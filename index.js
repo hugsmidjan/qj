@@ -13,6 +13,7 @@ export { default as curry } from './curry';
 export { default as debounce } from './debounce';
 export { default as domid } from './domid';
 export { default as E } from './E';
+export { default as eventify } from './eventify';
 export { default as frag, getFrag, setFrag, encodeFrag } from './frag';
 export { default as getUrlParam } from './getUrlParam';
 export { default as htmlToDiv } from './htmlToDiv';
