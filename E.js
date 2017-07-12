@@ -1,3 +1,4 @@
+// Hyperscript function that spits out DOM nodes.
 export default function E(tagName, attrs, ...children) {
   const elm = document.createElement(tagName);
   if (attrs) {

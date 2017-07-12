@@ -1,3 +1,4 @@
+import './polyfills/Promise';
 import addUrlParams from './addUrlParams';
 
 export default function ajax(url, params/*, opts*/) {
