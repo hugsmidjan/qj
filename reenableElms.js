@@ -1,4 +1,4 @@
-import Q from './qq';
+import qq from './qq';
 
 // reenable selected HTML elements that were disbbled by htmlToDiv()
 export default function reenableElms(elm, tagName) {
@@ -13,7 +13,7 @@ export default function reenableElms(elm, tagName) {
   // Since none of the elements disabled by htmlToDiv() may be nested
   // we can assume this is an either or case.
   else {
-    Q(disabledTagName, elm).forEach(enable);
+    qq(disabledTagName, elm).forEach(enable);
   }
   return elm;
 }

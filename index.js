@@ -26,7 +26,6 @@ export { default as onEvery } from './onEvery';
 export { default as onNext } from './onNext';
 export { default as parseParams } from './parseParams';
 export { default as q } from './q';
-export { default as Q } from './qq';
 export { default as qq } from './qq';
 export { default as reenableElms } from './reenableElms';
 export { default as regEscape } from './regEscape';
