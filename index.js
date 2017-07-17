@@ -1,6 +1,6 @@
 export { default as A } from './A';
 export { default as addUrlParams } from './addUrlParams';
-export { default as ajax } from './ajax';
+export { default as load } from './load';
 export { default as alphabetize } from './alphabetize';
 export { default as aquireId } from './aquireId';
 export { default as beget } from './beget';

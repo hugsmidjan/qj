@@ -1,7 +1,10 @@
+// Minimal, promise-returning ajax HTTP GET function.
+// No bells, whistles, kitchen-plumbing, options, etc.
+// Use fetch (w. polyfill) if you need more power).
 import './polyfills/Promise';
 import addUrlParams from './addUrlParams';
 
-export default function ajax(url, params/*, opts*/) {
+export default function load(url, params/*, opts*/) {
   if ( params ) {
     url = addUrlParams(url, params);
   }
