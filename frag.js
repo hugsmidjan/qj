@@ -1,12 +1,12 @@
 // Sets the document.location.hash while suppressing the viewport scrolling
 // Accepts a plaintext fragment - and URI encodes it automatically - unless the `_isEncoded` flag is set.
 // Usage:
-//   $.setFrag('myid');
-//   $.setFrag('#myid');
-//   $.setFrag('Fraîce 18%');
-//   $.setFrag('Fra%C3%AEce%2018%25', true);
-//   $.setFrag('');    // unset
-//   $.setFrag(null);  // unset
+//   setFrag('myid');
+//   setFrag('#myid');
+//   setFrag('Fraîce 18%');
+//   setFrag('Fra%C3%AEce%2018%25', true);
+//   setFrag('');    // unset
+//   setFrag(null);  // unset
 
 const setFrag = (_fragment, _isEncoded) => {
   _fragment = (_fragment||'').replace(/^#/, '');
@@ -20,7 +20,7 @@ const setFrag = (_fragment, _isEncoded) => {
   _elm  &&  (_elm.id = '');
 
   // set the damn hash... (Note: Safari 3 & Chrome barf if frag === '#'.)
-  document.location.hash = (_isEncoded ? _fragment : $.encodeFrag(_fragment) );
+  document.location.hash = (_isEncoded ? _fragment : encodeFrag(_fragment) );
 
   // Always reset scrollpos
   // (because Chrome ~v34 seems to scroll to the element which had -
