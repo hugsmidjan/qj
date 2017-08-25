@@ -1,5 +1,5 @@
 // Prototypal inheritance
-const F = () => {};
+const F = function () {};
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 export default function beget(proto, props) {
@@ -7,7 +7,7 @@ export default function beget(proto, props) {
   const o = new F();
   if ( props ) {
     for (let key in props) {
-      if ( !hasOwnProperty.call(props, key) ) {
+      if ( hasOwnProperty.call(props, key) ) {
         o[key] = props[key];
       }
     }
