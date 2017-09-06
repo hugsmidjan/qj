@@ -11,6 +11,9 @@
     "type": "git",
     "url": "ssh://git@stash.hugsmidjan.is:7999/cc/qj.git"
   },
-  "author": "Már Örlygsson <mar@hugsmidjan.is>",
+  "author": "Hugsmiðjan ehf. (www.hugsmidjan.is)",
+  "contributors": [
+    "Már Örlygsson <mar@hugsmidjan.is>"
+  ],
   "license": "ISC"
 }
