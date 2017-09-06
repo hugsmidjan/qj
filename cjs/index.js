@@ -274,7 +274,7 @@ function alphabetize(arr, lang, getProp) {
     return sortIsl( arr, { getProp: getProp } );
   }
   else {
-    var newArr = arr.map(function (item, idx) { return ({ value: getProp(item), idx: idx }); });
+    var newArr = arr.map(function (item, idx) { return ({ value: ''+getProp(item), idx: idx }); });
     lang = langAliases[lang] || lang;
     newArr.sort( function (a,b) {
       return a.value.localeCompare(b.value, lang, {
@@ -359,10 +359,11 @@ function byProp( arr, prop ) {
   return obj;
 }
 
-var _EP = Element.prototype;
-var _matcher = _EP.matches || _EP.msMatchesSelector || _EP.webkitMatchesSelector || (function () { return false; });
-
+var _matcher;
 function matches(selector, elm) {
+  if ( _matcher == null ) {
+    _matcher = elm.matches || elm.msMatchesSelector || elm.webkitMatchesSelector || (function () { return false; });
+  }
   return _matcher.call(elm, selector);
 }
 

@@ -124,7 +124,7 @@ function alphabetize(arr, lang, getProp) {
     return sortIsl( arr, { getProp: getProp } );
   }
   else {
-    var newArr = arr.map(function (item, idx) { return ({ value: getProp(item), idx: idx }); });
+    var newArr = arr.map(function (item, idx) { return ({ value: ''+getProp(item), idx: idx }); });
     lang = langAliases[lang] || lang;
     newArr.sort( function (a,b) {
       return a.value.localeCompare(b.value, lang, {

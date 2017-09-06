@@ -1,9 +1,10 @@
 'use strict';
 
-var _EP = Element.prototype;
-var _matcher = _EP.matches || _EP.msMatchesSelector || _EP.webkitMatchesSelector || (function () { return false; });
-
+var _matcher;
 function matches(selector, elm) {
+  if ( _matcher == null ) {
+    _matcher = elm.matches || elm.msMatchesSelector || elm.webkitMatchesSelector || (function () { return false; });
+  }
   return _matcher.call(elm, selector);
 }
 
