@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Quick JavaScripts – Collection of useful miniature JavaScript helper functions.",
   "module": "index.js",
-  "main": "index.js",
+  "main": "cjs/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build/build.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,12 @@
   "contributors": [
     "Már Örlygsson <mar@hugsmidjan.is>"
   ],
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^0.43.0",
+    "rollup-plugin-buble": "^0.15.0"
+  },
+  "disabledDevDependencies": {
+    "rollup-plugin-node-resolve": "^3.0.0"
+  }
 }
