@@ -20,7 +20,7 @@ export default function alphabetize(arr, lang, getProp) {
     return sortIsl( arr, { getProp } );
   }
   else {
-    let newArr = arr.map((item, idx) => ({ value: getProp(item), idx }));
+    let newArr = arr.map((item, idx) => ({ value: ''+getProp(item), idx }));
     lang = langAliases[lang] || lang;
     newArr.sort( (a,b) => {
       return a.value.localeCompare(b.value, lang, {
