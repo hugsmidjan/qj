@@ -1,6 +1,7 @@
-const _EP = Element.prototype;
-const _matcher = _EP.matches || _EP.msMatchesSelector || _EP.webkitMatchesSelector || (() => false);
-
+let _matcher;
 export default function matches(selector, elm) {
+  if ( _matcher == null ) {
+    _matcher = elm.matches || elm.msMatchesSelector || elm.webkitMatchesSelector || (() => false);
+  }
   return _matcher.call(elm, selector);
 }
