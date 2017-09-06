@@ -1,4 +1,4 @@
-import regEscape from './regescape';
+import regEscape from './regEscape';
 // Simple String templating (variable injection) that accepts either arrays or hash-maps.
 // Usage:
 // var output = inject('Hello %{1}! Hava a %{0}', ['banana', 'John']);                           // Returns  'Hello John! Have a banana'
