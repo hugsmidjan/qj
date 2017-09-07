@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@stash.hugsmidjan.is:7999/cc/qj.git"
+    "url": "ssh://git@github.com/hugsmidjan/qj.git"
   },
   "author": "Hugsmiðjan ehf. (www.hugsmidjan.is)",
   "contributors": [
