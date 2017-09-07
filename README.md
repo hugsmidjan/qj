@@ -32,3 +32,10 @@ import q from 'qj/q';
 import Q from 'qj/qq';
 ```
 
+
+## CommonJS modules
+
+If your build environment doesn't support loading ES6 modules from `node_modules`, then you need to change your dependency to point to the `v1-cjs` branch:
+
+    npm install --save-dev git+git@github.com:hugsmidjan/qj.git#v1-cjs
+
