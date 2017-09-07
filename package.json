@@ -5,6 +5,7 @@
   "module": "index.js",
   "main": "cjs/index.js",
   "scripts": {
+    "postinstall": "mv cjs/* . && rm -rf cjs",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node build/build.js"
   },
