@@ -843,6 +843,63 @@ function liveVal(input, value) {
   }
 }
 
+// Returns a clone of original object with keys with undefined values deleted
+// Returns the original if nothing changed.
+var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
+
+function objectClean(original) {
+  var deleted;
+  var clone = {};
+  for (var key in original) {
+    if ( hasOwnProperty$1.call(original, key) ) {
+      if ( original[key] !== undefined ) {
+        clone[key] = original[key];
+      }
+      else {
+        deleted = true;
+      }
+    }
+  }
+  return deleted ? clone : original;
+}
+
+var hasOwnProperty$2 = Object.prototype.hasOwnProperty;
+
+function objectIsEmpty(object) {
+    for (var key in object) {
+        if ( hasOwnProperty$2.call(object, key) ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Returns a clone of original object with newValues assigned
+// Returns the original if nothing changed.
+var hasOwnProperty$3 = Object.prototype.hasOwnProperty;
+
+function objectUpdate(original, newValues) {
+  var clone;
+  for (var key in newValues) {
+    if ( hasOwnProperty$3.call(newValues, key) &&  original[key] !== newValues[key] ) {
+      // IE11 compatible no-polyfill version
+      if ( !clone ) {
+        clone = {};
+        for (var originalKey in original) {
+          if ( hasOwnProperty$3.call(original, originalKey) ) {
+            clone[originalKey] = original[originalKey];
+          }
+        }
+      }
+      clone[key] = newValues[key];
+      // // Modern version:
+      // clone = { ...original, ...newValues };
+      // break;
+    }
+  }
+  return clone || original;
+}
+
 /*
   Executes callback when the clock strikes the next whole `periodSizeMs`
   Returns a canceller function - that allows for optional execution of the callback.
@@ -1097,6 +1154,9 @@ exports.inject = inject;
 exports.liveVal = liveVal;
 exports.makeQueryString = makeQueryString;
 exports.matches = matches;
+exports.objectClean = objectClean;
+exports.objectIsEmpty = objectIsEmpty;
+exports.objectUpdate = objectUpdate;
 exports.onEvery = onEvery;
 exports.onNext = onNext;
 exports.parseParams = parseParams;
