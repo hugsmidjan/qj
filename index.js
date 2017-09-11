@@ -37,6 +37,7 @@ export { default as removeNode } from './removeNode';
 export { default as replaceNode } from './replaceNode';
 export { default as shuffle } from './shuffle';
 // export { default as sortIsl } from './sortIsl'; // this function is superceded by alphabetize()
+export { default as textSearch } from './textSearch';
 export { default as throttle } from './throttle';
 export { default as trigger } from './trigger';
 export { default as uniqueArray } from './uniqueArray';
