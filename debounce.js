@@ -2,11 +2,6 @@
 // returns a debounced function that only runs after `delay` milliseconds of quiet-time
 // the returned function also has a nice .cancel() method.
 const debounce = (func, delay, immediate) => {
-  if ( typeof delay === 'boolean' ) {
-    immediate = delay;
-    delay = 0;
-  }
-  delay = delay || 50;
   let timeout;
   const debouncedFn = !immediate ?
       // simple delayed function
