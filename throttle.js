@@ -1,14 +1,9 @@
 // throttleFn()
 // returns a throttled function that never runs more than every `delay` milliseconds
 // the returned function also has a nice .finish() method.
-export default function throttle(func, delay, skipFirst) {
-  if ( typeof delay === 'boolean' ) {
-    skipFirst = delay;
-    delay = 0;
-  }
-  delay = delay || 50;
-  let throttled = 0;
+const throttle = (func, delay, skipFirst) => {
   let timeout;
+  let throttled = 0;
   let _args;
   let _this;
   const throttledFn = function (...args) {
@@ -29,3 +24,5 @@ export default function throttle(func, delay, skipFirst) {
   };
   return throttledFn;
 };
+
+export default throttle;
