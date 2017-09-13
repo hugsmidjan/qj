@@ -1,7 +1,7 @@
 // throttleFn()
 // returns a throttled function that never runs more than every `delay` milliseconds
 // the returned function also has a nice .finish() method.
-export default function throttle(func, delay, skipFirst) {
+const throttle = (func, delay, skipFirst) => {
   if ( typeof delay === 'boolean' ) {
     skipFirst = delay;
     delay = 0;
@@ -29,3 +29,5 @@ export default function throttle(func, delay, skipFirst) {
   };
   return throttledFn;
 };
+
+export default throttle;

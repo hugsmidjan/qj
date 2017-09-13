@@ -1,7 +1,7 @@
 // debounceFn()
 // returns a debounced function that only runs after `delay` milliseconds of quiet-time
 // the returned function also has a nice .cancel() method.
-export default function debounce(func, delay, immediate) {
+const debounce = (func, delay, immediate) => {
   if ( typeof delay === 'boolean' ) {
     immediate = delay;
     delay = 0;
@@ -28,9 +28,11 @@ export default function debounce(func, delay, immediate) {
         }, delay);
         runNow  &&  func.apply(_this, args);
       };
-  debouncedFn.cancel = function () {
+  debouncedFn.cancel = () => {
     clearTimeout(timeout);
     timeout = 0;
   };
   return debouncedFn;
-}
+};
+
+export default debounce;
