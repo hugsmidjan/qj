@@ -513,45 +513,35 @@ function curry(func) {
 // debounceFn()
 // returns a debounced function that only runs after `delay` milliseconds of quiet-time
 // the returned function also has a nice .cancel() method.
-function debounce(func, delay, immediate) {
-  if ( typeof delay === 'boolean' ) {
-    immediate = delay;
-    delay = 0;
-  }
-  delay = delay || 50;
+var debounce = function (func, delay, immediate) {
   var timeout;
-  var debouncedFn = !immediate ?
-      // simple delayed function
-      function () {
-        var args = [], len = arguments.length;
-        while ( len-- ) args[ len ] = arguments[ len ];
+  var debouncedFn = function () {
+    var args = [], len = arguments.length;
+    while ( len-- ) args[ len ] = arguments[ len ];
 
-        var _this = this;
-        clearTimeout(timeout);
-        timeout = setTimeout(function () {
-          func.apply(_this, args);
-        }, delay);
-      }:
-      // more complex immediately called function
-      function () {
-        var args = [], len = arguments.length;
-        while ( len-- ) args[ len ] = arguments[ len ];
-
-        var runNow = !timeout && immediate;
-        var _this = this;
-        clearTimeout(timeout);
-        timeout = setTimeout(function () {
-          !runNow  &&  func.apply(_this, args); // don't re-invoke `func` if runNow is true
-          timeout = 0;
-        }, delay);
-        runNow  &&  func.apply(_this, args);
-      };
+    var runNow = immediate && !timeout;
+    var _this = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      !runNow  &&  func.apply(_this, args); // don't re-invoke `func` if runNow is true
+      timeout = 0;
+    }, delay);
+    runNow  &&  func.apply(_this, args);
+  };
   debouncedFn.cancel = function () {
     clearTimeout(timeout);
     timeout = 0;
   };
   return debouncedFn;
-}
+};
+
+// Sugar to produce a debounced function
+// that accepts its contents/behavior at call time.
+// Usage:
+//     const myDebouncer = debounce.d(500);
+//     myDebouncer(() => { alert('Hello world'); });
+//     myDebouncer(() => { alert('I mean: Howdy world!'); });
+debounce.d = function (delay, immediate) { return debounce(function (fn) { return fn(); }, delay, immediate); };
 
 var domid_prefix = '_' + /*@__PURE__*/(Date.now()+'-').substr(6);
 var domid_incr = 0;
@@ -1119,14 +1109,9 @@ textSearch.normalize = normalizeText;
 // throttleFn()
 // returns a throttled function that never runs more than every `delay` milliseconds
 // the returned function also has a nice .finish() method.
-function throttle(func, delay, skipFirst) {
-  if ( typeof delay === 'boolean' ) {
-    skipFirst = delay;
-    delay = 0;
-  }
-  delay = delay || 50;
-  var throttled = 0;
+var throttle = function (func, delay, skipFirst) {
   var timeout;
+  var throttled = 0;
   var _args;
   var _this;
   var throttledFn = function () {
@@ -1149,7 +1134,7 @@ function throttle(func, delay, skipFirst) {
     throttled = 0;
   };
   return throttledFn;
-}
+};
 
 function trigger(type, elm) {
   var e = new Event(type);
