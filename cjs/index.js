@@ -10,7 +10,7 @@ function makeQueryString(paramsObj) {
   return Object.keys(paramsObj)
       .map(function (key) {
         var param = paramsObj[key];
-        return key +'='+ (param!=null ? encodeURIComponent(param) : '');
+        return (param!=null ? key+'='+encodeURIComponent(''+param) : '');
       })
       .join('&');
 }
@@ -625,14 +625,14 @@ function E(tagName, attrs) {
 
   3) Emit named event with extra parameters:
 
-      app.on('bar', (some, data) => use(some, data));
+      app.on('bar', (some, data) => use(some.toUpperCase(), data));
       //...
-      app.emit('bar' 'whatever', someObj);
+      app.emit('bar', 'whatever', someProps);
 
 
   4) Emit event object (with .type prop), along with extra parameters:
 
-      app.on('baz', (event, some, data) => use(event.target, some, data));
+      app.on('baz', (event, some, data) => use(event.target, some.toUpperCase(), data));
       //...
       app.emit({ type: 'baz', target: targObj }, 'whatever', someObj);
 

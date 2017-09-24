@@ -105,7 +105,7 @@ function makeQueryString(paramsObj) {
   return Object.keys(paramsObj)
       .map(function (key) {
         var param = paramsObj[key];
-        return key +'='+ (param!=null ? encodeURIComponent(param) : '');
+        return (param!=null ? key+'='+encodeURIComponent(''+param) : '');
       })
       .join('&');
 }

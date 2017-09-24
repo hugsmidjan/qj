@@ -12,7 +12,7 @@ fs.readdirSync(srcPath)
     })
     .forEach(function (fileName) {
       rollup({
-        entry: srcPath+fileName,
+        input: srcPath+fileName,
         plugins: [
           buble(),
           // nodeResolve(),
@@ -21,8 +21,8 @@ fs.readdirSync(srcPath)
           .then(function (bundle) {
             return bundle.write({
               format: 'cjs',
-              sourceMap: false,
-              dest: distPath+fileName,
+              sourcemap: false,
+              file: distPath+fileName,
             });
           });
     });
