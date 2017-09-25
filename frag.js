@@ -58,5 +58,5 @@ export {
   getFrag,
   encodeFrag,
   frag,
+  frag as default,
 };
-export default frag;
