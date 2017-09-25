@@ -1,10 +1,17 @@
 'use strict';
 
-// Returns a clone of original object with keys with undefined values deleted
-// Returns the original if nothing changed.
+// Functional Immutability helpers.
+// --------------------------------------------------------
+// import './polyfills/Object.assign';
+
+// IE11 compatible no-polyfill object cloner
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
-function objectClean(original) {
+
+
+// Returns a clone of original object with all keys that have undefined values deleted
+// Returns the original if nothing changed.
+var objectClean = function (original) {
   var deleted;
   var clone = {};
   for (var key in original) {
@@ -18,6 +25,8 @@ function objectClean(original) {
     }
   }
   return deleted ? clone : original;
-}
+};
+
+console.warn('Module "qj/objectClean" is depricated.\n `import { objectClean } from "qj/object";` instead.');
 
 module.exports = objectClean;
