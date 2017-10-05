@@ -43,16 +43,17 @@ var objectUpdate = function (original, newValues) {
 
 // Returns a clone of original object with all keys that have undefined values deleted
 // Returns the original if nothing changed.
-var objectClean = function (original) {
+var objectClean = function (original, alsoNull) {
   var deleted;
   var clone = {};
   for (var key in original) {
     if ( hasOwnProperty.call(original, key) ) {
-      if ( original[key] !== undefined ) {
-        clone[key] = original[key];
+      var originalVal = original[key];
+      if ( (originalVal === undefined) || (originalVal === null && alsoNull) ) {
+        deleted = true;
       }
       else {
-        deleted = true;
+        clone[key] = originalVal;
       }
     }
   }
