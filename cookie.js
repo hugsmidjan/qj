@@ -35,6 +35,6 @@ const cookie = {
 export {
   getCookie,
   setCookie,
-  cookie,
+
   cookie as default,
 };
