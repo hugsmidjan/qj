@@ -19,11 +19,14 @@
       at12_15.cancel(true);
 
 */
+
+// import { untilNext } from './time';
 export default function onNext(periodSizeMS, offsetMs, callback) {
   if (typeof offsetMs !== 'number') {
     callback = offsetMs;
     offsetMs = 0;
   }
+  // const msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
   const msToNext = periodSizeMS - (Date.now() - offsetMs) % periodSizeMS;
   // OPINIONATED: Add a slight .5% - 1% fuzz to the timer to avoid
   // A) crazy spikes in server-load (in case of multiple clients)

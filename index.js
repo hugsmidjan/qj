@@ -37,6 +37,7 @@ export { default as shuffle } from './shuffle';
 // export { default as sortIsl } from './sortIsl'; // this function is superceded by alphabetize()
 export { default as textSearch } from './textSearch';
 export { default as throttle } from './throttle';
+export { default as time } from './time';
 export { default as trigger } from './trigger';
 export { default as uniqueArray } from './uniqueArray';
 export { default as zapElm } from './zapElm';
