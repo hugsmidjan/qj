@@ -126,5 +126,4 @@ exports.objectIsEmpty = objectIsEmpty;
 exports.objectOnly = objectOnly;
 exports.objectUpdate = objectUpdate;
 exports.objectWithout = objectWithout;
-exports.object = object;
 exports['default'] = object;

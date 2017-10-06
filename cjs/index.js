@@ -954,10 +954,9 @@ var object = {
 
 /*
   Executes callback when the clock strikes the next whole `periodSizeMs`
-  Returns a canceller function - that allows for optional execution of the callback.
+  Returns an object with a `cancel` function - which optionally executes the callback.
 
   Usage:
-
       const MINUTE = 60*1000;
       const HOUR = 60*MINUTE;
 
@@ -968,43 +967,48 @@ var object = {
       const at12_15 = onNext(12*HOUR, 15*MINUTE, () => console.log(Date()) );
 
       // Cancel the 12 o'clock callback:
-      at12();
+      at12.cancel();
 
-      // Cancel the 12:15 schedule and run the callback right now!
-      at12_15(true);
+      // Nevermind the 12:15 schedule. Run the callback right now!
+      at12_15.cancel(true);
 
 */
+
+// import { untilNext } from './time';
 function onNext(periodSizeMS, offsetMs, callback) {
   if (typeof offsetMs !== 'number') {
     callback = offsetMs;
     offsetMs = 0;
   }
+  // const msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
   var msToNext = periodSizeMS - (Date.now() - offsetMs) % periodSizeMS;
-  // add a slight .5% - 1% fuzz to the timer to avoid
+  // OPINIONATED: Add a slight .5% - 1% fuzz to the timer to avoid
   // A) crazy spikes in server-load (in case of multiple clients)
   // B) accidental under-shoots caused by bad timer handling in the browser
   var fuzz = (1 + Math.random()) * Math.max(.01*periodSizeMS, 100);
   var timeout = setTimeout(callback, msToNext + fuzz);
 
-  var canceller = function (execCallback) {
-    clearTimeout(timeout);
-    execCallback && callback();
+  return {
+    cancel: function (execCallback) {
+      clearTimeout(timeout);
+      execCallback && callback();
+    },
   };
-  return canceller;
 }
 
-// Same as `onNext()` except auto-repeating
+// Auto-repeating version of `onNext()`
 function onEvery(periodSizeMS, offsetMs, callback) {
-  var canceller;
+  var nextUp;
   var callbackOnNext = function () {
-    canceller = onNext(periodSizeMS, offsetMs, function () {
+    nextUp = onNext(periodSizeMS, offsetMs, function () {
       callback();
       callbackOnNext();
     });
   };
   callbackOnNext();
-  var cancellerProxy = function (execCallback) { return canceller(execCallback); };
-  return cancellerProxy;
+  return {
+    cancel: function (execCallback) { nextUp.cancel(execCallback); },
+  };
 }
 
 // parseParams( queryString )
@@ -1198,6 +1202,60 @@ var throttle = function (func, delay, skipFirst) {
   return throttledFn;
 };
 
+var SECOND = 1000;
+var MINUTE = 60000;
+var HOUR = 3600000;
+var DAY = 86400000;
+/*
+  Super fast mini-helpers to find start/end of certain periods within the `timestamp` day.
+  Done without using any expensive `Date` operations.
+  Useful for setting timers/timeouts.
+
+  Usage:
+      const unixDate = 1486289500131; // some random Date.
+
+      const ms_at_start_of_Day = atLast(unixDate, DAY);
+      const ms_at_start_of_Hour = atLast(unixDate, HOUR);
+      const ms_at_start_of_12hourPeriod = atLast(unixDate, 12*HOUR);
+      const ms_at_end_of_Day = atNext(unixDate, DAY);
+      const ms_at_end_of_30MinutePeriod = atNext(unixDate, 30*MINUTE);
+      const ms_since_last_midnight = sinceLast(unixDate, DAY);
+*/
+
+var sinceLast = function (timestamp, periodSizeMS) {
+  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+  return timestamp % periodSizeMS;
+};
+var untilNext = function (timestamp, periodSizeMS) {
+  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+  // return periodSizeMS - sinceLast(timestamp, periodSizeMS);
+  return periodSizeMS - timestamp % periodSizeMS;
+};
+
+var atLast = function (timestamp, periodSizeMS) {
+  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+  // return timestamp - sinceLast(timestamp, periodSizeMS);
+  return timestamp - timestamp % periodSizeMS;
+};
+var atNext = function (timestamp, periodSizeMS) {
+  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+  // return timestamp + untilNext(timestamp, periodSizeMS);
+  return timestamp + (periodSizeMS - timestamp % periodSizeMS);
+};
+
+
+var time = {
+  SECOND: SECOND,
+  MINUTE: MINUTE,
+  HOUR: HOUR,
+  DAY: DAY,
+
+  sinceLast: sinceLast,
+  untilNext: untilNext,
+  atLast: atLast,
+  atNext: atNext,
+};
+
 function trigger(type, elm) {
   var e = new Event(type);
   elm.dispatchEvent( e );
@@ -1281,6 +1339,7 @@ exports.replaceNode = replaceNode;
 exports.shuffle = shuffle;
 exports.textSearch = textSearch;
 exports.throttle = throttle;
+exports.time = time;
 exports.trigger = trigger;
 exports.uniqueArray = uniqueArray;
 exports.zapElm = zapElm;

@@ -38,5 +38,4 @@ var cookie = {
 
 exports.getCookie = getCookie;
 exports.setCookie = setCookie;
-exports.cookie = cookie;
 exports['default'] = cookie;
