@@ -60,5 +60,4 @@ var frag = {
 exports.setFrag = setFrag;
 exports.getFrag = getFrag;
 exports.encodeFrag = encodeFrag;
-exports.frag = frag;
 exports['default'] = frag;

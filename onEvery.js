@@ -1,15 +1,16 @@
 import onNext from './onNext';
 
-// Same as `onNext()` except auto-repeating
+// Auto-repeating version of `onNext()`
 export default function onEvery(periodSizeMS, offsetMs, callback) {
-  let canceller;
+  let nextUp;
   const callbackOnNext = () => {
-    canceller = onNext(periodSizeMS, offsetMs, () => {
+    nextUp = onNext(periodSizeMS, offsetMs, () => {
       callback();
       callbackOnNext();
     });
   };
   callbackOnNext();
-  const cancellerProxy = (execCallback) => canceller(execCallback);
-  return cancellerProxy;
+  return {
+    cancel: (execCallback) => { nextUp.cancel(execCallback); },
+  };
 }

@@ -57,6 +57,6 @@ export {
   setFrag,
   getFrag,
   encodeFrag,
-  frag,
+
   frag as default,
 };

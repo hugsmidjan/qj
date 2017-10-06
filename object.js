@@ -122,6 +122,6 @@ export {
   objectOnly,
   objectUpdate,
   objectWithout,
-  object,
+
   object as default,
 };
