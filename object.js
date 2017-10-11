@@ -24,7 +24,7 @@ const hasOwnProperty = Object.prototype.hasOwnProperty;
 const objectUpdate = (original, newValues) => {
   let clone;
   for (const key in newValues) {
-    if ( hasOwnProperty.call(newValues, key) &&  original[key] !== newValues[key] ) {
+    if ( original[key] !== newValues[key] && hasOwnProperty.call(newValues, key) ) {
       // Fast IE11 compatible no-polyfill version
       clone = clone || _clone(original);
       clone[key] = newValues[key];
@@ -62,7 +62,7 @@ const objectClean = (original, alsoNull) => {
 
 // Returns true if object as no properties of its own
 const objectIsEmpty = (object) => {
-  for (var key in object) {
+  for (const key in object) {
     if ( hasOwnProperty.call(object, key) ) {
       return false;
     }
