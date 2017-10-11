@@ -1,5 +1,8 @@
 // Functional Immutability helpers.
 // --------------------------------------------------------
+// Small, fast, stupid, practical, & care-free.
+// False-positives (like NaN and 0 v -0) considered acceptable.
+
 // import './polyfills/Object.assign';
 
 // IE11 compatible no-polyfill object cloner
@@ -22,7 +25,7 @@ const objectUpdate = (original, newValues) => {
   let clone;
   for (const key in newValues) {
     if ( hasOwnProperty.call(newValues, key) &&  original[key] !== newValues[key] ) {
-      // IE11 compatible no-polyfill version
+      // Fast IE11 compatible no-polyfill version
       clone = clone || _clone(original);
       clone[key] = newValues[key];
       // // Modern
@@ -95,7 +98,7 @@ const objectWithout = (original, keys) => {
   for (let i=0; i<numKeys; i++) {
     const key = keys[i];
     if ( hasOwnProperty.call(original, key) ) {
-      // IE11 compatible no-polyfill version
+      // Fast IE11 compatible no-polyfill version
       clone = clone || _clone(original);
       // // Modern
       // clone = clone || Object.assign({}, original);
