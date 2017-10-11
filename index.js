@@ -22,7 +22,7 @@ export { default as inject } from './inject';
 export { default as liveVal } from './liveVal';
 export { default as makeQueryString } from './makeQueryString';
 export { default as matches } from './matches';
-export { default as object, objectClean, objectIsEmpty, objectOnly, objectUpdate, objectWithout } from './object';
+export { default as object, objectClean, objectIsEmpty, objectIsSame, objectOnly, objectReplace, objectUpdate, objectWithout } from './object';
 export { default as onEvery } from './onEvery';
 export { default as onNext } from './onNext';
 export { default as parseParams } from './parseParams';

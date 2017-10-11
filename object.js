@@ -1,5 +1,14 @@
 // Functional Immutability helpers.
 // --------------------------------------------------------
+// Small, fast, stupid, practical, & care-free.
+// False-positives (like NaN and 0 v -0) considered acceptable.
+
+// INFO: Interesting 3rd party deep equals helpers.
+//  * https://github.com/ReactiveSets/toubkal/blob/master/lib/util/value_equals.js
+//    (https://github.com/ReactiveSets/toubkal/blob/1b73baf288385b34727ddf6d223f62c3bb2cb176/lib/util/value_equals.js)
+//  * https://github.com/lodash/lodash/blob/es/_baseIsEqual.js
+//   (https://github.com/lodash/lodash/blob/f71a7a04b51bd761683e4a774c5b1d38bdaa7b20/_baseIsEqual.js)
+
 // import './polyfills/Object.assign';
 
 // IE11 compatible no-polyfill object cloner
@@ -21,8 +30,8 @@ const hasOwnProperty = Object.prototype.hasOwnProperty;
 const objectUpdate = (original, newValues) => {
   let clone;
   for (const key in newValues) {
-    if ( hasOwnProperty.call(newValues, key) &&  original[key] !== newValues[key] ) {
-      // IE11 compatible no-polyfill version
+    if ( original[key] !== newValues[key] && hasOwnProperty.call(newValues, key) ) {
+      // Fast IE11 compatible no-polyfill version
       clone = clone || _clone(original);
       clone[key] = newValues[key];
       // // Modern
@@ -59,8 +68,24 @@ const objectClean = (original, alsoNull) => {
 
 // Returns true if object as no properties of its own
 const objectIsEmpty = (object) => {
-  for (var key in object) {
+  for (const key in object) {
     if ( hasOwnProperty.call(object, key) ) {
+      return false;
+    }
+  }
+  return true;
+};
+
+
+// Returns true if objects a and b contain 100% the same values.
+const objectIsSame = (a, b) => {
+  for (const key in b) {
+    if ( a[key] !== b[key] && hasOwnProperty.call(b, key) ) {
+      return false;
+    }
+  }
+  for (const key in a) {
+    if ( a[key] !== b[key] && hasOwnProperty.call(a, key) ) {
       return false;
     }
   }
@@ -95,7 +120,7 @@ const objectWithout = (original, keys) => {
   for (let i=0; i<numKeys; i++) {
     const key = keys[i];
     if ( hasOwnProperty.call(original, key) ) {
-      // IE11 compatible no-polyfill version
+      // Fast IE11 compatible no-polyfill version
       clone = clone || _clone(original);
       // // Modern
       // clone = clone || Object.assign({}, original);
@@ -108,18 +133,29 @@ const objectWithout = (original, keys) => {
 };
 
 
+// Returns original if replacement has the same keys + values.
+// Otherwise returns replacement as is.
+const objectReplace = (original, replacement) => {
+    return objectIsSame(original, replacement) ? original : replacement;
+};
+
+
 
 const object = {
   clean: objectClean,
   isEmpty: objectIsEmpty,
+  isSame: objectIsSame,
   only: objectOnly,
+  replace: objectReplace,
   update: objectUpdate,
   without: objectWithout,
 };
 export {
   objectClean,
   objectIsEmpty,
+  objectIsSame,
   objectOnly,
+  objectReplace,
   objectUpdate,
   objectWithout,
 
