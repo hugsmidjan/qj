@@ -24,132 +24,6 @@ function addUrlParams(url, paramsObj) {
   return url + (queryString.length ? delim : '') + queryString + hash;
 }
 
-if ( typeof window !== 'undefined' && !window.Promise ) {
-  // https://github.com/lhorie/mithril.js/blob/next/promise/promise.js
-  /* eslint-disable */
-  var PromisePolyfill = function(executor) {
-    if (!(this instanceof PromisePolyfill)) { throw new Error("Promise must be called with `new`") }
-    if (typeof executor !== "function") { throw new TypeError("executor must be a function") }
-
-    var self = this, resolvers = [], rejectors = [], resolveCurrent = handler(resolvers, true), rejectCurrent = handler(rejectors, false);
-    var instance = self._instance = {resolvers: resolvers, rejectors: rejectors};
-    var callAsync = typeof setImmediate === "function" ? setImmediate : setTimeout;
-    function handler(list, shouldAbsorb) {
-      return function execute(value) {
-        var then;
-        try {
-          if (shouldAbsorb && value != null && (typeof value === "object" || typeof value === "function") && typeof (then = value.then) === "function") {
-            if (value === self) { throw new TypeError("Promise can't be resolved w/ itself") }
-            executeOnce(then.bind(value));
-          }
-          else {
-            callAsync(function() {
-              if (!shouldAbsorb && list.length === 0) { console.error("Possible unhandled promise rejection:", value); }
-              for (var i = 0; i < list.length; i++) { list[i](value); }
-              resolvers.length = 0, rejectors.length = 0;
-              instance.state = shouldAbsorb;
-              instance.retry = function() {execute(value);};
-            });
-          }
-        }
-        catch (e) {
-          rejectCurrent(e);
-        }
-      }
-    }
-    function executeOnce(then) {
-      var runs = 0;
-      function run(fn) {
-        return function(value) {
-          if (runs++ > 0) { return }
-          fn(value);
-        }
-      }
-      var onerror = run(rejectCurrent);
-      try {then(run(resolveCurrent), onerror);} catch (e) {onerror(e);}
-    }
-
-    executeOnce(executor);
-  };
-  PromisePolyfill.prototype.then = function(onFulfilled, onRejection) {
-    var self = this, instance = self._instance;
-    function handle(callback, list, next, state) {
-      list.push(function(value) {
-        if (typeof callback !== "function") { next(value); }
-        else { try {resolveNext(callback(value));} catch (e) {if (rejectNext) { rejectNext(e); }} }
-      });
-      if (typeof instance.retry === "function" && state === instance.state) { instance.retry(); }
-    }
-    var resolveNext, rejectNext;
-    var promise = new PromisePolyfill(function(resolve, reject) {resolveNext = resolve, rejectNext = reject;});
-    handle(onFulfilled, instance.resolvers, resolveNext, true), handle(onRejection, instance.rejectors, rejectNext, false);
-    return promise
-  };
-  PromisePolyfill.prototype.catch = function(onRejection) {
-    return this.then(null, onRejection)
-  };
-  PromisePolyfill.resolve = function(value) {
-    if (value instanceof PromisePolyfill) { return value }
-    return new PromisePolyfill(function(resolve) {resolve(value);})
-  };
-  PromisePolyfill.reject = function(value) {
-    return new PromisePolyfill(function(resolve, reject) {reject(value);})
-  };
-  PromisePolyfill.all = function(list) {
-    return new PromisePolyfill(function(resolve, reject) {
-      var total = list.length, count = 0, values = [];
-      if (list.length === 0) { resolve([]); }
-      else { for (var i = 0; i < list.length; i++) {
-        (function(i) {
-          function consume(value) {
-            count++;
-            values[i] = value;
-            if (count === total) { resolve(values); }
-          }
-          if (list[i] != null && (typeof list[i] === "object" || typeof list[i] === "function") && typeof list[i].then === "function") {
-            list[i].then(consume, reject);
-          }
-          else { consume(list[i]); }
-        })(i);
-      } }
-    })
-  };
-  PromisePolyfill.race = function(list) {
-    return new PromisePolyfill(function(resolve, reject) {
-      for (var i = 0; i < list.length; i++) {
-        list[i].then(resolve, reject);
-      }
-    })
-  };
-  /* eslint-enable */
-  window.Promise = PromisePolyfill;
-}
-
-// Minimal, promise-returning ajax HTTP GET function.
-// No bells, whistles, kitchen-plumbing, options, etc.
-// Use fetch (w. polyfill) if you need more power).
-function load(url, params/*, opts*/) {
-  if ( params ) {
-    url = addUrlParams(url, params);
-  }
-  return new Promise(function (resolve, reject) {
-    var request = new XMLHttpRequest();
-    request.open('GET', url, true);
-    request.onload = function () {
-      if (request.status >= 200 && request.status < 400) {
-        resolve(request.responseText);
-      }
-      else {
-        reject();
-      }
-    };
-    request.onerror = function () {
-      reject();
-    };
-    request.send();
-  });
-}
-
 /*
   sortIsl() -- (c) 2014-2017 Hugsmiðjan ehf. - MIT/GPL
   Written by Már Örlygsson - http://mar.anomy.net
@@ -328,6 +202,41 @@ function aquireId(el, prefDefaultId) { // el is an optional parameter.
   return el.id;
 }
 
+// Convert arry into an object keyed by prop.
+// Prop values are assumed to be unique.
+// Array items with repeated keys (prop value) are skipped
+// If prop is undefined, the Array values are used as keys
+// with the value being a count of how many times each key occured
+/*
+  const arr1 = [
+    {name:'Tim', age:12},
+    {name:'Sam', age:10},
+    {name:'Tim', age:29},
+  ];
+  console.log( arrayToObject(arr1, 'name') );
+  // { Tim:{name:'Tim',age:12}, Sam:{name:'Sam',age:10} };
+
+  const arr2 = ['Orange', 'Apple', 'Tomato', 'Apple', 'Apple'];
+  console.log( arrayToObject(arr2) );
+  // { Orange:1, Apple:3, Tomato:1 }
+
+*/
+function arrayToObject( arr, prop ) {
+  var obj = {};
+  arr.forEach(prop ?
+    function (item) {
+      var key = item[prop];
+      if ( !(key in obj) ) {
+        obj[key] = item;
+      }
+    }:
+    function (item) {
+      obj[item] = (obj[item] || 0) +1;
+    }
+  );
+  return obj;
+}
+
 // Prototypal inheritance
 var F = function () {};
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -343,20 +252,6 @@ function beget(proto, props) {
     }
   }
   return o;
-}
-
-// Convert arry into an object keyed by prop.
-// Prop values are assumed to be unique.
-// Array items with repeated keys (prop value) are skipped
-function byProp( arr, prop ) {
-  var obj = {};
-  arr.forEach(function (item) {
-    var key = item[prop];
-    if ( !(key in obj) ) {
-      obj[key] = item;
-    }
-  });
-  return obj;
 }
 
 var _matcher;
@@ -831,6 +726,132 @@ function liveVal(input, value) {
   if ( input.setSelectionRange ) {
     input.setSelectionRange(selStart, selEnd);
   }
+}
+
+if ( typeof window !== 'undefined' && !window.Promise ) {
+  // https://github.com/lhorie/mithril.js/blob/next/promise/promise.js
+  /* eslint-disable */
+  var PromisePolyfill = function(executor) {
+    if (!(this instanceof PromisePolyfill)) { throw new Error("Promise must be called with `new`") }
+    if (typeof executor !== "function") { throw new TypeError("executor must be a function") }
+
+    var self = this, resolvers = [], rejectors = [], resolveCurrent = handler(resolvers, true), rejectCurrent = handler(rejectors, false);
+    var instance = self._instance = {resolvers: resolvers, rejectors: rejectors};
+    var callAsync = typeof setImmediate === "function" ? setImmediate : setTimeout;
+    function handler(list, shouldAbsorb) {
+      return function execute(value) {
+        var then;
+        try {
+          if (shouldAbsorb && value != null && (typeof value === "object" || typeof value === "function") && typeof (then = value.then) === "function") {
+            if (value === self) { throw new TypeError("Promise can't be resolved w/ itself") }
+            executeOnce(then.bind(value));
+          }
+          else {
+            callAsync(function() {
+              if (!shouldAbsorb && list.length === 0) { console.error("Possible unhandled promise rejection:", value); }
+              for (var i = 0; i < list.length; i++) { list[i](value); }
+              resolvers.length = 0, rejectors.length = 0;
+              instance.state = shouldAbsorb;
+              instance.retry = function() {execute(value);};
+            });
+          }
+        }
+        catch (e) {
+          rejectCurrent(e);
+        }
+      }
+    }
+    function executeOnce(then) {
+      var runs = 0;
+      function run(fn) {
+        return function(value) {
+          if (runs++ > 0) { return }
+          fn(value);
+        }
+      }
+      var onerror = run(rejectCurrent);
+      try {then(run(resolveCurrent), onerror);} catch (e) {onerror(e);}
+    }
+
+    executeOnce(executor);
+  };
+  PromisePolyfill.prototype.then = function(onFulfilled, onRejection) {
+    var self = this, instance = self._instance;
+    function handle(callback, list, next, state) {
+      list.push(function(value) {
+        if (typeof callback !== "function") { next(value); }
+        else { try {resolveNext(callback(value));} catch (e) {if (rejectNext) { rejectNext(e); }} }
+      });
+      if (typeof instance.retry === "function" && state === instance.state) { instance.retry(); }
+    }
+    var resolveNext, rejectNext;
+    var promise = new PromisePolyfill(function(resolve, reject) {resolveNext = resolve, rejectNext = reject;});
+    handle(onFulfilled, instance.resolvers, resolveNext, true), handle(onRejection, instance.rejectors, rejectNext, false);
+    return promise
+  };
+  PromisePolyfill.prototype.catch = function(onRejection) {
+    return this.then(null, onRejection)
+  };
+  PromisePolyfill.resolve = function(value) {
+    if (value instanceof PromisePolyfill) { return value }
+    return new PromisePolyfill(function(resolve) {resolve(value);})
+  };
+  PromisePolyfill.reject = function(value) {
+    return new PromisePolyfill(function(resolve, reject) {reject(value);})
+  };
+  PromisePolyfill.all = function(list) {
+    return new PromisePolyfill(function(resolve, reject) {
+      var total = list.length, count = 0, values = [];
+      if (list.length === 0) { resolve([]); }
+      else { for (var i = 0; i < list.length; i++) {
+        (function(i) {
+          function consume(value) {
+            count++;
+            values[i] = value;
+            if (count === total) { resolve(values); }
+          }
+          if (list[i] != null && (typeof list[i] === "object" || typeof list[i] === "function") && typeof list[i].then === "function") {
+            list[i].then(consume, reject);
+          }
+          else { consume(list[i]); }
+        })(i);
+      } }
+    })
+  };
+  PromisePolyfill.race = function(list) {
+    return new PromisePolyfill(function(resolve, reject) {
+      for (var i = 0; i < list.length; i++) {
+        list[i].then(resolve, reject);
+      }
+    })
+  };
+  /* eslint-enable */
+  window.Promise = PromisePolyfill;
+}
+
+// Minimal, promise-returning ajax HTTP GET function.
+// No bells, whistles, kitchen-plumbing, options, etc.
+// Use fetch (w. polyfill) if you need more power).
+function load(url, params/*, opts*/) {
+  if ( params ) {
+    url = addUrlParams(url, params);
+  }
+  return new Promise(function (resolve, reject) {
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.onload = function () {
+      if (request.status >= 200 && request.status < 400) {
+        resolve(request.responseText);
+      }
+      else {
+        reject();
+      }
+    };
+    request.onerror = function () {
+      reject();
+    };
+    request.send();
+  });
 }
 
 // Functional Immutability helpers.
@@ -1327,11 +1348,10 @@ function zeroPad(number, width) {
 
 exports.A = A;
 exports.addUrlParams = addUrlParams;
-exports.load = load;
 exports.alphabetize = alphabetize;
 exports.aquireId = aquireId;
+exports.arrayToObject = arrayToObject;
 exports.beget = beget;
-exports.byProp = byProp;
 exports.closestParent = closestParent;
 exports.cookie = cookie;
 exports.getCookie = getCookie;
@@ -1352,6 +1372,7 @@ exports.htmlToDiv = htmlToDiv;
 exports.htmlToNodes = htmlToNodes;
 exports.inject = inject;
 exports.liveVal = liveVal;
+exports.load = load;
 exports.makeQueryString = makeQueryString;
 exports.matches = matches;
 exports.object = object;
