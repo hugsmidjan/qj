@@ -4,7 +4,7 @@ export { default as load } from './load';
 export { default as alphabetize } from './alphabetize';
 export { default as aquireId } from './aquireId';
 export { default as beget } from './beget';
-export { default as byProp } from './byProp';
+export { default as arrayToObject } from './arrayToObject';
 export { default as closestParent } from './closestParent';
 export { default as cookie, getCookie, setCookie } from './cookie';
 export { default as cropText } from './cropText';
