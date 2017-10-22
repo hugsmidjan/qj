@@ -54,6 +54,8 @@ var time = {
   untilNext: untilNext,
   atLast: atLast,
   atNext: atNext,
+  atStart: atLast,
+  atEnd: atNext,
 };
 
 exports.SECOND = SECOND;
@@ -64,4 +66,6 @@ exports.sinceLast = sinceLast;
 exports.untilNext = untilNext;
 exports.atLast = atLast;
 exports.atNext = atNext;
+exports.atStart = atLast;
+exports.atEnd = atNext;
 exports['default'] = time;
