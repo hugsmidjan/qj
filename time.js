@@ -50,6 +50,8 @@ const time = {
   untilNext,
   atLast,
   atNext,
+  atStart: atLast,
+  atEnd: atNext,
 };
 
 export {
@@ -62,6 +64,8 @@ export {
   untilNext,
   atLast,
   atNext,
+  atLast as atStart,
+  atNext as atEnd,
 
   time as default,
 };
