@@ -1309,6 +1309,8 @@ var time = {
   untilNext: untilNext,
   atLast: atLast,
   atNext: atNext,
+  atStart: atLast,
+  atEnd: atNext,
 };
 
 function trigger(type, elm) {
