@@ -27,12 +27,17 @@ var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 
 
-// Returns a clone of original object with newValues assigned
+// Returns a clone of original object with only the changed newValues assigned
 // Returns the original if nothing changed.
-var objectUpdate = function (original, newValues) {
+var objectUpdate = function (original, newValues, customSameCheck) {
   var clone;
   for (var key in newValues) {
-    if ( original[key] !== newValues[key] && hasOwnProperty.call(newValues, key) ) {
+    var valA = original[key];
+    var valB = newValues[key];
+    if (
+      valA !== valB  &&  hasOwnProperty.call(newValues, key)  &&
+      !(customSameCheck && valA && valB && customSameCheck(valA, valB, key))
+    ) {
       // Fast IE11 compatible no-polyfill version
       clone = clone || _clone(original);
       clone[key] = newValues[key];

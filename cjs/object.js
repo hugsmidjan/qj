@@ -29,12 +29,17 @@ var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 
 
-// Returns a clone of original object with newValues assigned
+// Returns a clone of original object with only the changed newValues assigned
 // Returns the original if nothing changed.
-var objectUpdate = function (original, newValues) {
+var objectUpdate = function (original, newValues, customSameCheck) {
   var clone;
   for (var key in newValues) {
-    if ( original[key] !== newValues[key] && hasOwnProperty.call(newValues, key) ) {
+    var valA = original[key];
+    var valB = newValues[key];
+    if (
+      valA !== valB  &&  hasOwnProperty.call(newValues, key)  &&
+      !(customSameCheck && valA && valB && customSameCheck(valA, valB, key))
+    ) {
       // Fast IE11 compatible no-polyfill version
       clone = clone || _clone(original);
       clone[key] = newValues[key];
@@ -82,14 +87,25 @@ var objectIsEmpty = function (object) {
 
 
 // Returns true if objects a and b contain 100% the same values.
-var objectIsSame = function (a, b) {
+// Note: Safe for Arrays too
+var objectIsSame = function (a, b, customSameCheck) {
+  if (typeof a.length === 'number' && a.length !== b.length) {
+    return false;
+  }
+  var encountered = {};
   for (var key in b) {
-    if ( a[key] !== b[key] && hasOwnProperty.call(b, key) ) {
+    var valA = a[key];
+    var valB = b[key];
+    if (
+      valA !== valB  &&  hasOwnProperty.call(b, key)  &&
+      !(customSameCheck && valA && valB && customSameCheck(valA, valB, key))
+    ) {
       return false;
     }
+    encountered[key] = true;
   }
   for (var key$1 in a) {
-    if ( a[key$1] !== b[key$1] && hasOwnProperty.call(a, key$1) ) {
+    if ( !encountered[key$1] ) {
       return false;
     }
   }
@@ -139,8 +155,13 @@ var objectWithout = function (original, keys) {
 
 // Returns original if replacement has the same keys + values.
 // Otherwise returns replacement as is.
-var objectReplace = function (original, replacement) {
-    return objectIsSame(original, replacement) ? original : replacement;
+// Note: Safe for Arrays too
+var objectReplace = function (original, replacement, customSameCheck) {
+    return  objectIsSame(original, replacement, customSameCheck) ?
+                original:
+            customSameCheck ?
+                objectUpdate(original, replacement, customSameCheck):
+                replacement;
 };
 
 
