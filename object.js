@@ -25,12 +25,17 @@ const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 
 
-// Returns a clone of original object with newValues assigned
+// Returns a clone of original object with only the changed newValues assigned
 // Returns the original if nothing changed.
-const objectUpdate = (original, newValues) => {
+const objectUpdate = (original, newValues, customSameCheck) => {
   let clone;
   for (const key in newValues) {
-    if ( original[key] !== newValues[key] && hasOwnProperty.call(newValues, key) ) {
+    const valA = original[key];
+    const valB = newValues[key];
+    if (
+      valA !== valB  &&  hasOwnProperty.call(newValues, key)  &&
+      !(customSameCheck && valA && valB && customSameCheck(valA, valB, key))
+    ) {
       // Fast IE11 compatible no-polyfill version
       clone = clone || _clone(original);
       clone[key] = newValues[key];
@@ -78,14 +83,25 @@ const objectIsEmpty = (object) => {
 
 
 // Returns true if objects a and b contain 100% the same values.
-const objectIsSame = (a, b) => {
+// Note: Safe for Arrays too
+const objectIsSame = (a, b, customSameCheck) => {
+  if (typeof a.length === 'number' && a.length !== b.length) {
+    return false;
+  }
+  const encountered = {};
   for (const key in b) {
-    if ( a[key] !== b[key] && hasOwnProperty.call(b, key) ) {
+    const valA = a[key];
+    const valB = b[key];
+    if (
+      valA !== valB  &&  hasOwnProperty.call(b, key)  &&
+      !(customSameCheck && valA && valB && customSameCheck(valA, valB, key))
+    ) {
       return false;
     }
+    encountered[key] = true;
   }
   for (const key in a) {
-    if ( a[key] !== b[key] && hasOwnProperty.call(a, key) ) {
+    if ( !encountered[key] ) {
       return false;
     }
   }
@@ -135,8 +151,13 @@ const objectWithout = (original, keys) => {
 
 // Returns original if replacement has the same keys + values.
 // Otherwise returns replacement as is.
-const objectReplace = (original, replacement) => {
-    return objectIsSame(original, replacement) ? original : replacement;
+// Note: Safe for Arrays too
+const objectReplace = (original, replacement, customSameCheck) => {
+    return  objectIsSame(original, replacement, customSameCheck) ?
+                original:
+            customSameCheck ?
+                objectUpdate(original, replacement, customSameCheck):
+                replacement;
 };
 
 
