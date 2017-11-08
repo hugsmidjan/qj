@@ -155,8 +155,6 @@ const objectWithout = (original, keys) => {
 const objectReplace = (original, replacement, customSameCheck) => {
     return  objectIsSame(original, replacement, customSameCheck) ?
                 original:
-            customSameCheck ?
-                objectUpdate(original, replacement, customSameCheck):
                 replacement;
 };
 
