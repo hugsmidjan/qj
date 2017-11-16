@@ -3,6 +3,9 @@
 // Small, fast, stupid, practical, & care-free.
 // False-positives (like NaN and 0 v -0) considered acceptable.
 
+// NOTE: All of the methods should be safe for Arrays too
+// ...while perhaps not optimally performant in all cases.
+
 // INFO: Interesting 3rd party deep equals helpers.
 //  * https://github.com/ReactiveSets/toubkal/blob/master/lib/util/value_equals.js
 //    (https://github.com/ReactiveSets/toubkal/blob/1b73baf288385b34727ddf6d223f62c3bb2cb176/lib/util/value_equals.js)
@@ -13,7 +16,7 @@
 
 // IE11 compatible no-polyfill object cloner
 const _clone = (original) => {
-  const clone = {};
+  const clone = new original.constructor();
   for (const originalKey in original) {
     if ( hasOwnProperty.call(original, originalKey) ) {
       clone[originalKey] = original[originalKey];
@@ -55,7 +58,7 @@ const objectUpdate = (original, newValues, customSameCheck) => {
 // Returns the original if nothing changed.
 const objectClean = (original, alsoNull) => {
   let deleted;
-  const clone = {};
+  const clone = new original.constructor();
   for (const key in original) {
     if ( hasOwnProperty.call(original, key) ) {
       const originalVal = original[key];
@@ -83,7 +86,6 @@ const objectIsEmpty = (object) => {
 
 
 // Returns true if objects a and b contain 100% the same values.
-// Note: Safe for Arrays too
 const objectIsSame = (a, b, customSameCheck) => {
   if (typeof a.length === 'number' && a.length !== b.length) {
     return false;
@@ -113,7 +115,7 @@ const objectIsSame = (a, b, customSameCheck) => {
 // Returns the original if nothing changed.
 const objectOnly = (original, keys) => {
   let extra;
-  const clone = {};
+  const clone = new original.constructor();
   for (const key in original) {
     if ( hasOwnProperty.call(original, key) ) {
       if ( keys.indexOf(key) > -1 ) {
@@ -151,12 +153,9 @@ const objectWithout = (original, keys) => {
 
 // Returns original if replacement has the same keys + values.
 // Otherwise returns replacement as is.
-// Note: Safe for Arrays too
 const objectReplace = (original, replacement, customSameCheck) => {
     return  objectIsSame(original, replacement, customSameCheck) ?
                 original:
-            customSameCheck ?
-                objectUpdate(original, replacement, customSameCheck):
                 replacement;
 };
 

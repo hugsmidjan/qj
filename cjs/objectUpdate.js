@@ -5,6 +5,9 @@
 // Small, fast, stupid, practical, & care-free.
 // False-positives (like NaN and 0 v -0) considered acceptable.
 
+// NOTE: All of the methods should be safe for Arrays too
+// ...while perhaps not optimally performant in all cases.
+
 // INFO: Interesting 3rd party deep equals helpers.
 //  * https://github.com/ReactiveSets/toubkal/blob/master/lib/util/value_equals.js
 //    (https://github.com/ReactiveSets/toubkal/blob/1b73baf288385b34727ddf6d223f62c3bb2cb176/lib/util/value_equals.js)
@@ -15,7 +18,7 @@
 
 // IE11 compatible no-polyfill object cloner
 var _clone = function (original) {
-  var clone = {};
+  var clone = new original.constructor();
   for (var originalKey in original) {
     if ( hasOwnProperty.call(original, originalKey) ) {
       clone[originalKey] = original[originalKey];

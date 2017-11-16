@@ -7,6 +7,9 @@ Object.defineProperty(exports, '__esModule', { value: true });
 // Small, fast, stupid, practical, & care-free.
 // False-positives (like NaN and 0 v -0) considered acceptable.
 
+// NOTE: All of the methods should be safe for Arrays too
+// ...while perhaps not optimally performant in all cases.
+
 // INFO: Interesting 3rd party deep equals helpers.
 //  * https://github.com/ReactiveSets/toubkal/blob/master/lib/util/value_equals.js
 //    (https://github.com/ReactiveSets/toubkal/blob/1b73baf288385b34727ddf6d223f62c3bb2cb176/lib/util/value_equals.js)
@@ -17,7 +20,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 // IE11 compatible no-polyfill object cloner
 var _clone = function (original) {
-  var clone = {};
+  var clone = new original.constructor();
   for (var originalKey in original) {
     if ( hasOwnProperty.call(original, originalKey) ) {
       clone[originalKey] = original[originalKey];
@@ -59,7 +62,7 @@ var objectUpdate = function (original, newValues, customSameCheck) {
 // Returns the original if nothing changed.
 var objectClean = function (original, alsoNull) {
   var deleted;
-  var clone = {};
+  var clone = new original.constructor();
   for (var key in original) {
     if ( hasOwnProperty.call(original, key) ) {
       var originalVal = original[key];
@@ -87,7 +90,6 @@ var objectIsEmpty = function (object) {
 
 
 // Returns true if objects a and b contain 100% the same values.
-// Note: Safe for Arrays too
 var objectIsSame = function (a, b, customSameCheck) {
   if (typeof a.length === 'number' && a.length !== b.length) {
     return false;
@@ -117,7 +119,7 @@ var objectIsSame = function (a, b, customSameCheck) {
 // Returns the original if nothing changed.
 var objectOnly = function (original, keys) {
   var extra;
-  var clone = {};
+  var clone = new original.constructor();
   for (var key in original) {
     if ( hasOwnProperty.call(original, key) ) {
       if ( keys.indexOf(key) > -1 ) {
@@ -155,12 +157,9 @@ var objectWithout = function (original, keys) {
 
 // Returns original if replacement has the same keys + values.
 // Otherwise returns replacement as is.
-// Note: Safe for Arrays too
 var objectReplace = function (original, replacement, customSameCheck) {
     return  objectIsSame(original, replacement, customSameCheck) ?
                 original:
-            customSameCheck ?
-                objectUpdate(original, replacement, customSameCheck):
                 replacement;
 };
 

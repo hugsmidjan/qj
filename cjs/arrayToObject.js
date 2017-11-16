@@ -20,19 +20,21 @@
 
 */
 function arrayToObject( arr, prop ) {
-  var obj = {};
-  arr.forEach(prop ?
-    function (item) {
-      var key = item[prop];
-      if ( !(key in obj) ) {
-        obj[key] = item;
+  if ( arr ) {
+    var obj = {};
+    arr.forEach(prop ?
+      function (item) {
+        var key = item[prop];
+        if ( !(key in obj) ) {
+          obj[key] = item;
+        }
+      }:
+      function (item) {
+        obj[item] = (obj[item] || 0) +1;
       }
-    }:
-    function (item) {
-      obj[item] = (obj[item] || 0) +1;
-    }
-  );
-  return obj;
+    );
+    return obj;
+  }
 }
 
 module.exports = arrayToObject;
