@@ -18,17 +18,19 @@
 
 */
 export default function arrayToObject( arr, prop ) {
-  const obj = {};
-  arr.forEach(prop ?
-    (item) => {
-      const key = item[prop];
-      if ( !(key in obj) ) {
-        obj[key] = item;
+  if ( arr ) {
+    const obj = {};
+    arr.forEach(prop ?
+      (item) => {
+        const key = item[prop];
+        if ( !(key in obj) ) {
+          obj[key] = item;
+        }
+      }:
+      (item) => {
+        obj[item] = (obj[item] || 0) +1;
       }
-    }:
-    (item) => {
-      obj[item] = (obj[item] || 0) +1;
-    }
-  );
-  return obj;
+    );
+    return obj;
+  }
 }
