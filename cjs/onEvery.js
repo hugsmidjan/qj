@@ -46,6 +46,10 @@ function onNext(periodSizeMS, offsetMs, callback) {
 
 // Auto-repeating version of `onNext()`
 function onEvery(periodSizeMS, offsetMs, callback) {
+  if (typeof offsetMs !== 'number') {
+    callback = offsetMs;
+    offsetMs = 0;
+  }
   var nextUp;
   var callbackOnNext = function () {
     nextUp = onNext(periodSizeMS, offsetMs, function () {
