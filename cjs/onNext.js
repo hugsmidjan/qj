@@ -1,5 +1,11 @@
 'use strict';
 
+var untilNext = function (timestamp, periodSizeMS) {
+  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+  // return periodSizeMS - sinceLast(timestamp, periodSizeMS);
+  return periodSizeMS - timestamp % periodSizeMS;
+};
+
 /*
   Executes callback when the clock strikes the next whole `periodSizeMs`
   Returns an object with a `cancel` function - which optionally executes the callback.
@@ -21,15 +27,12 @@
       at12_15.cancel(true);
 
 */
-
-// import { untilNext } from './time';
-function onNext(periodSizeMS, offsetMs, callback) {
+var onNext = function (periodSizeMS, offsetMs, callback) {
   if (typeof offsetMs !== 'number') {
     callback = offsetMs;
     offsetMs = 0;
   }
-  // const msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
-  var msToNext = periodSizeMS - (Date.now() - offsetMs) % periodSizeMS;
+  var msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
   // OPINIONATED: Add a slight .5% - 1% fuzz to the timer to avoid
   // A) crazy spikes in server-load (in case of multiple clients)
   // B) accidental under-shoots caused by bad timer handling in the browser
@@ -42,6 +45,8 @@ function onNext(periodSizeMS, offsetMs, callback) {
       execCallback && callback();
     },
   };
-}
+};
+
+console.warn('Module "qj/onNext" is depricated.\n `import { onNext } from "qj/time";` instead.');
 
 module.exports = onNext;
