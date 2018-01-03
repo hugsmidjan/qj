@@ -1,20 +1,2 @@
-import onNext from './onNext';
-
-// Auto-repeating version of `onNext()`
-export default function onEvery(periodSizeMS, offsetMs, callback) {
-  if (typeof offsetMs !== 'number') {
-    callback = offsetMs;
-    offsetMs = 0;
-  }
-  let nextUp;
-  const callbackOnNext = () => {
-    nextUp = onNext(periodSizeMS, offsetMs, () => {
-      callback();
-      callbackOnNext();
-    });
-  };
-  callbackOnNext();
-  return {
-    cancel: (execCallback) => { nextUp.cancel(execCallback); },
-  };
-}
+export { onEvery as default } from './time';
+console.warn('Module "qj/onEvery" is depricated.\n `import { onEvery } from "qj/time";` instead.');

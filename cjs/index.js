@@ -1029,6 +1029,50 @@ var object = {
   without: objectWithout,
 };
 
+var SECOND = 1000;
+var MINUTE = 60000;
+var HOUR = 3600000;
+var DAY = 86400000;
+/*
+  Super fast mini-helpers to find start/end of certain periods within the `timestamp` day.
+  Done without using any expensive `Date` operations.
+  Useful for setting timers/timeouts.
+
+  Usage:
+      const unixDate = 1486289500131; // some random Date.
+
+      const ms_at_start_of_Day = atLast(unixDate, DAY);
+      const ms_at_start_of_Hour = atLast(unixDate, HOUR);
+      const ms_at_start_of_12hourPeriod = atLast(unixDate, 12*HOUR);
+      const ms_at_end_of_Day = atNext(unixDate, DAY);
+      const ms_at_end_of_30MinutePeriod = atNext(unixDate, 30*MINUTE);
+      const ms_since_last_midnight = sinceLast(unixDate, DAY);
+*/
+
+var sinceLast = function (timestamp, periodSizeMS) {
+  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+  return timestamp % periodSizeMS;
+};
+var untilNext = function (timestamp, periodSizeMS) {
+  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+  // return periodSizeMS - sinceLast(timestamp, periodSizeMS);
+  return periodSizeMS - timestamp % periodSizeMS;
+};
+
+var atLast = function (timestamp, periodSizeMS) {
+  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+  // return timestamp - sinceLast(timestamp, periodSizeMS);
+  return timestamp - timestamp % periodSizeMS;
+};
+var atNext = function (timestamp, periodSizeMS) {
+  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+  // return timestamp + untilNext(timestamp, periodSizeMS);
+  return timestamp + (periodSizeMS - timestamp % periodSizeMS);
+};
+
+
+
+
 /*
   Executes callback when the clock strikes the next whole `periodSizeMs`
   Returns an object with a `cancel` function - which optionally executes the callback.
@@ -1050,15 +1094,12 @@ var object = {
       at12_15.cancel(true);
 
 */
-
-// import { untilNext } from './time';
-function onNext(periodSizeMS, offsetMs, callback) {
+var onNext = function (periodSizeMS, offsetMs, callback) {
   if (typeof offsetMs !== 'number') {
     callback = offsetMs;
     offsetMs = 0;
   }
-  // const msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
-  var msToNext = periodSizeMS - (Date.now() - offsetMs) % periodSizeMS;
+  var msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
   // OPINIONATED: Add a slight .5% - 1% fuzz to the timer to avoid
   // A) crazy spikes in server-load (in case of multiple clients)
   // B) accidental under-shoots caused by bad timer handling in the browser
@@ -1071,10 +1112,10 @@ function onNext(periodSizeMS, offsetMs, callback) {
       execCallback && callback();
     },
   };
-}
+};
 
 // Auto-repeating version of `onNext()`
-function onEvery(periodSizeMS, offsetMs, callback) {
+var onEvery = function (periodSizeMS, offsetMs, callback) {
   if (typeof offsetMs !== 'number') {
     callback = offsetMs;
     offsetMs = 0;
@@ -1090,7 +1131,30 @@ function onEvery(periodSizeMS, offsetMs, callback) {
   return {
     cancel: function (execCallback) { nextUp.cancel(execCallback); },
   };
-}
+};
+
+
+
+var time = {
+  SECOND: SECOND,
+  MINUTE: MINUTE,
+  HOUR: HOUR,
+  DAY: DAY,
+
+  sinceLast: sinceLast,
+  untilNext: untilNext,
+  atLast: atLast,
+  atNext: atNext,
+  atStart: atLast,
+  atEnd: atNext,
+
+  onNext: onNext,
+  onEvery: onEvery,
+};
+
+console.warn('Module "qj/onEvery" is depricated.\n `import { onEvery } from "qj/time";` instead.');
+
+console.warn('Module "qj/onNext" is depricated.\n `import { onNext } from "qj/time";` instead.');
 
 // parseParams( queryString )
 //
@@ -1281,62 +1345,6 @@ var throttle = function (func, delay, skipFirst) {
     throttled = 0;
   };
   return throttledFn;
-};
-
-var SECOND = 1000;
-var MINUTE = 60000;
-var HOUR = 3600000;
-var DAY = 86400000;
-/*
-  Super fast mini-helpers to find start/end of certain periods within the `timestamp` day.
-  Done without using any expensive `Date` operations.
-  Useful for setting timers/timeouts.
-
-  Usage:
-      const unixDate = 1486289500131; // some random Date.
-
-      const ms_at_start_of_Day = atLast(unixDate, DAY);
-      const ms_at_start_of_Hour = atLast(unixDate, HOUR);
-      const ms_at_start_of_12hourPeriod = atLast(unixDate, 12*HOUR);
-      const ms_at_end_of_Day = atNext(unixDate, DAY);
-      const ms_at_end_of_30MinutePeriod = atNext(unixDate, 30*MINUTE);
-      const ms_since_last_midnight = sinceLast(unixDate, DAY);
-*/
-
-var sinceLast = function (timestamp, periodSizeMS) {
-  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  return timestamp % periodSizeMS;
-};
-var untilNext = function (timestamp, periodSizeMS) {
-  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  // return periodSizeMS - sinceLast(timestamp, periodSizeMS);
-  return periodSizeMS - timestamp % periodSizeMS;
-};
-
-var atLast = function (timestamp, periodSizeMS) {
-  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  // return timestamp - sinceLast(timestamp, periodSizeMS);
-  return timestamp - timestamp % periodSizeMS;
-};
-var atNext = function (timestamp, periodSizeMS) {
-  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  // return timestamp + untilNext(timestamp, periodSizeMS);
-  return timestamp + (periodSizeMS - timestamp % periodSizeMS);
-};
-
-
-var time = {
-  SECOND: SECOND,
-  MINUTE: MINUTE,
-  HOUR: HOUR,
-  DAY: DAY,
-
-  sinceLast: sinceLast,
-  untilNext: untilNext,
-  atLast: atLast,
-  atNext: atNext,
-  atStart: atLast,
-  atEnd: atNext,
 };
 
 function trigger(type, elm) {
