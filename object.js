@@ -161,15 +161,6 @@ const objectReplace = (original, replacement, customSameCheck) => {
 
 
 
-const object = {
-  clean: objectClean,
-  isEmpty: objectIsEmpty,
-  isSame: objectIsSame,
-  only: objectOnly,
-  replace: objectReplace,
-  update: objectUpdate,
-  without: objectWithout,
-};
 export {
   objectClean,
   objectIsEmpty,
@@ -178,6 +169,14 @@ export {
   objectReplace,
   objectUpdate,
   objectWithout,
+};
 
-  object as default,
+export default {
+  clean: objectClean,
+  isEmpty: objectIsEmpty,
+  isSame: objectIsSame,
+  only: objectOnly,
+  replace: objectReplace,
+  update: objectUpdate,
+  without: objectWithout,
 };
