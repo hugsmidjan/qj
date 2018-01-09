@@ -2,6 +2,7 @@ import A from './A';
 import alphabetize from './alphabetize';
 import toObject from './arrayToObject';
 import dedupe from './uniqueArray';
+import groupBy from './list/groupBy';
 
 
 export {
@@ -10,6 +11,7 @@ export {
     alphabetize,
     toObject,
     dedupe,
+    groupBy,
 };
 export default {
     A,
@@ -17,4 +19,5 @@ export default {
     alphabetize,
     toObject,
     dedupe,
+    groupBy,
 };
