@@ -18,6 +18,7 @@ export { default as getUrlParam } from './getUrlParam';
 export { default as htmlToDiv } from './htmlToDiv';
 export { default as htmlToNodes } from './htmlToNodes';
 export { default as inject } from './inject';
+export { default as list } from './list';
 export { default as liveVal } from './liveVal';
 export { default as load } from './load';
 export { default as makeQueryString } from './makeQueryString';

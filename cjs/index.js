@@ -2,6 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+// List-to-Array converter
 function A/*::<T>*/(list/*:$Supertype<T[]> */)/*:T[] */ {
   return [].slice.call(list);
 }
@@ -202,7 +203,7 @@ function aquireId(el, prefDefaultId) { // el is an optional parameter.
   return el.id;
 }
 
-// Convert arry into an object keyed by prop.
+// Convert an array-like list into an object keyed by prop.
 // Prop values are assumed to be unique.
 // Array items with repeated keys (prop value) are skipped
 // If prop is undefined, the Array values are used as keys
@@ -221,10 +222,10 @@ function aquireId(el, prefDefaultId) { // el is an optional parameter.
   // { Orange:1, Apple:3, Tomato:1 }
 
 */
-function arrayToObject( arr, prop ) {
-  if ( arr ) {
+function arrayToObject( list, prop ) {
+  if ( list ) {
     var obj = {};
-    arr.forEach(prop ?
+    [].forEach.call(list, prop ?
       function (item) {
         var key = item[prop];
         if ( !(key in obj) ) {
@@ -717,6 +718,57 @@ function inject(template, _vars) {
   }
   return resultString;
 }
+
+// DECIDE: Add support for custom find function?
+//   (where the default would be the identity function)
+function uniqueArray(array) {
+  var result = [];
+  var length = array.length;
+  for (var i = 0; i < length; i++) {
+    var value = array[i];
+    if ( result.indexOf(value) < 0 ) {
+      result.push(value);
+    }
+  }
+  return result;
+}
+
+// Convert an array-like list into an object containing the items
+// grouped by some `prop` – where `prop` can be a custom function
+var groupBy = function (list, prop) {
+    var getProp = typeof prop === 'string' ?
+        function (item) { return item[prop]; }:
+        prop;
+
+    var grouped = {};
+
+    [].forEach.call(list, function (item) {
+        var name = getProp(item);
+        if (!grouped[name]) {
+            grouped[name] = [];
+        }
+        grouped[name].push(item);
+    });
+
+    return grouped;
+};
+
+groupBy.asArray = function (list, prop) {
+    var grouped = groupBy(list, prop);
+    return Object.keys(grouped).map(function (name) { return ({
+        name: name,
+        items: grouped[name],
+    }); });
+};
+
+var list = {
+    A: A,
+    toArray: A,
+    alphabetize: alphabetize,
+    toObject: arrayToObject,
+    dedupe: uniqueArray,
+    groupBy: groupBy,
+};
 
 // liveVal
 // update input/textarea values while maintaining cursor-position *from end*
@@ -1352,18 +1404,6 @@ function trigger(type, elm) {
   elm.dispatchEvent( e );
 }
 
-function uniqueArray(array) {
-  var result = [];
-  var length = array.length;
-  for (var i = 0; i < length; i++) {
-    var value = array[i];
-    if ( result.indexOf(value) < 0 ) {
-      result.push(value);
-    }
-  }
-  return result;
-}
-
 function zapElm(elm) {
   var parent = elm && elm.parentNode;
   if ( parent ) {
@@ -1407,6 +1447,7 @@ exports.getUrlParam = getUrlParam;
 exports.htmlToDiv = htmlToDiv;
 exports.htmlToNodes = htmlToNodes;
 exports.inject = inject;
+exports.list = list;
 exports.liveVal = liveVal;
 exports.load = load;
 exports.makeQueryString = makeQueryString;
