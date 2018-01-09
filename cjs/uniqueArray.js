@@ -1,5 +1,7 @@
 'use strict';
 
+// DECIDE: Add support for custom find function?
+//   (where the default would be the identity function)
 function uniqueArray(array) {
   var result = [];
   var length = array.length;
