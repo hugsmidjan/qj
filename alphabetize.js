@@ -15,7 +15,7 @@ export default function alphabetize(arr, lang, getProp) {
   if (
     lang === 'is' &&
     supportsIcelandic == null &&
-    (supportsIcelandic = 'ð'.localeCompare('e','is') === -1) === false
+    !(supportsIcelandic = 'ð'.localeCompare('e','is') < 0 && 'ob'.localeCompare('öa','is') < 0)
   ) {
     return sortIsl( arr, { getProp } );
   }
