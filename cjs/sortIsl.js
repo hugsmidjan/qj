@@ -69,6 +69,9 @@ var getAbcText = function (text) {
 };
 
 
+var defaultGetProp = function (item) { return item+''; };
+var defaultSortFn = function (a,b) { return a[0]===b[0] ? 0 : a[0]>b[0] ? 1 : -1; };
+
 function sortIsl( arr, opts ) {
   opts = opts || {};
   if ( typeof opts === 'string' ) {
@@ -78,29 +81,12 @@ function sortIsl( arr, opts ) {
   else if (opts.apply && opts.call) {
     opts = { getProp: opts };
   }
-
-  var getProp = opts.getProp  ||  (function (item) { return ''+item; });
-  var sortFn = opts.sortFn  ||  (function (a,b) { return a[0]===b[0] ? 0 : a[0]>b[0] ? 1 : -1; });
-
-  var tempArr = [];
-  var len = arr.length;
-  var i = 0;
-  while ( i<len ) {
-    tempArr[i] = [ getAbcText(getProp( arr[i] )), arr[i] ];
-    i++;
-  }
-  tempArr.sort(
-      opts.reverse ?
-          function (a,b) { return -1 * sortFn(a,b); }:
-          sortFn
-    );
-  i = 0;
-  while ( i<len ) {
-    arr[i] = tempArr[i][1];
-    i++;
-  }
-  return tempArr.map();
-
+  var getProp = opts.getProp  ||  defaultGetProp;
+  var sortFn = opts.sortFn  ||  defaultSortFn;
+  return arr
+      .map(function (itm) { return [ getAbcText(getProp(itm)), itm ]; })
+      .sort(opts.reverse ? function (a,b) { return -1*sortFn(a,b); } : sortFn)
+      .map(function (itm) { return itm[1]; });
 }
 
 module.exports = sortIsl;
