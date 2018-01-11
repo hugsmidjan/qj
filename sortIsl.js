@@ -67,6 +67,9 @@ const getAbcText = (text) => {
 };
 
 
+const defaultGetProp = (item) => item+'';
+const defaultSortFn = (a,b) => a[0]===b[0] ? 0 : a[0]>b[0] ? 1 : -1;
+
 export default function sortIsl( arr, opts ) {
   opts = opts || {};
   if ( typeof opts === 'string' ) {
@@ -76,27 +79,10 @@ export default function sortIsl( arr, opts ) {
   else if (opts.apply && opts.call) {
     opts = { getProp: opts };
   }
-
-  const getProp = opts.getProp  ||  ((item) => ''+item);
-  const sortFn = opts.sortFn  ||  ((a,b) => a[0]===b[0] ? 0 : a[0]>b[0] ? 1 : -1);
-
-  const tempArr = [];
-  const len = arr.length;
-  let i = 0;
-  while ( i<len ) {
-    tempArr[i] = [ getAbcText(getProp( arr[i] )), arr[i] ];
-    i++;
-  }
-  tempArr.sort(
-      opts.reverse ?
-          (a,b) => -1 * sortFn(a,b):
-          sortFn
-    );
-  i = 0;
-  while ( i<len ) {
-    arr[i] = tempArr[i][1];
-    i++;
-  }
-  return tempArr.map();
-
+  const getProp = opts.getProp  ||  defaultGetProp;
+  const sortFn = opts.sortFn  ||  defaultSortFn;
+  return arr
+      .map((itm) => [ getAbcText(getProp(itm)), itm ])
+      .sort(opts.reverse ? (a,b) => -1*sortFn(a,b) : sortFn)
+      .map((itm) => itm[1]);
 }

@@ -13,13 +13,9 @@ export default function alphabetize(arr, lang, getProp) {
     getProp = (item) => item[prop];
   }
   if (
-    lang === 'is' &&
-    supportsIcelandic == null &&
-    (supportsIcelandic = 'ð'.localeCompare('e','is') === -1) === false
+    lang !== 'is' || supportsIcelandic === true ||
+    (supportsIcelandic !== false && !!(supportsIcelandic = 'ð'.localeCompare('e','is') < 0 && 'ob'.localeCompare('öa','is') < 0))
   ) {
-    return sortIsl( arr, { getProp } );
-  }
-  else {
     let newArr = arr.map((item, idx) => ({ value: ''+getProp(item), idx }));
     lang = langAliases[lang] || lang;
     newArr.sort( (a,b) => {
@@ -30,5 +26,8 @@ export default function alphabetize(arr, lang, getProp) {
       });
     });
     return newArr.map((item) => arr[item.idx]);
+  }
+  else {
+    return sortIsl( arr, { getProp } );
   }
 }
