@@ -1088,23 +1088,23 @@ var DAY = 86400000;
 
 var sinceLast = function (timestamp, periodSizeMS) {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  return timestamp % periodSizeMS;
+  return timestamp >= 0 ?
+      timestamp % periodSizeMS:
+      (periodSizeMS + timestamp % periodSizeMS) % DAY;
 };
 var untilNext = function (timestamp, periodSizeMS) {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  // return periodSizeMS - sinceLast(timestamp, periodSizeMS);
-  return periodSizeMS - timestamp % periodSizeMS;
+  return periodSizeMS - sinceLast(timestamp, periodSizeMS);
 };
 
 var atLast = function (timestamp, periodSizeMS) {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  // return timestamp - sinceLast(timestamp, periodSizeMS);
-  return timestamp - timestamp % periodSizeMS;
+  return timestamp - sinceLast(timestamp, periodSizeMS);
 };
 var atNext = function (timestamp, periodSizeMS) {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   // return timestamp + untilNext(timestamp, periodSizeMS);
-  return timestamp + (periodSizeMS - timestamp % periodSizeMS);
+  return timestamp + (periodSizeMS - sinceLast(timestamp, periodSizeMS));
 };
 
 
