@@ -20,23 +20,23 @@ const DAY = 86400000;
 
 const sinceLast = (timestamp, periodSizeMS) => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  return timestamp % periodSizeMS;
+  return timestamp >= 0 ?
+      timestamp % periodSizeMS:
+      (periodSizeMS + timestamp % periodSizeMS) % DAY;
 };
 const untilNext = (timestamp, periodSizeMS) => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  // return periodSizeMS - sinceLast(timestamp, periodSizeMS);
-  return periodSizeMS - timestamp % periodSizeMS;
+  return periodSizeMS - sinceLast(timestamp, periodSizeMS);
 };
 
 const atLast = (timestamp, periodSizeMS) => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  // return timestamp - sinceLast(timestamp, periodSizeMS);
-  return timestamp - timestamp % periodSizeMS;
+  return timestamp - sinceLast(timestamp, periodSizeMS);
 };
 const atNext = (timestamp, periodSizeMS) => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   // return timestamp + untilNext(timestamp, periodSizeMS);
-  return timestamp + (periodSizeMS - timestamp % periodSizeMS);
+  return timestamp + (periodSizeMS - sinceLast(timestamp, periodSizeMS));
 };
 
 
