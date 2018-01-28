@@ -1,9 +1,31 @@
 'use strict';
 
+var DAY = 86400000;
+/*
+  Super fast mini-helpers to find start/end of certain periods within the `timestamp` day.
+  Done without using any expensive `Date` operations.
+  Useful for setting timers/timeouts.
+
+  Usage:
+      const unixDate = 1486289500131; // some random Date.
+
+      const ms_at_start_of_Day = atLast(unixDate, DAY);
+      const ms_at_start_of_Hour = atLast(unixDate, HOUR);
+      const ms_at_start_of_12hourPeriod = atLast(unixDate, 12*HOUR);
+      const ms_at_end_of_Day = atNext(unixDate, DAY);
+      const ms_at_end_of_30MinutePeriod = atNext(unixDate, 30*MINUTE);
+      const ms_since_last_midnight = sinceLast(unixDate, DAY);
+*/
+
+var sinceLast = function (timestamp, periodSizeMS) {
+  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+  return timestamp >= 0 ?
+      timestamp % periodSizeMS:
+      (periodSizeMS + timestamp % periodSizeMS) % DAY;
+};
 var untilNext = function (timestamp, periodSizeMS) {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  // return periodSizeMS - sinceLast(timestamp, periodSizeMS);
-  return periodSizeMS - timestamp % periodSizeMS;
+  return periodSizeMS - sinceLast(timestamp, periodSizeMS);
 };
 
 /*
