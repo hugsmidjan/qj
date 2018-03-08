@@ -42,23 +42,23 @@ const textSearch = (props) => {
       results.push({ item, score, idx });
     }
   });
-  results.sort((a,b) => {
-    return  a.score < b.score ? 1:
-            a.score > b.score ? -1:
-            a.idx < b.idx ? -1 : 1; // fix Chrome's unstable sort
-  });
+  results.sort((a,b) => (
+    a.score < b.score ? 1:
+    a.score > b.score ? -1:
+    a.idx < b.idx ? -1 : 1 // fix Chrome's unstable sort
+  ));
   return results.map((result) => result.item);
 };
 
 
 // Helper function to prepare a String for the search function
-const normalizeText = (string) => {
-  return (string.join ? string.join(' ') : string)
-              .replace(/\u00ad/g, '') // remove soft-hyphens
-              .replace(/[\s\-–—_.,@]+/g, ' ') // normalize spaces
-              .trim()
-              .toLowerCase();
-};
+const normalizeText = (string) => (
+  (string.join ? string.join(' ') : string)
+      .replace(/\u00ad/g, '') // remove soft-hyphens
+      .replace(/[\s\-–—_.,@]+/g, ' ') // normalize spaces
+      .trim()
+      .toLowerCase()
+);
 textSearch.normalize = normalizeText;
 
 
