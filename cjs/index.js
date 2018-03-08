@@ -1113,8 +1113,30 @@ var atNext = function (timestamp, periodSizeMS) {
 
 
 
+
 /*
-  Executes callback when the clock strikes the next whole `periodSizeMs`
+  Safe timeout which guarantees the timer doesn't undershoot
+  (i.e. doesn't fire a few milliseconds too early)
+  Returns a getter function for the current timeout ID
+*/
+var safeTimeout = function (callback, delay) {
+  var startingTime = Date.now();
+  var timeoutId = setTimeout(function () {
+    var undershootMs = startingTime + delay - Date.now();
+    if ( undershootMs > 0 ) {
+      timeoutId = setTimeout(callback, undershootMs + 50);
+    }
+    else {
+      callback();
+    }
+  }, delay + 50);
+  return function () { return timeoutId; };
+};
+
+
+/*
+  Executes callback which is guaranteed to fire *AFTER* the clock strikes
+  the next whole `periodSizeMs`.
   Returns an object with a `cancel` function - which optionally executes the callback.
 
   Usage:
@@ -1140,15 +1162,15 @@ var onNext = function (periodSizeMS, offsetMs, callback) {
     offsetMs = 0;
   }
   var msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
-  // OPINIONATED: Add a slight .5% - 1% fuzz to the timer to avoid
-  // A) crazy spikes in server-load (in case of multiple clients)
-  // B) accidental under-shoots caused by bad timer handling in the browser
-  var fuzz = (1 + Math.random()) * Math.max(.01*periodSizeMS, 100);
-  var timeout = setTimeout(callback, msToNext + fuzz);
+
+  var timeoutId = msToNext > 2000 ?
+      safeTimeout(callback, msToNext):
+      // quicker (and dirtier) alternative to safeTimeout() for shorter periodSizes
+      (function (tId) { return function () { return tId; }; })(setTimeout(callback, msToNext + 50));
 
   return {
     cancel: function (execCallback) {
-      clearTimeout(timeout);
+      clearTimeout( timeoutId() );
       execCallback && callback();
     },
   };
@@ -1190,6 +1212,7 @@ var time = {
 
   onNext: onNext,
   onEvery: onEvery,
+  safeTimeout: safeTimeout,
 };
 
 console.warn('Module "qj/onEvery" is depricated.\n `import { onEvery } from "qj/time";` instead.');
@@ -1338,23 +1361,23 @@ var textSearch = function (props) {
       results.push({ item: item, score: score, idx: idx });
     }
   });
-  results.sort(function (a,b) {
-    return  a.score < b.score ? 1:
-            a.score > b.score ? -1:
-            a.idx < b.idx ? -1 : 1; // fix Chrome's unstable sort
-  });
+  results.sort(function (a,b) { return (
+    a.score < b.score ? 1:
+    a.score > b.score ? -1:
+    a.idx < b.idx ? -1 : 1 // fix Chrome's unstable sort
+  ); });
   return results.map(function (result) { return result.item; });
 };
 
 
 // Helper function to prepare a String for the search function
-var normalizeText = function (string) {
-  return (string.join ? string.join(' ') : string)
-              .replace(/\u00ad/g, '') // remove soft-hyphens
-              .replace(/[\s\-–—_.,@]+/g, ' ') // normalize spaces
-              .trim()
-              .toLowerCase();
-};
+var normalizeText = function (string) { return (
+  (string.join ? string.join(' ') : string)
+      .replace(/\u00ad/g, '') // remove soft-hyphens
+      .replace(/[\s\-–—_.,@]+/g, ' ') // normalize spaces
+      .trim()
+      .toLowerCase()
+); };
 textSearch.normalize = normalizeText;
 
 // throttleFn()

@@ -42,23 +42,23 @@ var textSearch = function (props) {
       results.push({ item: item, score: score, idx: idx });
     }
   });
-  results.sort(function (a,b) {
-    return  a.score < b.score ? 1:
-            a.score > b.score ? -1:
-            a.idx < b.idx ? -1 : 1; // fix Chrome's unstable sort
-  });
+  results.sort(function (a,b) { return (
+    a.score < b.score ? 1:
+    a.score > b.score ? -1:
+    a.idx < b.idx ? -1 : 1 // fix Chrome's unstable sort
+  ); });
   return results.map(function (result) { return result.item; });
 };
 
 
 // Helper function to prepare a String for the search function
-var normalizeText = function (string) {
-  return (string.join ? string.join(' ') : string)
-              .replace(/\u00ad/g, '') // remove soft-hyphens
-              .replace(/[\s\-–—_.,@]+/g, ' ') // normalize spaces
-              .trim()
-              .toLowerCase();
-};
+var normalizeText = function (string) { return (
+  (string.join ? string.join(' ') : string)
+      .replace(/\u00ad/g, '') // remove soft-hyphens
+      .replace(/[\s\-–—_.,@]+/g, ' ') // normalize spaces
+      .trim()
+      .toLowerCase()
+); };
 textSearch.normalize = normalizeText;
 
 module.exports = textSearch;
