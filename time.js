@@ -42,8 +42,30 @@ const atNext = (timestamp, periodSizeMS) => {
 
 
 
+
 /*
-  Executes callback when the clock strikes the next whole `periodSizeMs`
+  Safe timeout which guarantees the timer doesn't undershoot
+  (i.e. doesn't fire a few milliseconds too early)
+  Returns a getter function for the current timeout ID
+*/
+const safeTimeout = (callback, delay) => {
+  const startingTime = Date.now();
+  let timeoutId = setTimeout(() => {
+    const undershootMs = startingTime + delay - Date.now();
+    if ( undershootMs > 0 ) {
+      timeoutId = setTimeout(callback, undershootMs + 50);
+    }
+    else {
+      callback();
+    }
+  }, delay + 50);
+  return () => timeoutId;
+};
+
+
+/*
+  Executes callback which is guaranteed to fire *AFTER* the clock strikes
+  the next whole `periodSizeMs`.
   Returns an object with a `cancel` function - which optionally executes the callback.
 
   Usage:
@@ -69,15 +91,15 @@ const onNext = (periodSizeMS, offsetMs, callback) => {
     offsetMs = 0;
   }
   const msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
-  // OPINIONATED: Add a slight .5% - 1% fuzz to the timer to avoid
-  // A) crazy spikes in server-load (in case of multiple clients)
-  // B) accidental under-shoots caused by bad timer handling in the browser
-  const fuzz = (1 + Math.random()) * Math.max(.01*periodSizeMS, 100);
-  const timeout = setTimeout(callback, msToNext + fuzz);
+
+  const timeoutId = msToNext > 2000 ?
+      safeTimeout(callback, msToNext):
+      // quicker (and dirtier) alternative to safeTimeout() for shorter periodSizes
+      (tId => () => tId)(setTimeout(callback, msToNext + 50));
 
   return {
     cancel: (execCallback) => {
-      clearTimeout(timeout);
+      clearTimeout( timeoutId() );
       execCallback && callback();
     },
   };
@@ -119,6 +141,7 @@ const time = {
 
   onNext,
   onEvery,
+  safeTimeout,
 };
 
 export {
@@ -136,5 +159,6 @@ export {
 
   onNext,
   onEvery,
+  safeTimeout,
 };
 export default time;
