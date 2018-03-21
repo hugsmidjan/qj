@@ -14,9 +14,11 @@
 
 // import './polyfills/Object.assign';
 
+const _createEmpty = (original) => original.constructor ? new original.constructor() : Object.create(null);
+
 // IE11 compatible no-polyfill object cloner
 const _clone = (original) => {
-  const clone = new original.constructor();
+  const clone = _createEmpty(original);
   for (const originalKey in original) {
     if ( hasOwnProperty.call(original, originalKey) ) {
       clone[originalKey] = original[originalKey];
@@ -58,7 +60,7 @@ const objectUpdate = (original, newValues, customSameCheck) => {
 // Returns the original if nothing changed.
 const objectClean = (original, alsoNull) => {
   let deleted;
-  const clone = new original.constructor();
+  const clone = _createEmpty(original);
   for (const key in original) {
     if ( hasOwnProperty.call(original, key) ) {
       const originalVal = original[key];
@@ -115,7 +117,7 @@ const objectIsSame = (a, b, customSameCheck) => {
 // Returns the original if nothing changed.
 const objectOnly = (original, keys) => {
   let extra;
-  const clone = new original.constructor();
+  const clone = _createEmpty(original);
   for (const key in original) {
     if ( hasOwnProperty.call(original, key) ) {
       if ( keys.indexOf(key) > -1 ) {

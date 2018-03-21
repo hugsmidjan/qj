@@ -383,6 +383,30 @@ function cssSupport( propname ) {
     return prop;
   }
 
+// const _curriers = [
+//     null,
+//     (func, args) => {
+//         return function (a) {
+//             return func.apply(this, args.concat([a]));
+//         };
+//     },
+//     (func, args) => {
+//         return function (a,b) {
+//             return func.apply(this, args.concat([a,b]));
+//         };
+//     },
+// ];
+// const _currierN = (func, args) => {
+//     return function (...args2) {
+//         return func.apply(this, args.concat(args2));
+//     };
+// };
+//
+// export default function curry(func, ...args) {
+//     const currier = _curriers[func.length - args.length] || _currierN;
+//     return currier(func, args);
+// }
+
 // Super simple minimal currier
 function curry(func) {
   var args = [], len = arguments.length - 1;
@@ -896,6 +920,61 @@ function load(url, params/*, opts*/) {
   });
 }
 
+// Simple, stupid, memory-efficient, and super fast memoizer.
+// Checks for strict equality with the last parameter values.
+var _memoizers = [
+    function (fn) { return fn; },
+    function (fn, value, p) {
+        return function (a) {
+            if ( !p || a!==p[0] ) {
+                p = [a];
+                value = fn.apply(this, p);
+            }
+            return value;
+        };
+    },
+    function (fn, value, p) {
+        return function (a,b) {
+            if ( !p || a!==p[0] || b!==p[1] ) {
+                p = [a,b];
+                value = fn.apply(this, p);
+            }
+            return value;
+        };
+    },
+    function (fn, value, p) {
+        return function (a,b,c) {
+            if ( !p || a!==p[0] || b!==p[1] || c!==p[2] ) {
+                p = [a,b,c];
+                value = fn.apply(this, p);
+            }
+            return value;
+        };
+    } ];
+var _memoizerN = function (fn, value, p) {
+    var arity = fn.length;
+    return function () {
+        var this$1 = this;
+        var args = [], len = arguments.length;
+        while ( len-- ) args[ len ] = arguments[ len ];
+
+        var i = 0;
+        while (i < arity) {
+            if (args[i] !== p[i]) {
+                p = args;
+                return (value = fn.apply(this$1, p));
+            }
+            i++;
+        }
+        return value;
+    };
+};
+
+var memoize = function (fn) {
+    var memoizer = _memoizers[fn.length] || _memoizerN;
+    return memoizer(fn);
+};
+
 // Functional Immutability helpers.
 // --------------------------------------------------------
 // Small, fast, stupid, practical, & care-free.
@@ -912,9 +991,11 @@ function load(url, params/*, opts*/) {
 
 // import './polyfills/Object.assign';
 
+var _createEmpty = function (original) { return original.constructor ? new original.constructor() : Object.create(null); };
+
 // IE11 compatible no-polyfill object cloner
 var _clone = function (original) {
-  var clone = new original.constructor();
+  var clone = _createEmpty(original);
   for (var originalKey in original) {
     if ( hasOwnProperty$1.call(original, originalKey) ) {
       clone[originalKey] = original[originalKey];
@@ -956,7 +1037,7 @@ var objectUpdate = function (original, newValues, customSameCheck) {
 // Returns the original if nothing changed.
 var objectClean = function (original, alsoNull) {
   var deleted;
-  var clone = new original.constructor();
+  var clone = _createEmpty(original);
   for (var key in original) {
     if ( hasOwnProperty$1.call(original, key) ) {
       var originalVal = original[key];
@@ -1013,7 +1094,7 @@ var objectIsSame = function (a, b, customSameCheck) {
 // Returns the original if nothing changed.
 var objectOnly = function (original, keys) {
   var extra;
-  var clone = new original.constructor();
+  var clone = _createEmpty(original);
   for (var key in original) {
     if ( hasOwnProperty$1.call(original, key) ) {
       if ( keys.indexOf(key) > -1 ) {
@@ -1463,6 +1544,7 @@ exports.liveVal = liveVal;
 exports.load = load;
 exports.makeQueryString = makeQueryString;
 exports.matches = matches;
+exports.memoize = memoize;
 exports.object = object;
 exports.objectClean = objectClean;
 exports.objectIsEmpty = objectIsEmpty;

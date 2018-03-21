@@ -16,9 +16,11 @@
 
 // import './polyfills/Object.assign';
 
+var _createEmpty = function (original) { return original.constructor ? new original.constructor() : Object.create(null); };
+
 // IE11 compatible no-polyfill object cloner
 var _clone = function (original) {
-  var clone = new original.constructor();
+  var clone = _createEmpty(original);
   for (var originalKey in original) {
     if ( hasOwnProperty.call(original, originalKey) ) {
       clone[originalKey] = original[originalKey];
