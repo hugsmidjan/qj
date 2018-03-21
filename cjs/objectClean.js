@@ -16,7 +16,8 @@
 
 // import './polyfills/Object.assign';
 
-// IE11 compatible no-polyfill object cloner
+var _createEmpty = function (original) { return original.constructor ? new original.constructor() : Object.create(null); };
+
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 
@@ -25,7 +26,7 @@ var hasOwnProperty = Object.prototype.hasOwnProperty;
 // Returns the original if nothing changed.
 var objectClean = function (original, alsoNull) {
   var deleted;
-  var clone = new original.constructor();
+  var clone = _createEmpty(original);
   for (var key in original) {
     if ( hasOwnProperty.call(original, key) ) {
       var originalVal = original[key];

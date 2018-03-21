@@ -16,7 +16,6 @@
 
 // import './polyfills/Object.assign';
 
-// IE11 compatible no-polyfill object cloner
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 
