@@ -34,17 +34,23 @@ var _memoizers = [
 var _memoizerN = function (fn, value, p) {
     var arity = fn.length;
     return function () {
-        var this$1 = this;
         var args = [], len = arguments.length;
         while ( len-- ) args[ len ] = arguments[ len ];
 
-        var i = 0;
-        while (i < arity) {
-            if (args[i] !== p[i]) {
-                p = args;
-                return (value = fn.apply(this$1, p));
+        var dirty = !p;
+        if (p) {
+            var i = 0;
+            while (i < arity) {
+                if (args[i] !== p[i]) {
+                    dirty = true;
+                    break;
+                }
+                i++;
             }
-            i++;
+        }
+        if (dirty) {
+            p = args;
+            value = fn.apply(this, p);
         }
         return value;
     };
