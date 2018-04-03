@@ -33,13 +33,20 @@ const _memoizers = [
 const _memoizerN = (fn, value, p) => {
     const arity = fn.length;
     return function (...args) {
-        let i = 0;
-        while (i < arity) {
-            if (args[i] !== p[i]) {
-                p = args;
-                return (value = fn.apply(this, p));
+        let dirty = !p;
+        if (p) {
+            let i = 0;
+            while (i < arity) {
+                if (args[i] !== p[i]) {
+                    dirty = true;
+                    break;
+                }
+                i++;
             }
-            i++;
+        }
+        if (dirty) {
+            p = args;
+            value = fn.apply(this, p);
         }
         return value;
     };
