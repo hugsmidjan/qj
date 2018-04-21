@@ -7,7 +7,7 @@ const getJsFiles = (path) => fs.readdirSync(path)
 const distPath = './cjs/';
 
 
-export default getJsFiles('./').map((filePath) => ({
+const libConfigs = getJsFiles('./').map((filePath) => ({
     input: filePath,
     output: {
         format: 'cjs',
@@ -18,3 +18,20 @@ export default getJsFiles('./').map((filePath) => ({
         clearScreen: false,
     },
 }));
+
+const testConfigs = getJsFiles('./tests/').map((filePath) => ({
+    input: filePath,
+    external: (id) => id !== filePath,
+    output: {
+        format: 'cjs',
+        sourcemap: false,
+        interop: false,
+        file: distPath+filePath.substr(2),
+    },
+    watch: {
+        clearScreen: false,
+    },
+}));
+
+
+export default libConfigs.concat(testConfigs);

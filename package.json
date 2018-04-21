@@ -5,9 +5,10 @@
   "module": "index.js",
   "main": "cjs/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c build/rollup.config.js",
-    "dev": "yarn build -w"
+    "test": "cd cjs && node ../node_modules/.bin/ospec",
+    "_build": "rollup -c build/rollup.config.js",
+    "build": "npm run _build && npm run test",
+    "dev": "onchange \"cjs/**\" -- yarn run test & yarn run _build -w"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,8 @@
   ],
   "license": "ISC",
   "devDependencies": {
+    "onchange": "^3.3.0",
+    "ospec": "^1.4.0",
     "rollup": "^0.58.1"
   }
 }
