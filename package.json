@@ -1,12 +1,13 @@
 {
   "name": "qj",
-  "version": "1.16.1",
+  "version": "1.17.0",
   "description": "Quick JavaScripts – Collection of useful miniature JavaScript helper functions.",
   "module": "index.js",
   "main": "cjs/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node build/build.js"
+    "build": "rollup -c build/rollup.config.js",
+    "dev": "yarn build -w"
   },
   "repository": {
     "type": "git",
@@ -18,10 +19,6 @@
   ],
   "license": "ISC",
   "devDependencies": {
-    "rollup": "^0.50.0",
-    "rollup-plugin-buble": "^0.16.0"
-  },
-  "disabledDevDependencies": {
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup": "^0.58.1"
   }
 }
