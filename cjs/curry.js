@@ -25,14 +25,8 @@
 // }
 
 // Super simple minimal currier
-function curry(func) {
-  var args = [], len = arguments.length - 1;
-  while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
-
-  return function () {
-    var args2 = [], len = arguments.length;
-    while ( len-- ) args2[ len ] = arguments[ len ];
-
+function curry(func, ...args) {
+  return function (...args2) {
     return func.apply(this, args.concat(args2));
   };
 }

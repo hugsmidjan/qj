@@ -47,23 +47,23 @@ function A/*::<T>*/(list/*:$Supertype<T[]> */)/*:T[] */ {
       $(tRows[0].parentNode).append( tRows );
 
 */
-var abcIdx = {};
-var abc = '| -0123456789aáàâäåbcdðeéèêëfghiíîïjklmnoóôpqrstuúùüvwxyýÿzþæö'; // prepend list with '|' to guarantee that abc.indexOf(chr) never returns 0 (falsy)
-var getAbcText = function (text) {
+const abcIdx = {};
+const abc = '| -0123456789aáàâäåbcdðeéèêëfghiíîïjklmnoóôpqrstuúùüvwxyýÿzþæö'; // prepend list with '|' to guarantee that abc.indexOf(chr) never returns 0 (falsy)
+const getAbcText = (text) => {
   if ( typeof text === 'string' ) {
-    var idxStr = '';
+    let idxStr = '';
     text = (text.trim ? text.trim() : text.replace(/^\s+|\s+$/g,''))
               .replace(/[\/.,()]/g, '') // remove punctutation
               .replace(/\s*-\s*/g,'-')  // normalize spacing around dashes
               .replace(/(_|\s)+/g,' ')  // normalize/collapse space-characters
               .toLowerCase();           // lowercase
-    var len = text.length;
-    var i = 0;
+    const len = text.length;
+    let i = 0;
     while ( i < len ) {
-      var chr = text.charAt(i);
-      var chrCode = abcIdx[chr];
+      const chr = text.charAt(i);
+      let chrCode = abcIdx[chr];
       if ( !chrCode ) {
-        var idx = abc.indexOf(chr);
+        let idx = abc.indexOf(chr);
         idx = idx>-1 ? 32+idx : 99+chr.charCodeAt(0);
         chrCode = abcIdx[chr] = String.fromCharCode( idx );
       }
@@ -76,56 +76,56 @@ var getAbcText = function (text) {
 };
 
 
-var defaultGetProp = function (item) { return item+''; };
-var defaultSortFn = function (a,b) { return a[0]===b[0] ? 0 : a[0]>b[0] ? 1 : -1; };
+const defaultGetProp = (item) => item+'';
+const defaultSortFn = (a,b) => a[0]===b[0] ? 0 : a[0]>b[0] ? 1 : -1;
 
 function sortIsl( arr, opts ) {
   opts = opts || {};
   if ( typeof opts === 'string' ) {
-    var propName = opts;
-    opts = { getProp: function (item) { return item[propName]; } };
+    const propName = opts;
+    opts = { getProp: (item) => item[propName] };
   }
   else if (opts.apply && opts.call) {
     opts = { getProp: opts };
   }
-  var getProp = opts.getProp  ||  defaultGetProp;
-  var sortFn = opts.sortFn  ||  defaultSortFn;
+  const getProp = opts.getProp  ||  defaultGetProp;
+  const sortFn = opts.sortFn  ||  defaultSortFn;
   return arr
-      .map(function (itm) { return [ getAbcText(getProp(itm)), itm ]; })
-      .sort(opts.reverse ? function (a,b) { return -1*sortFn(a,b); } : sortFn)
-      .map(function (itm) { return itm[1]; });
+      .map((itm) => [ getAbcText(getProp(itm)), itm ])
+      .sort(opts.reverse ? (a,b) => -1*sortFn(a,b) : sortFn)
+      .map((itm) => itm[1]);
 }
 
-var supportsIcelandic;
+let supportsIcelandic;
 
-var langAliases = {
+const langAliases = {
   no: 'nb', // 'no' doesn't work in Chrome, but 'nb' does
 };
 
 function alphabetize(arr, lang, getProp) {
-  getProp = getProp || (function (item) { return item; });
+  getProp = getProp || ((item) => item);
 
   if ( typeof getProp === 'string' ) {
-    var prop = getProp;
-    getProp = function (item) { return item[prop]; };
+    const prop = getProp;
+    getProp = (item) => item[prop];
   }
   if (
     lang !== 'is' || supportsIcelandic === true ||
     (supportsIcelandic !== false && !!(supportsIcelandic = 'ð'.localeCompare('e','is') < 0 && 'ob'.localeCompare('öa','is') < 0))
   ) {
-    var newArr = arr.map(function (item, idx) { return ({ value: ''+getProp(item), idx: idx }); });
+    let newArr = arr.map((item, idx) => ({ value: ''+getProp(item), idx }));
     lang = langAliases[lang] || lang;
-    newArr.sort( function (a,b) {
+    newArr.sort( (a,b) => {
       return a.value.localeCompare(b.value, lang, {
         sensitivity: 'accent',
         ignorePunctuation: true,
         numeric: true,
       });
     });
-    return newArr.map(function (item) { return arr[item.idx]; });
+    return newArr.map((item) => arr[item.idx]);
   }
   else {
-    return sortIsl( arr, { getProp: getProp } );
+    return sortIsl( arr, { getProp } );
   }
 }
 
@@ -150,15 +150,15 @@ function alphabetize(arr, lang, getProp) {
 */
 function arrayToObject( list, prop ) {
   if ( list ) {
-    var obj = {};
+    const obj = {};
     [].forEach.call(list, prop ?
-      function (item) {
-        var key = item[prop];
+      (item) => {
+        const key = item[prop];
         if ( !(key in obj) ) {
           obj[key] = item;
         }
       }:
-      function (item) {
+      (item) => {
         obj[item] = (obj[item] || 0) +1;
       }
     );
@@ -171,7 +171,7 @@ function arrayToObject( list, prop ) {
 function uniqueArray(array) {
   var result = [];
   var length = array.length;
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     var value = array[i];
     if ( result.indexOf(value) < 0 ) {
       result.push(value);
@@ -182,15 +182,15 @@ function uniqueArray(array) {
 
 // Convert an array-like list into an object containing the items
 // grouped by some `prop` – where `prop` can be a custom function
-var groupBy = function (list, prop) {
-    var getProp = typeof prop === 'string' ?
-        function (item) { return item[prop]; }:
+const groupBy = (list, prop) => {
+    const getProp = typeof prop === 'string' ?
+        (item) => item[prop]:
         prop;
 
-    var grouped = {};
+    const grouped = {};
 
-    [].forEach.call(list, function (item) {
-        var name = getProp(item);
+    [].forEach.call(list, (item) => {
+        const name = getProp(item);
         if (!grouped[name]) {
             grouped[name] = [];
         }
@@ -200,21 +200,21 @@ var groupBy = function (list, prop) {
     return grouped;
 };
 
-groupBy.asArray = function (list, prop) {
-    var grouped = groupBy(list, prop);
-    return Object.keys(grouped).map(function (name) { return ({
-        name: name,
+groupBy.asArray = (list, prop) => {
+    const grouped = groupBy(list, prop);
+    return Object.keys(grouped).map((name) => ({
+        name,
         items: grouped[name],
-    }); });
+    }));
 };
 
 var list = {
-    A: A,
+    A,
     toArray: A,
-    alphabetize: alphabetize,
+    alphabetize,
     toObject: arrayToObject,
     dedupe: uniqueArray,
-    groupBy: groupBy,
+    groupBy,
 };
 
 exports.A = A;
@@ -223,4 +223,4 @@ exports.alphabetize = alphabetize;
 exports.toObject = arrayToObject;
 exports.dedupe = uniqueArray;
 exports.groupBy = groupBy;
-exports['default'] = list;
+exports.default = list;

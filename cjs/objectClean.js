@@ -16,20 +16,18 @@
 
 // import './polyfills/Object.assign';
 
-var _createEmpty = function (original) { return original.constructor ? new original.constructor() : Object.create(null); };
-
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-
+const _createEmpty = (original) => original.constructor ? new original.constructor() : Object.create(null);
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 
 // Returns a clone of original object with all keys that have undefined values deleted
 // Returns the original if nothing changed.
-var objectClean = function (original, alsoNull) {
-  var deleted;
-  var clone = _createEmpty(original);
-  for (var key in original) {
+const objectClean = (original, alsoNull) => {
+  let deleted;
+  const clone = _createEmpty(original);
+  for (const key in original) {
     if ( hasOwnProperty.call(original, key) ) {
-      var originalVal = original[key];
+      const originalVal = original[key];
       if ( (originalVal === undefined) || (originalVal === null && alsoNull) ) {
         deleted = true;
       }

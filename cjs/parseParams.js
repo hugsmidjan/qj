@@ -21,12 +21,10 @@ function parseParams(paramString) {
     paramString
         .replace(/\+/g, ' ')
         .split('&')
-        .forEach(function (paramBit) {
-          var ref = paramBit.split('=');
-          var name = ref[0];
-          var value = ref[1];
+        .forEach((paramBit) => {
+          let [name, value] = paramBit.split('=');
           name = decodeURIComponent(name);
-          var values = map[name] || (map[name] = []);
+          const values = map[name] || (map[name] = []);
           values.push( decodeURIComponent(value||'') );
         });
   }

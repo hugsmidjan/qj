@@ -16,29 +16,29 @@
 
 // import './polyfills/Object.assign';
 
-var _createEmpty = function (original) { return original.constructor ? new original.constructor() : Object.create(null); };
+const _createEmpty = (original) => original.constructor ? new original.constructor() : Object.create(null);
 
 // IE11 compatible no-polyfill object cloner
-var _clone = function (original) {
-  var clone = _createEmpty(original);
-  for (var originalKey in original) {
+const _clone = (original) => {
+  const clone = _createEmpty(original);
+  for (const originalKey in original) {
     if ( hasOwnProperty.call(original, originalKey) ) {
       clone[originalKey] = original[originalKey];
     }
   }
   return clone;
 };
-var hasOwnProperty = Object.prototype.hasOwnProperty;
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 
 
 // Returns a clone of original object with only the changed newValues assigned
 // Returns the original if nothing changed.
-var objectUpdate = function (original, newValues, customSameCheck) {
-  var clone;
-  for (var key in newValues) {
-    var valA = original[key];
-    var valB = newValues[key];
+const objectUpdate = (original, newValues, customSameCheck) => {
+  let clone;
+  for (const key in newValues) {
+    const valA = original[key];
+    const valB = newValues[key];
     if (
       valA !== valB  &&  hasOwnProperty.call(newValues, key)  &&
       !(customSameCheck && valA && valB && customSameCheck(valA, valB, key))

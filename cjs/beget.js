@@ -1,14 +1,14 @@
 'use strict';
 
 // Prototypal inheritance
-var F = function () {};
-var hasOwnProperty = Object.prototype.hasOwnProperty;
+const F = function () {};
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 function beget(proto, props) {
   F.prototype = proto;
-  var o = new F();
+  const o = new F();
   if ( props ) {
-    for (var key in props) {
+    for (let key in props) {
       if ( hasOwnProperty.call(props, key) ) {
         o[key] = props[key];
       }

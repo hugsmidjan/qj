@@ -2,10 +2,10 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var SECOND = 1000;
-var MINUTE = 60000;
-var HOUR = 3600000;
-var DAY = 86400000;
+const SECOND = 1000;
+const MINUTE = 60000;
+const HOUR = 3600000;
+const DAY = 86400000;
 /*
   Super fast mini-helpers to find start/end of certain periods within the `timestamp` day.
   Done without using any expensive `Date` operations.
@@ -22,22 +22,22 @@ var DAY = 86400000;
       const ms_since_last_midnight = sinceLast(unixDate, DAY);
 */
 
-var sinceLast = function (timestamp, periodSizeMS) {
+const sinceLast = (timestamp, periodSizeMS) => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   return timestamp >= 0 ?
       timestamp % periodSizeMS:
       (periodSizeMS + timestamp % periodSizeMS) % DAY;
 };
-var untilNext = function (timestamp, periodSizeMS) {
+const untilNext = (timestamp, periodSizeMS) => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   return periodSizeMS - sinceLast(timestamp, periodSizeMS);
 };
 
-var atLast = function (timestamp, periodSizeMS) {
+const atLast = (timestamp, periodSizeMS) => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   return timestamp - sinceLast(timestamp, periodSizeMS);
 };
-var atNext = function (timestamp, periodSizeMS) {
+const atNext = (timestamp, periodSizeMS) => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   // return timestamp + untilNext(timestamp, periodSizeMS);
   return timestamp + (periodSizeMS - sinceLast(timestamp, periodSizeMS));
@@ -52,10 +52,10 @@ var atNext = function (timestamp, periodSizeMS) {
   (i.e. doesn't fire a few milliseconds too early)
   Returns a getter function for the current timeout ID
 */
-var safeTimeout = function (callback, delay) {
-  var startingTime = Date.now();
-  var timeoutId = setTimeout(function () {
-    var undershootMs = startingTime + delay - Date.now();
+const safeTimeout = (callback, delay) => {
+  const startingTime = Date.now();
+  let timeoutId = setTimeout(() => {
+    const undershootMs = startingTime + delay - Date.now();
     if ( undershootMs > 0 ) {
       timeoutId = setTimeout(callback, undershootMs + 50);
     }
@@ -63,7 +63,7 @@ var safeTimeout = function (callback, delay) {
       callback();
     }
   }, delay + 50);
-  return function () { return timeoutId; };
+  return () => timeoutId;
 };
 
 
@@ -89,20 +89,20 @@ var safeTimeout = function (callback, delay) {
       at12_15.cancel(true);
 
 */
-var onNext = function (periodSizeMS, offsetMs, callback) {
+const onNext = (periodSizeMS, offsetMs, callback) => {
   if (typeof offsetMs !== 'number') {
     callback = offsetMs;
     offsetMs = 0;
   }
-  var msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
+  const msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
 
-  var timeoutId = msToNext > 2000 ?
+  const timeoutId = msToNext > 2000 ?
       safeTimeout(callback, msToNext):
       // quicker (and dirtier) alternative to safeTimeout() for shorter periodSizes
-      (function (tId) { return function () { return tId; }; })(setTimeout(callback, msToNext + 50));
+      (tId => () => tId)(setTimeout(callback, msToNext + 50));
 
   return {
-    cancel: function (execCallback) {
+    cancel: (execCallback) => {
       clearTimeout( timeoutId() );
       execCallback && callback();
     },
@@ -110,42 +110,42 @@ var onNext = function (periodSizeMS, offsetMs, callback) {
 };
 
 // Auto-repeating version of `onNext()`
-var onEvery = function (periodSizeMS, offsetMs, callback) {
+const onEvery = (periodSizeMS, offsetMs, callback) => {
   if (typeof offsetMs !== 'number') {
     callback = offsetMs;
     offsetMs = 0;
   }
-  var nextUp;
-  var callbackOnNext = function () {
-    nextUp = onNext(periodSizeMS, offsetMs, function () {
+  let nextUp;
+  const callbackOnNext = () => {
+    nextUp = onNext(periodSizeMS, offsetMs, () => {
       callback();
       callbackOnNext();
     });
   };
   callbackOnNext();
   return {
-    cancel: function (execCallback) { nextUp.cancel(execCallback); },
+    cancel: (execCallback) => { nextUp.cancel(execCallback); },
   };
 };
 
 
 
-var time = {
-  SECOND: SECOND,
-  MINUTE: MINUTE,
-  HOUR: HOUR,
-  DAY: DAY,
+const time = {
+  SECOND,
+  MINUTE,
+  HOUR,
+  DAY,
 
-  sinceLast: sinceLast,
-  untilNext: untilNext,
-  atLast: atLast,
-  atNext: atNext,
+  sinceLast,
+  untilNext,
+  atLast,
+  atNext,
   atStart: atLast,
   atEnd: atNext,
 
-  onNext: onNext,
-  onEvery: onEvery,
-  safeTimeout: safeTimeout,
+  onNext,
+  onEvery,
+  safeTimeout,
 };
 
 exports.SECOND = SECOND;
@@ -161,4 +161,4 @@ exports.atEnd = atNext;
 exports.onNext = onNext;
 exports.onEvery = onEvery;
 exports.safeTimeout = safeTimeout;
-exports['default'] = time;
+exports.default = time;
