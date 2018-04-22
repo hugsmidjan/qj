@@ -1,43 +1,50 @@
-// Simple, stupid, memory-efficient, and super fast memoizer.
+// Simple, stupid, memory-efficient, and super fast memoizer for **pure functions**.
 // Checks for strict equality with the last parameter values.
+// Ignores changes in `this` context - like any other side-effect.
+
+
 const _memoizers = [
     (fn) => fn,
-    (fn, value, p) => {
+    (fn) => {
+        let value, params;
         return function (a) {
-            if ( !p || a!==p[0] ) {
-                p = [a];
-                value = fn.apply(this, p);
+            if ( !params || a!==params[0] ) {
+                params = [a];
+                value = fn.apply(this, params);
             }
             return value;
         };
     },
-    (fn, value, p) => {
+    (fn) => {
+        let value, params;
         return function (a,b) {
-            if ( !p || a!==p[0] || b!==p[1] ) {
-                p = [a,b];
-                value = fn.apply(this, p);
+            if ( !params || a!==params[0] || b!==params[1] ) {
+                params = [a,b];
+                value = fn.apply(this, params);
             }
             return value;
         };
     },
-    (fn, value, p) => {
+    (fn) => {
+        let value, params;
         return function (a,b,c) {
-            if ( !p || a!==p[0] || b!==p[1] || c!==p[2] ) {
-                p = [a,b,c];
-                value = fn.apply(this, p);
+            if ( !params || a!==params[0] || b!==params[1] || c!==params[2] ) {
+                params = [a,b,c];
+                value = fn.apply(this, params);
             }
             return value;
         };
     },
 ];
-const _memoizerN = (fn, value, p) => {
+const _memoizerN = (fn) => {
+    let value, params;
     const arity = fn.length;
     return function (...args) {
-        let dirty = !p;
-        if (p) {
+        let dirty = !params;
+        if (params) {
             let i = 0;
             while (i < arity) {
-                if (args[i] !== p[i]) {
+                if (args[i] !== params[i]) {
                     dirty = true;
                     break;
                 }
@@ -45,8 +52,8 @@ const _memoizerN = (fn, value, p) => {
             }
         }
         if (dirty) {
-            p = args;
-            value = fn.apply(this, p);
+            params = args;
+            value = fn.apply(this, params);
         }
         return value;
     };

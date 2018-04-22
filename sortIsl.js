@@ -44,7 +44,7 @@ const getAbcText = (text) => {
   if ( typeof text === 'string' ) {
     let idxStr = '';
     text = (text.trim ? text.trim() : text.replace(/^\s+|\s+$/g,''))
-              .replace(/[\/.,()]/g, '') // remove punctutation
+              .replace(/[/.,()]/g, '') // remove punctutation
               .replace(/\s*-\s*/g,'-')  // normalize spacing around dashes
               .replace(/(_|\s)+/g,' ')  // normalize/collapse space-characters
               .toLowerCase();           // lowercase
