@@ -11,7 +11,6 @@ const libConfigs = getJsFiles('./').map((filePath) => ({
     input: filePath,
     output: {
         format: 'cjs',
-        sourcemap: false,
         file: distPath+filePath.substr(2),
     },
     watch: {
@@ -21,10 +20,10 @@ const libConfigs = getJsFiles('./').map((filePath) => ({
 
 const testConfigs = getJsFiles('./tests/').map((filePath) => ({
     input: filePath,
-    external: (id) => id !== filePath,
+    external: ['ospec'],
     output: {
         format: 'cjs',
-        sourcemap: false,
+        // sourcemap: true, // 'inline',
         interop: false,
         file: distPath+filePath.substr(2),
     },

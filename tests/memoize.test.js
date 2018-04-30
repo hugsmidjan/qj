@@ -1,4 +1,4 @@
-import memoize from '../cjs/memoize';
+import memoize from '../memoize';
 import o from 'ospec';
 
 o.spec('Memoize', () => {
