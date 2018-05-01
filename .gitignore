@@ -4,3 +4,4 @@ node-debug.log
 .vscode
 .idea
 cjs/tests
+.flowconfig

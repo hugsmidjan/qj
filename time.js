@@ -1,3 +1,4 @@
+//@flow
 const SECOND = 1000;
 const MINUTE = 60000;
 const HOUR = 3600000;
@@ -18,22 +19,27 @@ const DAY = 86400000;
       const ms_since_last_midnight = sinceLast(unixDate, DAY);
 */
 
-const sinceLast = (timestamp, periodSizeMS) => {
+
+/*::
+  type Callback = () => any;
+*/
+
+const sinceLast = (timestamp/*:number*/, periodSizeMS/*:number*/)/*:number*/ => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   return timestamp >= 0 ?
       timestamp % periodSizeMS:
       (periodSizeMS + timestamp % periodSizeMS) % DAY;
 };
-const untilNext = (timestamp, periodSizeMS) => {
+const untilNext = (timestamp/*:number*/, periodSizeMS/*:number*/)/*:number*/ => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   return periodSizeMS - sinceLast(timestamp, periodSizeMS);
 };
 
-const atLast = (timestamp, periodSizeMS) => {
+const atLast = (timestamp/*:number*/, periodSizeMS/*:number*/)/*:number*/ => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   return timestamp - sinceLast(timestamp, periodSizeMS);
 };
-const atNext = (timestamp, periodSizeMS) => {
+const atNext = (timestamp/*:number*/, periodSizeMS/*:number*/)/*:number*/ => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   // return timestamp + untilNext(timestamp, periodSizeMS);
   return timestamp + (periodSizeMS - sinceLast(timestamp, periodSizeMS));
@@ -48,7 +54,7 @@ const atNext = (timestamp, periodSizeMS) => {
   (i.e. doesn't fire a few milliseconds too early)
   Returns a getter function for the current timeout ID
 */
-const safeTimeout = (callback, delay) => {
+const safeTimeout = (callback/*:Callback*/, delay/*:number*/)/*:()=>TimeoutID*/ => {
   const startingTime = Date.now();
   let timeoutId = setTimeout(() => {
     const undershootMs = startingTime + delay - Date.now();

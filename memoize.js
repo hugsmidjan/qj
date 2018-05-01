@@ -1,7 +1,12 @@
+//@flow
+
 // Simple, stupid, memory-efficient, and super fast memoizer for **pure functions**.
 // Checks for strict equality with the last parameter values.
 // Ignores changes in `this` context - like any other side-effect.
 
+/*::
+    type AnyFn = (...any[]) => mixed;
+*/
 
 const _memoizers = [
     (fn) => fn,
@@ -59,7 +64,7 @@ const _memoizerN = (fn) => {
     };
 };
 
-const memoize = (fn) => {
+const memoize = (fn/*:AnyFn */)/*: AnyFn */ => {
     const memoizer = _memoizers[fn.length] || _memoizerN;
     return memoizer(fn);
 };

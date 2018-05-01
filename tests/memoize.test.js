@@ -1,3 +1,4 @@
+//@flow
 import memoize from '../memoize';
 import o from 'ospec';
 
