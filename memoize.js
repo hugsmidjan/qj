@@ -9,7 +9,6 @@
 */
 
 const _memoizers = [
-    (fn) => fn,
     (fn) => {
         let value, params;
         return function (a) {
@@ -41,14 +40,16 @@ const _memoizers = [
         };
     },
 ];
-const _memoizerN = (fn) => {
-    let value, params;
-    const arity = fn.length;
+
+const _memoizerN = (fn, multiArg/*: ?boolean */) => {
+    let value;
+    let params;
     return function (...args) {
         let dirty = !params;
         if (params) {
             let i = 0;
-            while (i < arity) {
+            const n = multiArg ? Math.max(args.length, params.length) : fn.length;
+            while (i < n) {
                 if (args[i] !== params[i]) {
                     dirty = true;
                     break;
@@ -64,8 +65,11 @@ const _memoizerN = (fn) => {
     };
 };
 
-const memoize = (fn/*:AnyFn */)/*: AnyFn */ => {
-    const memoizer = _memoizers[fn.length] || _memoizerN;
+const memoize = (fn/*:AnyFn */, multiArg/*: ?boolean */)/*: AnyFn */ => {
+    if ( multiArg ) {
+        return _memoizerN(fn, true);
+    }
+    const memoizer = _memoizers[fn.length - 1] || _memoizerN; // NOTE: Flow doesn't realize that the assignment may fall back to _memoizerN
     return memoizer(fn);
 };
 
