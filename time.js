@@ -138,25 +138,6 @@ const onEvery = (periodSizeMS/*:number*/, offsetMs/*:number|Callback*/, callback
 };
 
 
-const time = {
-  SECOND,
-  MINUTE,
-  HOUR,
-  DAY,
-
-  sinceLast,
-  untilNext,
-  atLast,
-  atNext,
-  atStart: atLast,
-  atEnd: atNext,
-
-  onNext,
-  onEvery,
-  safeTimeout,
-};
-
-
 export {
   SECOND,
   MINUTE,
@@ -175,4 +156,22 @@ export {
   safeTimeout,
 };
 
-export default time;
+
+// FIXME: Remove this default export in v2
+export default {
+  SECOND,
+  MINUTE,
+  HOUR,
+  DAY,
+
+  sinceLast,
+  untilNext,
+  atLast,
+  atNext,
+  atStart: atLast,
+  atEnd: atNext,
+
+  onNext,
+  onEvery,
+  safeTimeout,
+};

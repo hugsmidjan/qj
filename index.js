@@ -1,3 +1,4 @@
+// FIXME: Remove this file in v2
 export { default as A } from './A';
 export { default as addUrlParams } from './addUrlParams';
 export { default as alphabetize } from './alphabetize';
