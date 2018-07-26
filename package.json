@@ -5,8 +5,8 @@
   "module": "index.js",
   "main": "cjs/index.js",
   "scripts": {
-    "_test": "ospec 'cjs/tests/**/*.js'",
-    "_test:dev": "onchange 'cjs/tests/**' -f add,change -- ospec {{changed}}",
+    "_test": "ospec 'cjs/_tests/**/*.js'",
+    "_test:dev": "onchange 'cjs/_tests/**' -f add,change -- ospec {{changed}}",
     "_build": "rollup -c build/rollup.config.js",
     "test": "yarn run _build && yarn run _test",
     "build": "rm -rf cjs && npm run _build && npm run _test",
@@ -23,7 +23,7 @@
   "license": "ISC",
   "devDependencies": {
     "onchange": "^4.0",
-    "ospec": "^2.0",
-    "rollup": "^0.58.2"
+    "ospec": "^3.0",
+    "rollup": "^0.63"
   }
 }

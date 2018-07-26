@@ -1,36 +1,48 @@
 import fs from 'fs';
 
-const getJsFiles = (path) => fs.readdirSync(path)
-    .filter((fileName) => /\.js$/.test(fileName))
-    .map((fileName) => path + fileName);
+const getJsFiles = (...paths) => {
+    let allFiles = [];
+    paths.forEach((path) => {
+        path = path || '.';
+        const files = fs.readdirSync(path)
+            .filter((fileName) => /\.js$/.test(fileName))
+            .map((fileName) => path + '/' + fileName);
+        allFiles = allFiles.concat(files);
+    });
+    return allFiles;
+};
+const getJsFileMap = (...paths) => {
+    const fileMap = {};
+    getJsFiles(...paths).forEach((fileName) => {
+        fileMap[fileName.replace(/\.js$/,'')] = fileName;
+    });
+    return fileMap;
+};
 
-const distPath = './cjs/';
 
 
-const libConfigs = getJsFiles('./').map((filePath) => ({
-    input: filePath,
-    output: {
-        format: 'cjs',
-        file: distPath+filePath.substr(2),
+export default [
+    {
+        input: getJsFileMap('.', 'polyfills'),
+        output: {
+            format: 'cjs',
+            dir: 'cjs',
+        },
+        experimentalCodeSplitting: true,
+        watch: {
+            // clearScreen: false,
+        },
     },
-    watch: {
-        clearScreen: false,
-    },
-}));
-
-const testConfigs = getJsFiles('./tests/').map((filePath) => ({
-    input: filePath,
-    external: ['ospec'],
-    output: {
-        format: 'cjs',
-        // sourcemap: true, // 'inline',
-        interop: false,
-        file: distPath+filePath.substr(2),
-    },
-    watch: {
-        clearScreen: false,
-    },
-}));
-
-
-export default libConfigs.concat(testConfigs);
+].concat(
+    getJsFiles('tests').map((fileName) => ({
+        input: fileName,
+        external: ['ospec'],
+        output: {
+            file: 'cjs/_' + fileName,
+            format: 'cjs',
+        },
+        watch: {
+            // clearScreen: false,
+        },
+    }))
+);
