@@ -1,10 +1,6 @@
 'use strict';
 
-const A = [].slice;
-
-function qq(selector/*:string */, root/*::?:Root */)/*:Element[] */ {
-  return (!selector || root===null) ? [] : A.call((root||document).querySelectorAll(selector));
-}
+var qq = require('./qq.js');
 
 // reenable selected HTML elements that were disbbled by htmlToDiv()
 function reenableElms(elm, tagName) {

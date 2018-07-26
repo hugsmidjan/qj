@@ -1,8 +1,6 @@
 'use strict';
 
-function regEscape(s) {
-  return s.replace(/([\\\^\$*+\[\]?{}.=!:(|)])/g, '\\$1');
-}
+var regEscape = require('./regEscape.js');
 
 // Simple String templating (variable injection) that accepts either arrays or hash-maps.
 // Usage:

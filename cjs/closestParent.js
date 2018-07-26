@@ -1,12 +1,6 @@
 'use strict';
 
-let _matcher;
-function matches(selector, elm) {
-  if ( _matcher == null ) {
-    _matcher = elm.matches || elm.msMatchesSelector || elm.webkitMatchesSelector || (() => false);
-  }
-  return _matcher.call(elm, selector);
-}
+var matches = require('./matches.js');
 
 function closestParent(selector/*:string */, elm/*:Node */, stopper/*::?:Element */) {
   let _stopper = stopper || null;
