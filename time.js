@@ -91,45 +91,51 @@ const safeTimeout = (callback/*:Callback*/, delay/*:number*/)/*:()=>TimeoutID*/ 
       at12_15.cancel(true);
 
 */
-const onNext = (periodSizeMS, offsetMs, callback) => {
+const onNext = (periodSizeMS/*:number*/, offsetMs/*:number|Callback*/, callback/*:?Callback*/) => {
   if (typeof offsetMs !== 'number') {
     callback = offsetMs;
     offsetMs = 0;
   }
+  const _callback = callback;
+  if ( !_callback ) { return;}
   const msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
 
   const timeoutId = msToNext > 2000 ?
-      safeTimeout(callback, msToNext):
+      safeTimeout(_callback, msToNext):
       // quicker (and dirtier) alternative to safeTimeout() for shorter periodSizes
-      (tId => () => tId)(setTimeout(callback, msToNext + 50));
+      (tId => () => tId)(setTimeout(_callback, msToNext + 50));
 
   return {
-    cancel: (execCallback) => {
+    cancel: (execCallback/*:boolean*/) => {
       clearTimeout( timeoutId() );
-      execCallback && callback();
+      execCallback && _callback(); // NOTE: Flow thinks callback may still be null|undefined
     },
   };
 };
 
 // Auto-repeating version of `onNext()`
-const onEvery = (periodSizeMS, offsetMs, callback) => {
+const onEvery = (periodSizeMS/*:number*/, offsetMs/*:number|Callback*/, callback/*:?Callback*/) => {
   if (typeof offsetMs !== 'number') {
     callback = offsetMs;
     offsetMs = 0;
   }
+  const _callback = callback;
+  if ( !_callback ) { return;}
   let nextUp;
   const callbackOnNext = () => {
     nextUp = onNext(periodSizeMS, offsetMs, () => {
-      callback();
+      _callback();
       callbackOnNext();
     });
   };
   callbackOnNext();
   return {
-    cancel: (execCallback) => { nextUp.cancel(execCallback); },
+    cancel: (execCallback/*:boolean*/) => {
+      //$FlowFixMe - nextUp *IS* defined as side-effect of running callbackOnNext() above
+      nextUp.cancel(execCallback);
+    },
   };
 };
-
 
 
 const time = {
@@ -150,6 +156,7 @@ const time = {
   safeTimeout,
 };
 
+
 export {
   SECOND,
   MINUTE,
@@ -167,4 +174,5 @@ export {
   onEvery,
   safeTimeout,
 };
+
 export default time;
