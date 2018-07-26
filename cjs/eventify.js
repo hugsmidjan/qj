@@ -40,11 +40,11 @@
 */
 function eventify(object) {
 
-  var events = {};
+  let events = {};
 
   object.on = function (eventName, callback) {
     if ( callback ) {
-      var callbackList = events[eventName];
+      let callbackList = events[eventName];
       if ( !callbackList ) {
         callbackList = events[eventName] = [];
       }
@@ -56,7 +56,7 @@ function eventify(object) {
   };
 
   object.off = function (eventName, callback) {
-    var numArgs = arguments.length;
+    const numArgs = arguments.length;
     if ( !numArgs ) {
       events = {};
     }
@@ -64,8 +64,8 @@ function eventify(object) {
       delete events[eventName];
     }
     else if ( callback ) {
-      var callbackList = events[eventName] || [];
-      var idx = callbackList.indexOf( callback );
+      const callbackList = events[eventName] || [];
+      const idx = callbackList.indexOf( callback );
       if ( idx > -1 ) {
         callbackList.splice( idx, 1 );
       }
@@ -74,12 +74,9 @@ function eventify(object) {
   };
 
 
-  object.emit = function () {
-    var args = [], len = arguments.length;
-    while ( len-- ) args[ len ] = arguments[ len ];
-
-    var firstArg = args[0];
-    var evType;
+  object.emit = function (...args) {
+    const firstArg = args[0];
+    let evType;
     if ( typeof firstArg === 'string' ) {
       evType = args.shift();
     }
@@ -89,7 +86,7 @@ function eventify(object) {
     if ( evType != null ) {
       (events[evType] || [])
           .slice() // clone to prevent callbacks adding to the queue in mid-air
-          .forEach(function (callback) {
+          .forEach((callback) => {
             callback.apply(null, args);
           });
     }

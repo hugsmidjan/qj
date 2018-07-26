@@ -14,7 +14,10 @@ export default function alphabetize(arr, lang, getProp) {
   }
   if (
     lang !== 'is' || supportsIcelandic === true ||
-    (supportsIcelandic !== false && !!(supportsIcelandic = 'ð'.localeCompare('e','is') < 0 && 'ob'.localeCompare('öa','is') < 0))
+    (
+      supportsIcelandic !== false && // This means it's not tested yet
+      !!(supportsIcelandic = 'ð'.localeCompare('e','is') < 0 && 'ob'.localeCompare('öa','is') < 0)
+    )
   ) {
     let newArr = arr.map((item, idx) => ({ value: ''+getProp(item), idx }));
     lang = langAliases[lang] || lang;

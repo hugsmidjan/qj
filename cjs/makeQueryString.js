@@ -2,11 +2,11 @@
 
 function makeQueryString(paramsObj) {
   return Object.keys(paramsObj)
-      .map(function (key) {
-        var param = paramsObj[key];
+      .map((key) => {
+        const param = paramsObj[key];
         return param!=null ? key+'='+encodeURIComponent(''+param) : '';
       })
-      .filter(function (item) { return item; })
+      .filter((item) => item)
       .join('&');
 }
 

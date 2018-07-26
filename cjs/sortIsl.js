@@ -40,23 +40,23 @@
       $(tRows[0].parentNode).append( tRows );
 
 */
-var abcIdx = {};
-var abc = '| -0123456789aáàâäåbcdðeéèêëfghiíîïjklmnoóôpqrstuúùüvwxyýÿzþæö'; // prepend list with '|' to guarantee that abc.indexOf(chr) never returns 0 (falsy)
-var getAbcText = function (text) {
+const abcIdx = {};
+const abc = '| -0123456789aáàâäåbcdðeéèêëfghiíîïjklmnoóôpqrstuúùüvwxyýÿzþæö'; // prepend list with '|' to guarantee that abc.indexOf(chr) never returns 0 (falsy)
+const getAbcText = (text) => {
   if ( typeof text === 'string' ) {
-    var idxStr = '';
+    let idxStr = '';
     text = (text.trim ? text.trim() : text.replace(/^\s+|\s+$/g,''))
-              .replace(/[\/.,()]/g, '') // remove punctutation
+              .replace(/[/.,()]/g, '') // remove punctutation
               .replace(/\s*-\s*/g,'-')  // normalize spacing around dashes
               .replace(/(_|\s)+/g,' ')  // normalize/collapse space-characters
               .toLowerCase();           // lowercase
-    var len = text.length;
-    var i = 0;
+    const len = text.length;
+    let i = 0;
     while ( i < len ) {
-      var chr = text.charAt(i);
-      var chrCode = abcIdx[chr];
+      const chr = text.charAt(i);
+      let chrCode = abcIdx[chr];
       if ( !chrCode ) {
-        var idx = abc.indexOf(chr);
+        let idx = abc.indexOf(chr);
         idx = idx>-1 ? 32+idx : 99+chr.charCodeAt(0);
         chrCode = abcIdx[chr] = String.fromCharCode( idx );
       }
@@ -69,24 +69,24 @@ var getAbcText = function (text) {
 };
 
 
-var defaultGetProp = function (item) { return item+''; };
-var defaultSortFn = function (a,b) { return a[0]===b[0] ? 0 : a[0]>b[0] ? 1 : -1; };
+const defaultGetProp = (item) => item+'';
+const defaultSortFn = (a,b) => a[0]===b[0] ? 0 : a[0]>b[0] ? 1 : -1;
 
 function sortIsl( arr, opts ) {
   opts = opts || {};
   if ( typeof opts === 'string' ) {
-    var propName = opts;
-    opts = { getProp: function (item) { return item[propName]; } };
+    const propName = opts;
+    opts = { getProp: (item) => item[propName] };
   }
   else if (opts.apply && opts.call) {
     opts = { getProp: opts };
   }
-  var getProp = opts.getProp  ||  defaultGetProp;
-  var sortFn = opts.sortFn  ||  defaultSortFn;
+  const getProp = opts.getProp  ||  defaultGetProp;
+  const sortFn = opts.sortFn  ||  defaultSortFn;
   return arr
-      .map(function (itm) { return [ getAbcText(getProp(itm)), itm ]; })
-      .sort(opts.reverse ? function (a,b) { return -1*sortFn(a,b); } : sortFn)
-      .map(function (itm) { return itm[1]; });
+      .map((itm) => [ getAbcText(getProp(itm)), itm ])
+      .sort(opts.reverse ? (a,b) => -1*sortFn(a,b) : sortFn)
+      .map((itm) => itm[1]);
 }
 
 module.exports = sortIsl;

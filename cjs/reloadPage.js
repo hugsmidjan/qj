@@ -1,12 +1,12 @@
 'use strict';
 
 function reloadPage(url) {
-  var _docLoc = document.location;
-  var _docHref = _docLoc.href;
+  const _docLoc = document.location;
+  const _docHref = _docLoc.href;
   url = url || _docHref;
   // juggling ?/& suffixes is neccessary to 100% guarantee a reload.
   if ( url === _docHref ) {
-    var blah =  !/\?/.test(url) ?
+    const blah =  !/\?/.test(url) ?
                     '?':
                   !/[&?](?:#|$)/.test(url) ?
                     '&':

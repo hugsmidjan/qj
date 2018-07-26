@@ -1,11 +1,11 @@
 'use strict';
 
-var _paramREs = {};
+const _paramREs = {};
 
 function getUrlParam(name, url) {
-  var re = _paramREs[name];
+  let re = _paramREs[name];
   if ( !re ) {
-    var safeName = name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const safeName = name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     re = new RegExp('(?:^|&)'+safeName+'=([^&]+)');
     _paramREs[name] = re;
   }

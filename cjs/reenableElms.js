@@ -1,16 +1,12 @@
 'use strict';
 
-var A = [].slice;
-
-function qq(selector/*:string */, root/*::?:Root */)/*:Element[] */ {
-  return (!selector || root===null) ? [] : A.call((root||document).querySelectorAll(selector));
-}
+var qq = require('./qq.js');
 
 // reenable selected HTML elements that were disbbled by htmlToDiv()
 function reenableElms(elm, tagName) {
-  var disabledTagName = tagName + '--disabled';
-  var re = new RegExp('(<\\/?'+ tagName +')--disabled([ >])', 'gi');
-  var enable = function (elm) {
+  const disabledTagName = tagName + '--disabled';
+  const re = new RegExp('(<\\/?'+ tagName +')--disabled([ >])', 'gi');
+  const enable = (elm) => {
     elm.outerHTML = elm.outerHTML.replace(re, '$1$2');
   };
   if ( elm.tagName.toLowerCase() === disabledTagName ) {

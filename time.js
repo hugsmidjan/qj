@@ -1,3 +1,4 @@
+//@flow
 const SECOND = 1000;
 const MINUTE = 60000;
 const HOUR = 3600000;
@@ -18,22 +19,27 @@ const DAY = 86400000;
       const ms_since_last_midnight = sinceLast(unixDate, DAY);
 */
 
-const sinceLast = (timestamp, periodSizeMS) => {
+
+/*::
+  type Callback = () => any;
+*/
+
+const sinceLast = (timestamp/*:number*/, periodSizeMS/*:number*/)/*:number*/ => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   return timestamp >= 0 ?
       timestamp % periodSizeMS:
       (periodSizeMS + timestamp % periodSizeMS) % DAY;
 };
-const untilNext = (timestamp, periodSizeMS) => {
+const untilNext = (timestamp/*:number*/, periodSizeMS/*:number*/)/*:number*/ => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   return periodSizeMS - sinceLast(timestamp, periodSizeMS);
 };
 
-const atLast = (timestamp, periodSizeMS) => {
+const atLast = (timestamp/*:number*/, periodSizeMS/*:number*/)/*:number*/ => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   return timestamp - sinceLast(timestamp, periodSizeMS);
 };
-const atNext = (timestamp, periodSizeMS) => {
+const atNext = (timestamp/*:number*/, periodSizeMS/*:number*/)/*:number*/ => {
   // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
   // return timestamp + untilNext(timestamp, periodSizeMS);
   return timestamp + (periodSizeMS - sinceLast(timestamp, periodSizeMS));
@@ -48,7 +54,7 @@ const atNext = (timestamp, periodSizeMS) => {
   (i.e. doesn't fire a few milliseconds too early)
   Returns a getter function for the current timeout ID
 */
-const safeTimeout = (callback, delay) => {
+const safeTimeout = (callback/*:Callback*/, delay/*:number*/)/*:()=>TimeoutID*/ => {
   const startingTime = Date.now();
   let timeoutId = setTimeout(() => {
     const undershootMs = startingTime + delay - Date.now();
@@ -85,64 +91,52 @@ const safeTimeout = (callback, delay) => {
       at12_15.cancel(true);
 
 */
-const onNext = (periodSizeMS, offsetMs, callback) => {
+const onNext = (periodSizeMS/*:number*/, offsetMs/*:number|Callback*/, callback/*:?Callback*/) => {
   if (typeof offsetMs !== 'number') {
     callback = offsetMs;
     offsetMs = 0;
   }
+  const _callback = callback;
+  if ( !_callback ) { return;}
   const msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
 
   const timeoutId = msToNext > 2000 ?
-      safeTimeout(callback, msToNext):
+      safeTimeout(_callback, msToNext):
       // quicker (and dirtier) alternative to safeTimeout() for shorter periodSizes
-      (tId => () => tId)(setTimeout(callback, msToNext + 50));
+      (tId => () => tId)(setTimeout(_callback, msToNext + 50));
 
   return {
-    cancel: (execCallback) => {
+    cancel: (execCallback/*:boolean*/) => {
       clearTimeout( timeoutId() );
-      execCallback && callback();
+      execCallback && _callback(); // NOTE: Flow thinks callback may still be null|undefined
     },
   };
 };
 
 // Auto-repeating version of `onNext()`
-const onEvery = (periodSizeMS, offsetMs, callback) => {
+const onEvery = (periodSizeMS/*:number*/, offsetMs/*:number|Callback*/, callback/*:?Callback*/) => {
   if (typeof offsetMs !== 'number') {
     callback = offsetMs;
     offsetMs = 0;
   }
+  const _callback = callback;
+  if ( !_callback ) { return;}
   let nextUp;
   const callbackOnNext = () => {
     nextUp = onNext(periodSizeMS, offsetMs, () => {
-      callback();
+      _callback();
       callbackOnNext();
     });
   };
   callbackOnNext();
   return {
-    cancel: (execCallback) => { nextUp.cancel(execCallback); },
+    cancel: (execCallback/*:boolean*/) => {
+      //$FlowFixMe - nextUp *IS* defined as side-effect of running callbackOnNext() above
+      nextUp.cancel(execCallback);
+    },
   };
 };
 
-
-
-const time = {
-  SECOND,
-  MINUTE,
-  HOUR,
-  DAY,
-
-  sinceLast,
-  untilNext,
-  atLast,
-  atNext,
-  atStart: atLast,
-  atEnd: atNext,
-
-  onNext,
-  onEvery,
-  safeTimeout,
-};
 
 export {
   SECOND,
@@ -161,4 +155,23 @@ export {
   onEvery,
   safeTimeout,
 };
-export default time;
+
+
+// FIXME: Remove this default export in v2
+export default {
+  SECOND,
+  MINUTE,
+  HOUR,
+  DAY,
+
+  sinceLast,
+  untilNext,
+  atLast,
+  atNext,
+  atStart: atLast,
+  atEnd: atNext,
+
+  onNext,
+  onEvery,
+  safeTimeout,
+};

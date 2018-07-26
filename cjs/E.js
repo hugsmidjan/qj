@@ -1,14 +1,11 @@
 'use strict';
 
 // Hyperscript function that spits out DOM nodes.
-function E(tagName, attrs) {
-  var children = [], len = arguments.length - 2;
-  while ( len-- > 0 ) children[ len ] = arguments[ len + 2 ];
-
-  var elm = document.createElement(tagName);
+function E(tagName, attrs, ...children) {
+  const elm = document.createElement(tagName);
   if (attrs) {
-    for (var name in attrs) {
-      var value = attrs[name];
+    for (let name in attrs) {
+      const value = attrs[name];
       if ( value != null ) {
         if ( name === 'style' ) {
           for (var cssProp in value) {
@@ -33,7 +30,7 @@ function E(tagName, attrs) {
       }
     }
   }
-  var _appendChildren = function (child) {
+  const _appendChildren = (child) => {
     if ( child instanceof Array ) {
       child.forEach(_appendChildren);
     }

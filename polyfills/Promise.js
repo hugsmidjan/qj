@@ -1,6 +1,7 @@
-if ( typeof window !== 'undefined' && !window.Promise ) {
+if ( typeof window !== 'undefined' && (!window.Promise || !window.Promise.prototype.finally) ) {
   // https://github.com/lhorie/mithril.js/blob/next/promise/promise.js
   /* eslint-disable */
+
   var PromisePolyfill = function(executor) {
     if (!(this instanceof PromisePolyfill)) throw new Error("Promise must be called with `new`")
     if (typeof executor !== "function") throw new TypeError("executor must be a function")
@@ -62,6 +63,20 @@ if ( typeof window !== 'undefined' && !window.Promise ) {
   PromisePolyfill.prototype.catch = function(onRejection) {
     return this.then(null, onRejection)
   }
+  PromisePolyfill.prototype.finally = function(callback) {
+    return this.then(
+      function(value) {
+        return PromisePolyfill.resolve(callback()).then(function() {
+          return value
+        })
+      },
+      function(reason) {
+        return PromisePolyfill.resolve(callback()).then(function() {
+          return PromisePolyfill.reject(reason);
+        })
+      }
+    )
+  }
   PromisePolyfill.resolve = function(value) {
     if (value instanceof PromisePolyfill) return value
     return new PromisePolyfill(function(resolve) {resolve(value)})
@@ -95,6 +110,14 @@ if ( typeof window !== 'undefined' && !window.Promise ) {
       }
     })
   }
+
   /* eslint-enable */
-  window.Promise = PromisePolyfill;
+
+	if (!window.Promise) {
+		window.Promise = PromisePolyfill;
+  }
+  else if (!window.Promise.prototype.finally) {
+		window.Promise.prototype.finally = PromisePolyfill.prototype.finally;
+	}
+
 }
