@@ -4,10 +4,6 @@
 // Checks for strict equality with the last parameter values.
 // Ignores changes in `this` context - like any other side-effect.
 
-/*::
-    type AnyFn = (...any[]) => mixed;
-*/
-
 const _memoizers = [
     (fn) => {
         let value, params;
@@ -41,14 +37,15 @@ const _memoizers = [
     },
 ];
 
-const _memoizerN = (fn, multiArg/*: ?boolean */) => {
+const _memoizerN = (fn, isVariadic) => {
     let value;
     let params;
+    // return function (...args/*:any[]*/)/*:mixed*/ {
     return function (...args) {
         let dirty = !params;
         if (params) {
             let i = 0;
-            const n = multiArg ? Math.max(args.length, params.length) : fn.length;
+            const n = isVariadic ? Math.max(args.length, params.length) : fn.length;
             while (i < n) {
                 if (args[i] !== params[i]) {
                     dirty = true;
@@ -65,11 +62,14 @@ const _memoizerN = (fn, multiArg/*: ?boolean */) => {
     };
 };
 
-const memoize = (fn/*:AnyFn */, multiArg/*: ?boolean */)/*: AnyFn */ => {
-    if ( multiArg ) {
+
+const memoize = /*::<AnyFn:(...any[]) => mixed>*/(fn/*:AnyFn*/, isVariadic/*:?boolean*/)/*:AnyFn*/ => {
+    if ( isVariadic ) {
+        //$FlowFixMe
         return _memoizerN(fn, true);
     }
     const memoizer = _memoizers[fn.length - 1] || _memoizerN; // NOTE: Flow doesn't realize that the assignment may fall back to _memoizerN
+    //$FlowFixMe
     return memoizer(fn);
 };
 
