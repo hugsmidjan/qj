@@ -1,4 +1,5 @@
+//@flow
 // List-to-Array converter
-export default function A/*::<T>*/(list/*:$Supertype<T[]> */)/*:T[] */ {
-  return [].slice.call(list);
+export default function A/*::<List>*/(list/*:List*/)/*:$ElementType<List,number>[]*/ {
+    return [].slice.call(list);
 }
