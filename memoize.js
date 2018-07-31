@@ -5,6 +5,9 @@
 // Ignores changes in `this` context - like any other side-effect.
 
 const _memoizers = [
+    // Hmmm... Why does neither of these work !?!
+    // /*::<A,R:*,F:(a:A)=>R>*/(fn/*:F*/)/*:F*/ => {
+    // /*::<F:(a:any)=>mixed>*/(fn/*:F*/)/*:F*/ => {
     (fn) => {
         let value, params;
         return function (a) {
