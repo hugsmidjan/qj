@@ -1,4 +1,4 @@
-if (!Array.prorotype.find) {
+if (!Array.prototype.find) {
   Array.prototype.find = function (predicate) {
     const context = arguments[1];
     var i = 0;

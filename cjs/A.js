@@ -1,8 +1,9 @@
 'use strict';
 
+//@flow
 // List-to-Array converter
-function A/*::<T>*/(list/*:$Supertype<T[]> */)/*:T[] */ {
-  return [].slice.call(list);
+function A/*::<List>*/(list/*:List*/)/*:$ElementType<List,number>[]*/ {
+    return [].slice.call(list);
 }
 
 module.exports = A;

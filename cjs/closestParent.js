@@ -2,12 +2,16 @@
 
 var matches = require('./matches.js');
 
-function closestParent(selector/*:string */, elm/*:Node */, stopper/*::?:Element */) {
-  let _stopper = stopper || null;
-  while ( elm && !matches(selector, elm) && elm !== _stopper ) {
-    elm = elm.parentNode;
-  }
-  return elm === _stopper ? null : elm;
+//@flow
+
+// TODO: Find a way to be more clever about the type annotation for the return value
+function closestParent(selector/*:string*/, elm/*:Node*/, stopper/*::?:HTMLElement*/)/*:null|HTMLElement*/ {
+    let _stopper = stopper || null;
+    let candidateElm = elm instanceof Element ? elm : elm.parentElement;
+    while ( candidateElm && !matches(selector, candidateElm) && candidateElm !== _stopper ) {
+         candidateElm = candidateElm.parentElement;
+    }
+    return candidateElm !== _stopper && candidateElm instanceof HTMLElement ? candidateElm : null;
 }
 
 module.exports = closestParent;
