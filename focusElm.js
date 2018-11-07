@@ -29,7 +29,7 @@ export default function focusElm(_elm, opts) {
         // ...then scroll the window to place the anchor at the top of the viewport.
         // (NOTE: We do this because most browsers place the artificially .focus()ed link at the *bottom* of the viewport.)
         var offset = opts && opts.offset;
-        var offsetPx = offset.apply ? offset(_elm) : offset || 0;
+        var offsetPx = offset && offset.apply ? offset(_elm) : offset || 0;
         var elmTopPos = _elm.getBoundingClientRect().top + document.body.scrollTop;
         window.scrollTo( window.pageXOffset,  elmTopPos - offsetPx );
       }
