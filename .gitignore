@@ -3,5 +3,5 @@ yarn-error.log
 node-debug.log
 .vscode
 .idea
-cjs/_tests
+cjs_tests
 .flowconfig
