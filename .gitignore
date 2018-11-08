@@ -4,5 +4,4 @@ node-debug.log
 .vscode
 .idea
 cjs/_tests
-cjs/polyfills
 .flowconfig
