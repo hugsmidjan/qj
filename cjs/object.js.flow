@@ -1,0 +1,3 @@
+//@flow
+export * from './src/object/object.js';
+export { default } from './src/object/object.js';

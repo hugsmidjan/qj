@@ -1,0 +1,3 @@
+//@flow
+export * from './src/_deprecated/objectClean.js';
+export { default } from './src/_deprecated/objectClean.js';

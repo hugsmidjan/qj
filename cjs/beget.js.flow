@@ -1,0 +1,3 @@
+//@flow
+export * from './src/object/beget.js';
+export { default } from './src/object/beget.js';

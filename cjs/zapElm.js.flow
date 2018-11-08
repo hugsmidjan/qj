@@ -1,0 +1,3 @@
+//@flow
+export * from './src/dom/zapElm.js';
+export { default } from './src/dom/zapElm.js';

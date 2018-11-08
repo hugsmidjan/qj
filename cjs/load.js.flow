@@ -1,0 +1,3 @@
+//@flow
+export * from './src/browser/load.js';
+export { default } from './src/browser/load.js';

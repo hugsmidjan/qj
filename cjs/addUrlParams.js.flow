@@ -1,0 +1,3 @@
+//@flow
+export * from './src/url/addUrlParams.js';
+export { default } from './src/url/addUrlParams.js';

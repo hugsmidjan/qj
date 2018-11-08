@@ -1,0 +1,3 @@
+//@flow
+export * from './src/select/closestParent.js';
+export { default } from './src/select/closestParent.js';

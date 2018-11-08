@@ -1,0 +1,3 @@
+//@flow
+export * from './src/browser/focusElm.js';
+export { default } from './src/browser/focusElm.js';
