@@ -62,7 +62,7 @@ export default [
         ),
         output: {
             format: 'cjs',
-            dir: 'cjs',
+            dir: 'dist',
             strict: false,
         },
         plugins: [
@@ -82,7 +82,7 @@ export default [
         ),
         output: {
             format: 'cjs',
-            dir: 'cjs/polyfills',
+            dir: 'dist/polyfills',
             strict: false,
         },
         experimentalCodeSplitting: true,
@@ -98,7 +98,7 @@ export default [
         input: fileName,
         external: ['ospec'],
         output: {
-            file: 'cjs_tests/' + fileName.split('/').pop(),
+            file: 'dist_tests/' + fileName.split('/').pop(),
             format: 'cjs',
         },
         watch: {
