@@ -13,8 +13,8 @@ _2018-11-09_
 - Chore: All files are now transpiled to ES5 + CommonJS format
 - refactor: Deprecated `qj/objectClean`,  `qj/objectIsEmpty`,  `qj/objectUpdate` in favour of same-named exports from `qj/object`
 - refactor: Deprecated `qj/onEvery`,  `qj/onNext` in favour of same-named exports from `qj/time`
-- refactor: Renamed `qj/uniqueArray` to `qj/dedupeArray`
-- feat: Renamed `groupBy` from `qj/list` to `groupArrayBy` and also exposed it as `qj/groupArrayBy`
+- refactor: Deprecated  `qj/uniqueArray` and renamed it to `qj/dedupeArray`
+- refactor: Renamed `qj/list`'s `groupBy` to `groupArrayBy` and also exposed it as `qj/groupArrayBy`
 - Chore: Sources have been moved into `src/*` sub-folders with their tests alongside them.
 
 

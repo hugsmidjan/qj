@@ -7,7 +7,8 @@ The functions try to be small, stupid, and side-effect free.
 
 ## Install
 
-    npm install --save-dev git+git@github.com:hugsmidjan/qj.git#semver:^1.19.0
+    npm install --save-dev git+git@github.com:hugsmidjan/qj.git#semver:^2.0.0
+
 
 ## Usage
 
