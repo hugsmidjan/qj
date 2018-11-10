@@ -3,9 +3,17 @@
 
 ## Upcoming...
 <!-- Add new lines here. Version number will be decided later -->
-- feat: Add support for custom `document` in `htmlToDiv()` to make html parsing server-side easier.
-- chore: Prevent "postinstall" script from running when installing locally and/or adding dependencies.
 - ...
+
+
+
+## 2.1.0
+_2018-11-12_
+- feat: Add support for custom `document` in `htmlToDiv()` to make html parsing server-side easier.
+- fix: Make `closestParent()` also work with SVG elements.
+- fix: Make `htmlToDiv()`'s html-disabling RegExp safer.
+- chore: Prevent "postinstall" script from running when installing locally and/or adding dependencies.
+- chore: Improve test/dev script hehavior
 
 
 ## 2.0.0
