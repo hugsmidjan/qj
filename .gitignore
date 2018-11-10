@@ -3,5 +3,5 @@ yarn-error.log
 node-debug.log
 .vscode
 .idea
-dist_tests
+_tests
 .flowconfig

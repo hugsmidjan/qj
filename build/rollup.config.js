@@ -99,7 +99,7 @@ export default [
         input: fileName,
         external: ['ospec', 'jsdom'],
         output: {
-            file: 'dist_tests/' + fileName.split('/').pop(),
+            file: '_tests/' + fileName.split('/').pop(),
             format: 'cjs',
         },
         watch: {
