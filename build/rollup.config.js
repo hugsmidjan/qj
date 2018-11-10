@@ -48,6 +48,7 @@ const createFlowFiles = () => {
 
 const polyfillsGlob = 'src/__polyfills/**/*.js';
 const testsGlob = 'src/**/*.test?(s).js';
+const testHelperGlob = 'src/__testing/**/*.js';
 
 export default [
     // Glob all src scipts – except polyfills.
@@ -57,7 +58,7 @@ export default [
         input: getFileMap(
             glob.sync(
                 'src/**/*.js',
-                { ignore: [testsGlob, polyfillsGlob] }
+                { ignore: [testsGlob, polyfillsGlob, testHelperGlob] }
             )
         ),
         output: {
@@ -96,7 +97,7 @@ export default [
     // to appease the wonderfully KISS ospec.
     glob.sync(testsGlob).map((fileName) => ({
         input: fileName,
-        external: ['ospec'],
+        external: ['ospec', 'jsdom'],
         output: {
             file: 'dist_tests/' + fileName.split('/').pop(),
             format: 'cjs',
