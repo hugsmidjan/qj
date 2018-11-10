@@ -1,7 +1,18 @@
 //@flow
 
 /*::
-    export type HtmlToDivOpts = { [key:string]: boolean };
+    export type HtmlToDivOpts = {
+        keepimg?: boolean,
+        keepscript?: boolean,
+        keephtml?: boolean,
+        keepbody?: boolean,
+        keeptitle?: boolean,
+        keepmeta?: boolean,
+        keepstyle?: boolean,
+        keeplink?: boolean,
+
+        document?: HTMLDocument,
+    };
 */
 
 export default function htmlToDiv(html/*:string*/, opts/*:?HtmlToDivOpts*/)/*:HTMLDivElement*/ {
