@@ -4,6 +4,7 @@
 ## Upcoming...
 <!-- Add new lines here. Version number will be decided later -->
 - feat: Add support for custom `document` in `htmlToDiv()` to make html parsing server-side easier.
+- chore: Prevent "postinstall" script from running when installing locally and/or adding dependencies.
 - ...
 
 
