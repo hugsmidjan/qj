@@ -4,7 +4,7 @@
   "description": "Quick JavaScripts – Collection of useful miniature JavaScript helper functions.",
   "scripts": {
     "postinstall": "node build/postinstall.js",
-    "_test": "ospec 'dist_tests/**/*.js'",
+    "_test": "ospec '_tests/**/*.js'",
     "_test:dev": "onchange '_tests/**' -f add,change -- ospec {{changed}}",
     "_build": "rollup -c build/rollup.config.js",
     "test": "yarn run _build  &&  yarn run _test",
