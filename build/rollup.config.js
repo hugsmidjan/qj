@@ -48,6 +48,7 @@ const createFlowFiles = () => {
 
 const polyfillsGlob = 'src/__polyfills/**/*.js';
 const testsGlob = 'src/**/*.test?(s).js';
+const privatesGlob = 'src/**/*.privates.js'; // `*.privates.js` contain private bits that need testing
 const testHelperGlob = 'src/__testing/**/*.js';
 
 export default [
@@ -58,7 +59,7 @@ export default [
         input: getFileMap(
             glob.sync(
                 'src/**/*.js',
-                { ignore: [testsGlob, polyfillsGlob, testHelperGlob] }
+                { ignore: [polyfillsGlob, privatesGlob, testsGlob, testHelperGlob] }
             )
         ),
         output: {
