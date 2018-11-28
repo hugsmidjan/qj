@@ -5,7 +5,7 @@
   "module": "index.js",
   "main": "cjs/index.js",
   "scripts": {
-    "postinstall": "mv cjs/* . && rm -rf cjs",
+    "postinstall": "rm -rf polyfills && mv cjs/* . && rm -rf cjs",
     "_test": "ospec 'cjs/_tests/**/*.js'",
     "_test:dev": "onchange 'cjs/_tests/**' -f add,change -- ospec {{changed}}",
     "_build": "rollup -c build/rollup.config.js",
