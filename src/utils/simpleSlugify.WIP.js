@@ -3,21 +3,34 @@ const wildcard = '-';
 const multiWildcardRe = /-+/g;
 const multiSpaceRe = /[\s_./–—-]+/g
 const endSpaceRe = /^_|_$/g;
-let charMap;
+const charMap = {};
 
-const buildCharMap = () => {
-    const inn = 'åàáãäâèéëêìíïîòóöôùúüûñç';
-    const out = 'aaaaaaeeeeiiiioooouuuunc';
-    charMap = [].reduce.call(inn, (acc, char, i) => {
-        acc[char] = out[i];
-        return acc;
-    }, {});
-}
+[
+    ['àáãäâ', 'a'],
+    ['å', 'aa'],
+    ['æ', 'ae'],
+    ['ç', 'c'],
+    ['ð', 'd'],
+    ['èéëê', 'e'],
+    ['ìíïî', 'y'],
+    ['ñ', 'n'],
+    ['òóöôø', 'o'],
+    ['œ', 'oe'],
+    ['ß', 'ss'],
+    ['þ', 'th'],
+    ['ùúüû', 'u'],
+    ['ý', 'y'],
+    // NOTE: More replacements: https://gist.github.com/mathewbyrne/1280286#gistcomment-2723416
+]
+    .forEach((mapping) => {
+        const to = mapping[1];
+        [].forEach.call(mapping[0], (from) => {
+            charMap[from] = to;
+        })
+    })
+
 
 const simpleSlugify = (string/*:string*/)/*:string*/ => {
-    if (!charMap) {
-        buildCharMap();
-    }
     return string
         .toLowerCase()
         .replace(multiSpaceRe, space)

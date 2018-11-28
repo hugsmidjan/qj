@@ -45,9 +45,17 @@ o.spec('simpleSlugify', () => {
         o( slugify('\n– Hi — –- there!\tWhat\'s up ?  ') ).equals( 'hi_there_whats_up' );
     });
 
+    o('ASCII-fies latin accented characters', () => {
+        o( slugify('Halló þú ert Æðibiti') ).equals( 'hallo_thu_ert_aedibiti' );
+        o( slugify('Déjà vu garçon') ).equals( 'deja_vu_garcon' );
+        o( slugify('Øl på Señor') ).equals( 'ol_paa_senor' );
+        o( slugify('Schloß Ümläuts') ).equals( 'schloss_umlauts' );
+    });
+
     o('Leaves unknown Unicode symbols as is, but lower-cased', () => {
         o( slugify('Hello ...err... Путин') ).equals( 'hello_err_путин' );
         o( slugify('گرگ!!') ).equals( 'گرگ' );
     });
 
 });
+
