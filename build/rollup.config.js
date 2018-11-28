@@ -50,6 +50,7 @@ const polyfillsGlob = 'src/__polyfills/**/*.js';
 const testsGlob = 'src/**/*.test?(s).js';
 const privatesGlob = 'src/**/*.privates.js'; // `*.privates.js` contain private bits that need testing
 const testHelperGlob = 'src/__testing/**/*.js';
+const wipGlob = 'src/**/*.WIP.js'; // Scripts that should not be bundled/published yet
 
 export default [
     // Glob all src scipts – except polyfills.
@@ -59,7 +60,7 @@ export default [
         input: getFileMap(
             glob.sync(
                 'src/**/*.js',
-                { ignore: [polyfillsGlob, privatesGlob, testsGlob, testHelperGlob] }
+                { ignore: [polyfillsGlob, wipGlob, privatesGlob, testsGlob, testHelperGlob] }
             )
         ),
         output: {
