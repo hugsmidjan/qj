@@ -1,7 +1,7 @@
 import o from 'ospec';
 import slugify from './simpleSlugify.WIP';
 
-o.spec('Slugify', () => {
+o.spec('simpleSlugify', () => {
 
     o('Leaves pure ASCII alphanumerical strings alone', () => {
         o( slugify('Hello') ).equals( 'hello' );
@@ -37,7 +37,7 @@ o.spec('Slugify', () => {
         o( slugify('http://foo.bar') ).equals( 'http_foo_bar' );
     });
 
-    o('Trims and collapses multipile white spaces', () => {
+    o('Trims and collapses multiple white spaces', () => {
         o( slugify(' Hello') ).equals( 'hello' );
         o( slugify('Hello ') ).equals( 'hello' );
         o( slugify('/path/') ).equals( 'path' );
@@ -45,9 +45,9 @@ o.spec('Slugify', () => {
         o( slugify('\n– Hi — –- there!\tWhat\'s up ?  ') ).equals( 'hi_there_whats_up' );
     });
 
-    o('Leaves unknown Unicode symbols as is', () => {
-        o( slugify('Hello ...er... Путин') ).equals( 'hello_er_Путин' );
-        o( slugify('گرگ!') ).equals( 'گرگ' );
+    o('Leaves unknown Unicode symbols as is, but lower-cased', () => {
+        o( slugify('Hello ...err... Путин') ).equals( 'hello_err_путин' );
+        o( slugify('گرگ!!') ).equals( 'گرگ' );
     });
 
 });
