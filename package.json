@@ -19,6 +19,11 @@
   "contributors": [
     "Már Örlygsson <mar@hugsmidjan.is>"
   ],
+  "engines": {
+    "node": ">=6",
+    "yarn": ">=1.11",
+    "npm": ">=6.4"
+  },
   "license": "ISC",
   "devDependencies": {
     "glob": "^7.1.3",
