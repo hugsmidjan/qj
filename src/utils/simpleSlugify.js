@@ -1,10 +1,9 @@
-const space = '_';
-const wildcard = '-';
-const multiWildcardRe = /-+/g;
-const multiSpaceRe = /[\s_./–—-]+/g
+const punctuationRe = /[:;',!¡¿?]/g
+const spaceRe = /[\s_./…–—-]+/g
+const replaceRe = /[+&]+/g;
 const endSpaceRe = /^_|_$/g;
-const charMap = {};
 
+const charMap = {};
 [
     ['àáãäâ', 'a'],
     ['å', 'aa'],
@@ -27,16 +26,14 @@ const charMap = {};
         [].forEach.call(mapping[0], (from) => {
             charMap[from] = to;
         })
-    })
+    });
 
-
-const simpleSlugify = (string/*:string*/)/*:string*/ => {
-    return string
-        .toLowerCase()
-        .replace(multiSpaceRe, space)
-        .replace(/[^a-z0-9_]/g, (char) => charMap[char] || wildcard)
-        .replace(multiWildcardRe, wildcard)
-        .replace(endSpaceRe, '');
-};
+const simpleSlugify = (string/*:string*/)/*:string*/ => string
+    .toLowerCase()
+    .replace(punctuationRe, '')
+    .replace(spaceRe, '_')
+    .replace(/[^a-z0-9_]/g, (char) => charMap[char] || char)
+    .replace(replaceRe, '-')
+    .replace(endSpaceRe, '');
 
 export default simpleSlugify;

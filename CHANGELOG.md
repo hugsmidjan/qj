@@ -3,6 +3,7 @@
 
 ## Upcoming...
 <!-- Add new lines here. Version number will be decided later -->
+- feat: Add `qj/simpleSlugify` to turn "latin" strings into URL-friendlier format.
 - ...
 
 
