@@ -6,9 +6,9 @@ function /*::<N:Node>*/replaceNode(node/*:N*/, newNode/*:Node*/)/*:N*/ {
   return node;
 }
 
-const p = document.querySelector('p');
+var p = document.querySelector('p');
 if (p) {
-  const p2 = replaceNode(p, document.createTextNode('foobar'));
+  var p2 = replaceNode(p, document.createTextNode('foobar'));
   p2.focus();
 }
 

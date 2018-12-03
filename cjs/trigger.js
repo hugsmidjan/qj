@@ -1,7 +1,7 @@
 'use strict';
 
 function trigger(type, elm) {
-  const e = new Event(type);
+  var e = new Event(type);
   elm.dispatchEvent( e );
 }
 

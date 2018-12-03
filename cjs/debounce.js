@@ -3,19 +3,22 @@
 // debounceFn()
 // returns a debounced function that only runs after `delay` milliseconds of quiet-time
 // the returned function also has a nice .cancel() method.
-const debounce = (func, delay, immediate) => {
-  let timeout;
-  const debouncedFn = function (...args) {
-    const runNow = immediate && !timeout;
-    const _this = this;
+var debounce = function (func, delay, immediate) {
+  var timeout;
+  var debouncedFn = function () {
+    var args = [], len = arguments.length;
+    while ( len-- ) args[ len ] = arguments[ len ];
+
+    var runNow = immediate && !timeout;
+    var _this = this;
     clearTimeout(timeout);
-    timeout = setTimeout(() => {
+    timeout = setTimeout(function () {
       !runNow  &&  func.apply(_this, args); // don't re-invoke `func` if runNow is true
       timeout = 0;
     }, delay);
     runNow  &&  func.apply(_this, args);
   };
-  debouncedFn.cancel = () => {
+  debouncedFn.cancel = function () {
     clearTimeout(timeout);
     timeout = 0;
   };
@@ -28,6 +31,6 @@ const debounce = (func, delay, immediate) => {
 //     const myDebouncer = debounce.d(500);
 //     myDebouncer(() => { alert('Hello world'); });
 //     myDebouncer(() => { alert('I mean: Howdy world!'); });
-debounce.d = (delay, immediate) => debounce((fn) => fn(), delay, immediate);
+debounce.d = function (delay, immediate) { return debounce(function (fn) { return fn(); }, delay, immediate); };
 
 module.exports = debounce;

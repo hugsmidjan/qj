@@ -12,7 +12,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 //   setFrag('');    // unset
 //   setFrag(null);  // unset
 
-const setFrag = (_fragment, _isEncoded) => {
+var setFrag = function (_fragment, _isEncoded) {
   _fragment = (_fragment||'').replace(/^#/, '');
   // check if there exists an element with .id same as _fragment
   var _elm = _fragment  &&  document.getElementById( _isEncoded ? decodeURIComponent(_fragment) : _fragment );
@@ -38,20 +38,20 @@ const setFrag = (_fragment, _isEncoded) => {
 
 
 // encodes a plain-text string to a URL #fragment friendly format (compatible with .get())
-const encodeFrag = (_fragment) => {
+var encodeFrag = function (_fragment) {
   return encodeURI(_fragment).replace(/#/g, '%23').replace(/%7C/g, '|');
 };
 
 
 // returns the #fragment portion of `url` (defaulting to using `document.location.href`)
 // returns a plaintext (decodeURIComponent) version of the fragment - unless a `_returnRaw` argument is passed.
-const getFrag = (url, _returnRaw) => {
+var getFrag = function (url, _returnRaw) {
   var _fragment = ( url || document.location.href ).split('#')[1] || '';
   return _returnRaw ? _fragment : decodeURIComponent(_fragment);
 };
 
 
-const frag = {
+var frag = {
   get: getFrag,
   set: setFrag,
   encode: encodeFrag,

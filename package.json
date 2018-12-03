@@ -1,6 +1,6 @@
 {
   "name": "qj",
-  "version": "1.19.0",
+  "version": "1.19.1",
   "description": "Quick JavaScripts – Collection of useful miniature JavaScript helper functions.",
   "module": "index.js",
   "main": "cjs/index.js",

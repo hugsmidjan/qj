@@ -21,15 +21,15 @@
 */
 function arrayToObject( list, prop ) {
   if ( list ) {
-    const obj = {};
+    var obj = {};
     [].forEach.call(list, prop ?
-      (item) => {
-        const key = item[prop];
+      function (item) {
+        var key = item[prop];
         if ( !(key in obj) ) {
           obj[key] = item;
         }
       }:
-      (item) => {
+      function (item) {
         obj[item] = (obj[item] || 0) +1;
       }
     );

@@ -1,7 +1,7 @@
 'use strict';
 
 //@flow
-const A = [].slice;
+var A = [].slice;
 /*
 ::  // FIXME: Better describe qq() to reflect actual return Array...
     type ElementListSelector = <S:string, R:Element|Document>

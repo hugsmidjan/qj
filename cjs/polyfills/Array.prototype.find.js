@@ -2,7 +2,7 @@
 
 if (!Array.prototype.find) {
   Array.prototype.find = function (predicate) {
-    const context = arguments[1];
+    var context = arguments[1];
     var i = 0;
     var l = this.length;
     while (i < l) {

@@ -8,9 +8,9 @@
 //
 
 // suffix and prefix used to generate temporary @id-values for HTMLelements without an @id
-const _guidPrefix = 'tmp_' + Date.now() + '_';
+var _guidPrefix = 'tmp_' + Date.now() + '_';
 // a counter that should be incremented with each use.
-let _guid = 1;
+var _guid = 1;
 
 // aquireId
 function aquireId(el, prefDefaultId) { // el is an optional parameter.
@@ -22,12 +22,12 @@ function aquireId(el, prefDefaultId) { // el is an optional parameter.
     el = el.nodeType ? el : el[0];
   }
   if (!el || !el.id) {
-    let id = prefDefaultId  ||  _guidPrefix + _guid++;
+    var id = prefDefaultId  ||  _guidPrefix + _guid++;
     if (prefDefaultId) {
-      let count;
+      var count;
       while ( document.getElementById(id) ) {
         if (count === undefined) {
-          let m = prefDefaultId.match(/\d+$/);
+          var m = prefDefaultId.match(/\d+$/);
           count = m ? parseInt(m[0],10) : 1;
           prefDefaultId = m ? prefDefaultId.replace(/\d+$/, '') : prefDefaultId;
         }

@@ -18,29 +18,29 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 // import './polyfills/Object.assign';
 
-const _createEmpty = (original) => original.constructor ? new original.constructor() : Object.create(null);
+var _createEmpty = function (original) { return original.constructor ? new original.constructor() : Object.create(null); };
 
 // IE11 compatible no-polyfill object cloner
-const _clone = (original) => {
-  const clone = _createEmpty(original);
-  for (const originalKey in original) {
+var _clone = function (original) {
+  var clone = _createEmpty(original);
+  for (var originalKey in original) {
     if ( hasOwnProperty.call(original, originalKey) ) {
       clone[originalKey] = original[originalKey];
     }
   }
   return clone;
 };
-const hasOwnProperty = Object.prototype.hasOwnProperty;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 
 
 // Returns a clone of original object with only the changed newValues assigned
 // Returns the original if nothing changed.
-const objectUpdate = (original, newValues, customSameCheck) => {
-  let clone;
-  for (const key in newValues) {
-    const valA = original[key];
-    const valB = newValues[key];
+var objectUpdate = function (original, newValues, customSameCheck) {
+  var clone;
+  for (var key in newValues) {
+    var valA = original[key];
+    var valB = newValues[key];
     if (
       valA !== valB  &&  hasOwnProperty.call(newValues, key)  &&
       !(customSameCheck && valA && valB && customSameCheck(valA, valB, key))
@@ -62,12 +62,12 @@ const objectUpdate = (original, newValues, customSameCheck) => {
 
 // Returns a clone of original object with all keys that have undefined values deleted
 // Returns the original if nothing changed.
-const objectClean = (original, alsoNull) => {
-  let deleted;
-  const clone = _createEmpty(original);
-  for (const key in original) {
+var objectClean = function (original, alsoNull) {
+  var deleted;
+  var clone = _createEmpty(original);
+  for (var key in original) {
     if ( hasOwnProperty.call(original, key) ) {
-      const originalVal = original[key];
+      var originalVal = original[key];
       if ( (originalVal === undefined) || (originalVal === null && alsoNull) ) {
         deleted = true;
       }
@@ -81,8 +81,8 @@ const objectClean = (original, alsoNull) => {
 
 
 // Returns true if object as no properties of its own
-const objectIsEmpty = (object) => {
-  for (const key in object) {
+var objectIsEmpty = function (object) {
+  for (var key in object) {
     if ( hasOwnProperty.call(object, key) ) {
       return false;
     }
@@ -92,14 +92,14 @@ const objectIsEmpty = (object) => {
 
 
 // Returns true if objects a and b contain 100% the same values.
-const objectIsSame = (a, b, customSameCheck) => {
+var objectIsSame = function (a, b, customSameCheck) {
   if (typeof a.length === 'number' && a.length !== b.length) {
     return false;
   }
-  const encountered = {};
-  for (const key in b) {
-    const valA = a[key];
-    const valB = b[key];
+  var encountered = {};
+  for (var key in b) {
+    var valA = a[key];
+    var valB = b[key];
     if (
       valA !== valB  &&  hasOwnProperty.call(b, key)  &&
       !(customSameCheck && valA && valB && customSameCheck(valA, valB, key))
@@ -108,8 +108,8 @@ const objectIsSame = (a, b, customSameCheck) => {
     }
     encountered[key] = true;
   }
-  for (const key in a) {
-    if ( !encountered[key] ) {
+  for (var key$1 in a) {
+    if ( !encountered[key$1] ) {
       return false;
     }
   }
@@ -119,10 +119,10 @@ const objectIsSame = (a, b, customSameCheck) => {
 
 // Returns a clone of original object with only the specified keys
 // Returns the original if nothing changed.
-const objectOnly = (original, keys) => {
-  let extra;
-  const clone = _createEmpty(original);
-  for (const key in original) {
+var objectOnly = function (original, keys) {
+  var extra;
+  var clone = _createEmpty(original);
+  for (var key in original) {
     if ( hasOwnProperty.call(original, key) ) {
       if ( keys.indexOf(key) > -1 ) {
         clone[key] = original[key];
@@ -138,11 +138,11 @@ const objectOnly = (original, keys) => {
 
 // Returns a clone of original object without the specified keys
 // Returns the original if nothing changed.
-const objectWithout = (original, keys) => {
-  let clone;
-  const numKeys = keys.length;
-  for (let i=0; i<numKeys; i++) {
-    const key = keys[i];
+var objectWithout = function (original, keys) {
+  var clone;
+  var numKeys = keys.length;
+  for (var i=0; i<numKeys; i++) {
+    var key = keys[i];
     if ( hasOwnProperty.call(original, key) ) {
       // Fast IE11 compatible no-polyfill version
       clone = clone || _clone(original);
@@ -159,7 +159,7 @@ const objectWithout = (original, keys) => {
 
 // Returns original if replacement has the same keys + values.
 // Otherwise returns replacement as is.
-const objectReplace = (original, replacement, customSameCheck) => {
+var objectReplace = function (original, replacement, customSameCheck) {
     return  objectIsSame(original, replacement, customSameCheck) ?
                 original:
                 replacement;
