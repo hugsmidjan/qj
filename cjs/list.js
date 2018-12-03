@@ -10,15 +10,15 @@ require('./sortIsl.js');
 
 // Convert an array-like list into an object containing the items
 // grouped by some `prop` – where `prop` can be a custom function
-const groupBy = (list, prop) => {
-    const getProp = typeof prop === 'string' ?
-        (item) => item[prop]:
+var groupBy = function (list, prop) {
+    var getProp = typeof prop === 'string' ?
+        function (item) { return item[prop]; }:
         prop;
 
-    const grouped = {};
+    var grouped = {};
 
-    [].forEach.call(list, (item) => {
-        const name = getProp(item);
+    [].forEach.call(list, function (item) {
+        var name = getProp(item);
         if (!grouped[name]) {
             grouped[name] = [];
         }
@@ -28,21 +28,21 @@ const groupBy = (list, prop) => {
     return grouped;
 };
 
-groupBy.asArray = (list, prop) => {
-    const grouped = groupBy(list, prop);
-    return Object.keys(grouped).map((name) => ({
-        name,
+groupBy.asArray = function (list, prop) {
+    var grouped = groupBy(list, prop);
+    return Object.keys(grouped).map(function (name) { return ({
+        name: name,
         items: grouped[name],
-    }));
+    }); });
 };
 
 var list = {
-    A,
+    A: A,
     toArray: A,
-    alphabetize,
+    alphabetize: alphabetize,
     toObject: arrayToObject,
     dedupe: uniqueArray,
-    groupBy,
+    groupBy: groupBy,
 };
 
 exports.A = A.default;

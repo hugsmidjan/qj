@@ -1,8 +1,8 @@
 'use strict';
 
 //@flow
-const domid_prefix = '_' + /*@__PURE__*/(Date.now()+'-').substr(6);
-let domid_incr = 0;
+var domid_prefix = '_' + /*@__PURE__*/(Date.now()+'-').substr(6);
+var domid_incr = 0;
 
 function domid()/*: string */ {
   return domid_prefix + (domid_incr++);

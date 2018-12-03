@@ -29,23 +29,23 @@
       }
 
 */
-const cache = {};
-let elmStyles;
-const vendorsJs = ['Khtml','O','Ms','Moz','Webkit'];
-const vendorsCss = ['-khtml-','-o-','-ms-','-moz-','-webkit-'];
+var cache = {};
+var elmStyles;
+var vendorsJs = ['Khtml','O','Ms','Moz','Webkit'];
+var vendorsCss = ['-khtml-','-o-','-ms-','-moz-','-webkit-'];
 
 function cssSupport( propname ) {
     // lazy initalize elmStyle
     elmStyles = elmStyles || document.createElement('div').style;
 
-    let prop = cache[propname];
+    var prop = cache[propname];
     // If this is the first time we're asked about propname
     if ( prop === undefined ) {
-      let cssProp;
-      let jsProp;
+      var cssProp;
+      var jsProp;
       // Convert propname from CSS style `transform-origin`
       // into JavaScript-style `transformOrigin`
-      let PropName = propname.replace(/-([a-z])/g, (val, chr) => chr.toUpperCase());
+      var PropName = propname.replace(/-([a-z])/g, function (val, chr) { return chr.toUpperCase(); });
       if ( PropName in elmStyles ) {
         // Un-prefixed property is supported!
         jsProp = PropName;
@@ -54,10 +54,10 @@ function cssSupport( propname ) {
       else {
         // Capitalize PropName in preparation for vendor-prefixing
         // (i.e. from `transformOrigin` to `TransformOrigin`
-        PropName = PropName.replace(/^[a-z]/, (chr) => chr.toUpperCase());
-        let i = vendorsJs.length;
+        PropName = PropName.replace(/^[a-z]/, function (chr) { return chr.toUpperCase(); });
+        var i = vendorsJs.length;
         while (i--) {
-          const PrefixedProp = vendorsJs[i] + PropName;
+          var PrefixedProp = vendorsJs[i] + PropName;
           if ( PrefixedProp in elmStyles ) {
             // Vendor-prefixed property is supported
             jsProp = PrefixedProp;

@@ -4,9 +4,9 @@ var qq = require('./qq.js');
 
 // reenable selected HTML elements that were disbbled by htmlToDiv()
 function reenableElms(elm, tagName) {
-  const disabledTagName = tagName + '--disabled';
-  const re = new RegExp('(<\\/?'+ tagName +')--disabled([ >])', 'gi');
-  const enable = (elm) => {
+  var disabledTagName = tagName + '--disabled';
+  var re = new RegExp('(<\\/?'+ tagName +')--disabled([ >])', 'gi');
+  var enable = function (elm) {
     elm.outerHTML = elm.outerHTML.replace(re, '$1$2');
   };
   if ( elm.tagName.toLowerCase() === disabledTagName ) {

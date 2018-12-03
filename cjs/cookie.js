@@ -2,21 +2,21 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const getCookie = (name) => {
-  const nameEquals = name+'=';
-  const nameLength = nameEquals.length;
-  const cookies = document.cookie ? document.cookie.split(/\s*;\s*/) : [];
+var getCookie = function (name) {
+  var nameEquals = name+'=';
+  var nameLength = nameEquals.length;
+  var cookies = document.cookie ? document.cookie.split(/\s*;\s*/) : [];
   for (var i = 0; i < cookies.length; i++) {
-    const cookie = cookies[i];
+    var cookie = cookies[i];
     if ( cookie.substr(0, nameLength) === nameEquals ) {
       return decodeURIComponent( cookie.substr(nameLength) );
     }
   }
 };
 
-const setCookie = (name, value, options) => {
+var setCookie = function (name, value, options) {
   options = options || {};
-  let expires = (value == null) ? -1 : options.expires;
+  var expires = (value == null) ? -1 : options.expires;
   if (typeof expires === 'number') {
     expires = new Date( Date.now() + (expires * 24*60*60*1000) );
   }
@@ -31,7 +31,7 @@ const setCookie = (name, value, options) => {
   );
 };
 
-const cookie = {
+var cookie = {
   get: getCookie,
   set: setCookie,
 };

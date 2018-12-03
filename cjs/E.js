@@ -10,14 +10,17 @@
     type Child =  Node | string | number | null | false
     type Children = Child | Child[]
 */
-function E(tagName/*:string*/, attrs/*:?Attrs*/, ...children/*:Children[]*/)/*:HTMLElement*/ {
-  const elm = document.createElement(tagName);
+function E(tagName/*:string*/, attrs/*:Children[]*/)/*:HTMLElement*/ {
+  var children = [], len = arguments.length - 2;
+  while ( len-- > 0 ) children[ len ] = arguments[ len + 2 ];
+
+  var elm = document.createElement(tagName);
   if (attrs) {
-    for (let name in attrs) {
-      const value = attrs[name];
+    for (var name in attrs) {
+      var value = attrs[name];
       if ( value != null ) {
         if ( name === 'style' ) {
-          for (let cssProp in attrs.style) {
+          for (var cssProp in attrs.style) {
             if (cssProp in elm.style) {
               //$FlowFixMe – flow wants cssProp
               elm.style[cssProp] = value[cssProp];
@@ -44,7 +47,7 @@ function E(tagName/*:string*/, attrs/*:?Attrs*/, ...children/*:Children[]*/)/*:H
       }
     }
   }
-  const _appendChildren = (child) => {
+  var _appendChildren = function (child) {
     if ( child instanceof Array ) {
       child.forEach(_appendChildren);
     }

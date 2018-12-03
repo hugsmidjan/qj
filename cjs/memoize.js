@@ -6,12 +6,12 @@
 // Checks for strict equality with the last parameter values.
 // Ignores changes in `this` context - like any other side-effect.
 
-const _memoizers = [
+var _memoizers = [
     // Hmmm... Why does neither of these work !?!
     // /*::<A,R:*,F:(a:A)=>R>*/(fn/*:F*/)/*:F*/ => {
     // /*::<F:(a:any)=>mixed>*/(fn/*:F*/)/*:F*/ => {
-    (fn) => {
-        let value, params;
+    function (fn) {
+        var value, params;
         return function (a) {
             if ( !params || a!==params[0] ) {
                 params = [a];
@@ -20,8 +20,8 @@ const _memoizers = [
             return value;
         };
     },
-    (fn) => {
-        let value, params;
+    function (fn) {
+        var value, params;
         return function (a,b) {
             if ( !params || a!==params[0] || b!==params[1] ) {
                 params = [a,b];
@@ -30,8 +30,8 @@ const _memoizers = [
             return value;
         };
     },
-    (fn) => {
-        let value, params;
+    function (fn) {
+        var value, params;
         return function (a,b,c) {
             if ( !params || a!==params[0] || b!==params[1] || c!==params[2] ) {
                 params = [a,b,c];
@@ -39,18 +39,20 @@ const _memoizers = [
             }
             return value;
         };
-    },
-];
+    } ];
 
-const _memoizerN = (fn, isVariadic) => {
-    let value;
-    let params;
+var _memoizerN = function (fn, isVariadic) {
+    var value;
+    var params;
     // return function (...args/*:any[]*/)/*:mixed*/ {
-    return function (...args) {
-        let dirty = !params;
+    return function () {
+        var args = [], len = arguments.length;
+        while ( len-- ) args[ len ] = arguments[ len ];
+
+        var dirty = !params;
         if (params) {
-            let i = 0;
-            const n = isVariadic ? Math.max(args.length, params.length) : fn.length;
+            var i = 0;
+            var n = isVariadic ? Math.max(args.length, params.length) : fn.length;
             while (i < n) {
                 if (args[i] !== params[i]) {
                     dirty = true;
@@ -68,12 +70,12 @@ const _memoizerN = (fn, isVariadic) => {
 };
 
 
-const memoize = /*::<AnyFn:(...any[]) => mixed>*/(fn/*:AnyFn*/, isVariadic/*:?boolean*/)/*:AnyFn*/ => {
+var memoize = /*::<AnyFn:(...any[]) => mixed>*/function (fn/*:AnyFn*/, isVariadic/*:?boolean*/)/*:AnyFn*/ {
     if ( isVariadic ) {
         //$FlowFixMe
         return _memoizerN(fn, true);
     }
-    const memoizer = _memoizers[fn.length - 1] || _memoizerN; // NOTE: Flow doesn't realize that the assignment may fall back to _memoizerN
+    var memoizer = _memoizers[fn.length - 1] || _memoizerN; // NOTE: Flow doesn't realize that the assignment may fall back to _memoizerN
     //$FlowFixMe
     return memoizer(fn);
 };

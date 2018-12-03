@@ -8,10 +8,10 @@
         webkitMatchesSelector?: MatcherMethod,
     }
 */
-let _matcher;
+var _matcher;
 function matches(selector/*:string*/, elm/*:Element & VendorMatcherMethods*/)/*:boolean*/ {
   if ( _matcher == null ) {
-    _matcher = elm.matches || (elm.msMatchesSelector) || elm.webkitMatchesSelector || (() => false);
+    _matcher = elm.matches || (elm.msMatchesSelector) || elm.webkitMatchesSelector || (function () { return false; });
   }
   return _matcher.call(elm, selector);
 }
