@@ -24,6 +24,7 @@
   "devDependencies": {
     "onchange": "^4.0",
     "ospec": "^3.0",
-    "rollup": "^0.63"
+    "rollup": "^0.67.4",
+    "rollup-plugin-buble": "^0.19.4"
   }
 }

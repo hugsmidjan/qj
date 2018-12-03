@@ -1,3 +1,4 @@
+import buble from 'rollup-plugin-buble';
 import fs from 'fs';
 
 const getJsFiles = (...paths) => {
@@ -28,6 +29,9 @@ export default [
             format: 'cjs',
             dir: 'cjs',
         },
+        plugins: [
+            buble({ objectAssign: true }),
+        ],
         experimentalCodeSplitting: true,
         watch: {
             // clearScreen: false,
