@@ -1,3 +1,0 @@
-//@flow
-export * from './src/list/sortIsl.js';
-export { default } from './src/list/sortIsl.js';

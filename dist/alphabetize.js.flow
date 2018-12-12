@@ -1,3 +1,0 @@
-//@flow
-export * from './src/list/alphabetize.js';
-export { default } from './src/list/alphabetize.js';

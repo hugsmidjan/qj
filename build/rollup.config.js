@@ -16,36 +16,6 @@ const getFileMap = (files/*:Array<string>*/)/*:FileMap*/ => {
 };
 
 
-const createFlowFiles = () => {
-    let _flowFilesCreated = false;
-    let files/*:FileMap*/ = {};
-    return {
-        options: (options/*:Object*/) => { files = options.input; },
-        generateBundle: (output/*:Object*/) => {
-            if ( !_flowFilesCreated ) {
-                _flowFilesCreated = true;
-                fs.mkdir(output.dir, undefined, (e) => {
-                    if ( e ) {
-                        console.error(e);
-                    }
-                    else {
-                        Object.keys(files).forEach((fileName) => {
-                            const importStr = '\'./'+files[fileName]+'\';\n';
-                            const code = '//@flow\nexport * from '+importStr+'export { default } from '+importStr;
-                            fs.writeFile(
-                                output.dir+'/'+fileName+'.js.flow',
-                                code,
-                                (e) => { e && console.error(e); }
-                            );
-                        });
-                    }
-                });
-            }
-        },
-    };
-};
-
-
 const polyfillsGlob = 'src/__polyfills/**/*.js';
 const testsGlob = 'src/**/*.test?(s).js';
 const privatesGlob = 'src/**/*.privates.js'; // `*.privates.js` contain private bits that need testing
@@ -70,7 +40,6 @@ export default [
         },
         plugins: [
             buble({ objectAssign: true }),
-            createFlowFiles(),
         ],
         experimentalCodeSplitting: true,
         watch: {

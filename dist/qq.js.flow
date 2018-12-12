@@ -1,3 +1,0 @@
-//@flow
-export * from './src/select/qq.js';
-export { default } from './src/select/qq.js';

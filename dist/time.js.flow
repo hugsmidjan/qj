@@ -1,3 +1,0 @@
-//@flow
-export * from './src/time/time.js';
-export { default } from './src/time/time.js';

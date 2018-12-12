@@ -1,3 +1,0 @@
-//@flow
-export * from './src/cssSupport/cssSupport.js';
-export { default } from './src/cssSupport/cssSupport.js';

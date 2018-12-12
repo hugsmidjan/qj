@@ -1,3 +1,0 @@
-//@flow
-export * from './src/url/getUrlParam.js';
-export { default } from './src/url/getUrlParam.js';

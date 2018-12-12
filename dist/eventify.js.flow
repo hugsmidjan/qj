@@ -1,3 +1,0 @@
-//@flow
-export * from './src/eventify/eventify.js';
-export { default } from './src/eventify/eventify.js';

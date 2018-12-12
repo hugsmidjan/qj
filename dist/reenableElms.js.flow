@@ -1,3 +1,0 @@
-//@flow
-export * from './src/dom/reenableElms.js';
-export { default } from './src/dom/reenableElms.js';

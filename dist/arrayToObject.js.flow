@@ -1,3 +1,0 @@
-//@flow
-export * from './src/list/arrayToObject.js';
-export { default } from './src/list/arrayToObject.js';

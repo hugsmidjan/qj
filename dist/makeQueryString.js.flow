@@ -1,3 +1,0 @@
-//@flow
-export * from './src/url/makeQueryString.js';
-export { default } from './src/url/makeQueryString.js';

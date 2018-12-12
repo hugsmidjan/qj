@@ -1,3 +1,0 @@
-//@flow
-export * from './src/list/list.js';
-export { default } from './src/list/list.js';

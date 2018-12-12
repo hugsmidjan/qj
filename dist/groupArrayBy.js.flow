@@ -1,3 +1,0 @@
-//@flow
-export * from './src/list/groupArrayBy.js';
-export { default } from './src/list/groupArrayBy.js';

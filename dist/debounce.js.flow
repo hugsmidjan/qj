@@ -1,3 +1,0 @@
-//@flow
-export * from './src/functions/debounce.js';
-export { default } from './src/functions/debounce.js';

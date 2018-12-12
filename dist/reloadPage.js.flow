@@ -1,3 +1,0 @@
-//@flow
-export * from './src/browser/reloadPage.js';
-export { default } from './src/browser/reloadPage.js';

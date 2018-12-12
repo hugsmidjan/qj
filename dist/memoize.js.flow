@@ -1,3 +1,0 @@
-//@flow
-export * from './src/memoize/memoize.js';
-export { default } from './src/memoize/memoize.js';

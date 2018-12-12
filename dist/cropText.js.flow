@@ -1,3 +1,0 @@
-//@flow
-export * from './src/utils/cropText.js';
-export { default } from './src/utils/cropText.js';

@@ -1,3 +1,0 @@
-//@flow
-export * from './src/_deprecated/uniqueArray.js';
-export { default } from './src/_deprecated/uniqueArray.js';

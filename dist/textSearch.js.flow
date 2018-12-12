@@ -1,3 +1,0 @@
-//@flow
-export * from './src/textSearch/textSearch.js';
-export { default } from './src/textSearch/textSearch.js';

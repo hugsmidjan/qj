@@ -1,3 +1,0 @@
-//@flow
-export * from './src/dom/replaceNode.js';
-export { default } from './src/dom/replaceNode.js';

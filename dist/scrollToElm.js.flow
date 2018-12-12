@@ -1,3 +1,0 @@
-//@flow
-export * from './src/browser/scrollToElm.js';
-export { default } from './src/browser/scrollToElm.js';

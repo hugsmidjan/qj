@@ -1,3 +1,0 @@
-//@flow
-export * from './src/dom/aquireId.js';
-export { default } from './src/dom/aquireId.js';

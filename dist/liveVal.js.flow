@@ -1,3 +1,0 @@
-//@flow
-export * from './src/browser/liveVal.js';
-export { default } from './src/browser/liveVal.js';

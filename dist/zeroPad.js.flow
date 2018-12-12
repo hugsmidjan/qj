@@ -1,3 +1,0 @@
-//@flow
-export * from './src/utils/zeroPad.js';
-export { default } from './src/utils/zeroPad.js';

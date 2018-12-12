@@ -1,3 +1,0 @@
-//@flow
-export * from './src/list/dedupeArray.js';
-export { default } from './src/list/dedupeArray.js';

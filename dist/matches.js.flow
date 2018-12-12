@@ -1,3 +1,0 @@
-//@flow
-export * from './src/select/matches.js';
-export { default } from './src/select/matches.js';

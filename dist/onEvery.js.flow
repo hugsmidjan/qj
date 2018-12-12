@@ -1,3 +1,0 @@
-//@flow
-export * from './src/_deprecated/onEvery.js';
-export { default } from './src/_deprecated/onEvery.js';

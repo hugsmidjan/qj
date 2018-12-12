@@ -1,3 +1,0 @@
-//@flow
-export * from './src/functions/throttle.js';
-export { default } from './src/functions/throttle.js';
