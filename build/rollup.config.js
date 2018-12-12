@@ -94,9 +94,6 @@ export default [
         },
     },
 ].concat(
-    // Tests can (and should!) be bundled individually
-    // without experimentalCodeSplitting –
-    // to appease the wonderfully KISS ospec.
     glob.sync(testsGlob).map((fileName) => ({
         input: fileName,
         external: ['ospec', 'jsdom'],

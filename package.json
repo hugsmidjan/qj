@@ -5,7 +5,7 @@
   "scripts": {
     "postinstall": "node build/postinstall.js",
     "_test": "ospec '_tests/**/*.js'",
-    "_test:dev": "onchange '_tests/**' -f add,change -- ospec {{changed}}",
+    "_test:dev": "sleep 1  &&  yarn run _test  &&  onchange '_tests/**' -f add,change -- ospec {{changed}}",
     "_build": "rollup -c build/rollup.config.js",
     "test": "yarn run _build  &&  yarn run _test",
     "build": "rm -rf dist  &&  npm run _build  &&  npm run _test",
