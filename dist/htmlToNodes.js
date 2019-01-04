@@ -1,5 +1,5 @@
-var A = require('./A.js');
 var htmlToDiv = require('./htmlToDiv.js');
+var A = require('./A.js');
 
 //@flow
 
