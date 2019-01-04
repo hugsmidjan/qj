@@ -10,5 +10,10 @@ if (
 }
 else {
     const exec = require('child_process').execSync;
-    exec('rm -rf build  &&  cp -R dist/* .  &&  rm -rf dist');
+    if (process.platform === 'win32') { // Ack!
+        exec('xcopy dist\\* . /s' + ['', 'dist', 'build', 'src'].join('  &&  rmdir /s /q '));
+    }
+    else {
+        exec('cp -R dist/* .  &&  rm -rf dist build src');
+    }
 }
