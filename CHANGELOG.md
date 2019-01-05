@@ -6,6 +6,11 @@
 - ...
 
 
+## 2.2.1
+_2019-01-05_
+- fix: Some source file-changes weren't built before last release
+
+
 ## 2.2.0
 _2019-01-04_
 - feat: Support install via Windows command prompt

@@ -1,5 +1,5 @@
-var addUrlParams = require('./addUrlParams.js');
 require('./makeQueryString.js');
+var addUrlParams = require('./addUrlParams.js');
 
 // Minimal, promise-returning ajax HTTP GET function.
 // No bells, whistles, kitchen-plumbing, options, etc.
