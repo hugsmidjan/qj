@@ -30,7 +30,7 @@
     "jsdom": "^13.0.0",
     "onchange": "^5.2.0",
     "ospec": "^3.0.1",
-    "rollup": "^0.67.4",
+    "rollup": "^1.0.1",
     "rollup-plugin-buble": "^0.19.6"
   }
 }

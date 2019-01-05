@@ -41,7 +41,6 @@ export default [
         plugins: [
             buble({ objectAssign: true }),
         ],
-        experimentalCodeSplitting: true,
         watch: {
             // clearScreen: false,
         },
@@ -57,7 +56,6 @@ export default [
             dir: 'dist/polyfills',
             strict: false,
         },
-        experimentalCodeSplitting: true,
         watch: {
             // clearScreen: false,
         },
