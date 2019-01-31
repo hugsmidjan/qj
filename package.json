@@ -1,6 +1,6 @@
 {
   "name": "qj",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Quick JavaScripts – Collection of useful miniature JavaScript helper functions.",
   "scripts": {
     "postinstall": "node build/postinstall.js",

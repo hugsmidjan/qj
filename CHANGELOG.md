@@ -4,6 +4,10 @@
 ## Upcoming...
 <!-- Add new lines here. Version number will be decided later -->
 - ...
+
+
+## 2.2.2
+_2019-01-31_
 - fix: Remove accidentally commited testing code in `replaceNode()`
 
 
