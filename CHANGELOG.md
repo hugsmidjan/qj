@@ -4,6 +4,7 @@
 ## Upcoming...
 <!-- Add new lines here. Version number will be decided later -->
 - ...
+- fix: Remove accidentally commited testing code in `replaceNode()`
 
 
 ## 2.2.1
