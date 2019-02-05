@@ -4,6 +4,7 @@
 ## Upcoming...
 <!-- Add new lines here. Version number will be decided later -->
 - ...
+- feat: Add `delay` option to `focusElm()`
 
 
 ## 2.2.2
