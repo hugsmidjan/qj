@@ -17,7 +17,7 @@ var setFrag = function (_fragment, _isEncoded) {
   // check if there exists an element with .id same as _fragment
   var _elm = _fragment  &&  document.getElementById( _isEncoded ? decodeURIComponent(_fragment) : _fragment );
   // var _prePos = !_fragment  &&  $.scrollTop();
-  var _prePos = document.body.scrollTop||document.documentElement.scrollTop;
+  var _prePos = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
   var _tmpId = _elm && _elm.id;
 
   // temporaily defuse the element's id
