@@ -1,5 +1,11 @@
 // place keyboard focus on _elm - setting tabindex="" when needed
 // and make sure any window scrolling is both sane and useful
+export const getYScroll = function () {
+  return window.pageYOffset ||
+  document.documentElement.scrollTop ||
+  document.body.scrollTop;
+};
+
 export default function focusElm(_elm, opts) {
   if (_elm) {
     if ( _elm.tabIndex < 0 ) {
@@ -7,13 +13,13 @@ export default function focusElm(_elm, opts) {
     }
 
     // Make note of current scroll position
-    var _before = window.pageYOffset;
+    var _before = getYScroll();
 
     // Focus the element!
     _elm.focus();
 
     // Measure the distance scrolled
-    var _scrolld = window.pageYOffset - _before;
+    var _scrolld = getYScroll() - _before;
 
     // Check if the browser jumped to the anchor...
     // (the browser only scrolls the page if the _focusElm was outside the viewport)
@@ -30,7 +36,7 @@ export default function focusElm(_elm, opts) {
         // (NOTE: We do this because most browsers place the artificially .focus()ed link at the *bottom* of the viewport.)
         var offset = opts && opts.offset;
         var offsetPx = offset && offset.apply ? offset(_elm) : offset || 0;
-        var elmTopPos = _elm.getBoundingClientRect().top + document.body.scrollTop;
+        var elmTopPos = _elm.getBoundingClientRect().top + getYScroll();
         window.scrollTo( window.pageXOffset,  elmTopPos - offsetPx );
       }
     }
