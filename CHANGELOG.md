@@ -4,6 +4,7 @@
 ## Upcoming...
 <!-- Add new lines here. Version number will be decided later -->
 - ...
+- fix: Correctly judge document scroll offset in `focusElm()` and `frag.set()`
 
 
 ## 2.3.0

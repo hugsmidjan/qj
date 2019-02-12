@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>focusElm() – Muck About In Your Browser Console Test</title>
+
+    <script>window.module = { exports:{} };</script>
+    <script src="../../dist/focusElm.js"></script>
+    <script>
+      window.p = document.getElementsByTagName('p');
+      window.focusElm = function (idx) {
+        [].slice.call(p).forEach(function (elm) { elm.removeAttribute('tabindex'); });
+        window.module.exports(window.p[idx], { offset: 20 });
+      }
+    </script>
+    <style>
+        p {
+            padding: 1em;
+            border: 1px solid #eee;
+            margin: 2em;
+        }
+        p[tabindex],
+        :focus { outline: 2px dashed red}
+    </style>
+  </head>
+  <body>
+    <h1><code>focusElm()</code> – Muck About In Your Browser Console Test</h1>
+    <p>Zero</p>
+    <p>One</p>
+    <p>Two</p>
+    <p>Three</p>
+    <p>Four</p>
+    <p>Five</p>
+    <p>Six</p>
+    <p>Seven</p>
+    <p>Eight</p>
+    <p>Nine</p>
+    <p>Ten</p>
+    <p>Eleven</p>
+    <p>Twelve</p>
+    <p>Thirteen</p>
+    <p>Fourteen</p>
+    <p>Fifteen</p>
+    <p>Sixteen</p>
+    <p>Seventeen</p>
+    <p>Eighteen</p>
+    <p>Nineteen</p>
+    <p>Twenty</p>
+    <p>Twenty one</p>
+    <p>Twenty two</p>
+    <p>Twenty three</p>
+    <p>Twenty four</p>
+    <p>Twenty five</p>
+    <p>Twenty six</p>
+    <p>Twenty seven</p>
+    <p>Twenty eight</p>
+    <p>Twenty nine</p>
+    <p>Thirty</p>
+  </body>
+</html>
