@@ -3,7 +3,8 @@
 
 ## Upcoming...
 <!-- Add new lines here. Version number will be decided later -->
-- ...
+- feat: Add `qj/polyfills/Object.entries`
+...
 
 
 ## 2.3.1
