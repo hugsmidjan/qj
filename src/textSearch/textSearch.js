@@ -33,7 +33,7 @@ const textSearch = /*::<Item:string|{}>*/(props/*:TextSearchProps<Item>*/)/*:Arr
             (item) => (typeof item !== 'string' ? String(item[prop]) : ''):
             prop
     );
-    items.forEach((item, idx) => {
+    items.forEach((item) => {
         let searchText = getSearchText(item);
         if ( !normalized ) {
             searchText = normalizeText(searchText);
@@ -56,13 +56,13 @@ const textSearch = /*::<Item:string|{}>*/(props/*:TextSearchProps<Item>*/)/*:Arr
             }
         });
         if ( score > 0 ) {
-            results.push({ item, score, idx });
+            results.push({ item, score });
         }
     });
     results.sort((a,b) => (
         a.score < b.score ? 1:
         a.score > b.score ? -1:
-        a.idx < b.idx ? -1 : 1 // fix Chrome's unstable sort
+        0
     ));
     return results.map((result) => result.item);
 };
