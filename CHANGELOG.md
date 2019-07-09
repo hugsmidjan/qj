@@ -4,6 +4,7 @@
 ## Upcoming...
 <!-- Add new lines here. Version number will be decided later -->
 ...
+- fix: Treat undefined `env.INIT_CWD` (yarn win10 linux) as dep install
 
 
 ## 2.4.0
