@@ -6,6 +6,7 @@
 - ...
 - feat: `makeQueryString` spreads arrays into multple same-name query parameters
 - fix: Treat undefined `env.INIT_CWD` (yarn win10 linux) as dep install
+- chore: Upgrade dependencies
 
 
 ## 2.4.0
