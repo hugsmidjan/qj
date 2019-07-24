@@ -1,15 +1,16 @@
-//@flow
-
-/*::
-    export type ParamsObj = { [key:string]: any };
-*/
-
-export default function makeQueryString(paramsObj/*:ParamsObj*/)/*:string*/ {
+export default function makeQueryString/*:: <T = boolean | number | string | null | undefined>*/(paramsObj/*: Record<string, T | Array<T>>*/)/*: string*/ {
     return Object.keys(paramsObj)
-        .map((key) => {
-            const param = paramsObj[key];
-            return param!=null ? key+'='+encodeURIComponent(String(param)) : '';
-        })
-        .filter((item) => item)
+        .reduce((acc, key) => {
+            let param = paramsObj[key];
+            if (!Array.isArray(param) ) {
+              param = [param];
+            }
+            param.forEach(value => {
+              if ( param != null ) {
+                acc.push(key+'='+encodeURIComponent(String(param)))
+              }
+            });
+            return acc;
+        }, [])
         .join('&');
 }
