@@ -1,18 +1,7 @@
 // Prototypal inheritance
-var F = function () {};
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-
+// export default function beget<O extends object, P>(proto: O, props?: P | null): P extends object ? O & P : O { // <-- Similar signature to Object.assign
 function beget(proto, props) {
-  F.prototype = proto;
-  var o = new F();
-  if ( props ) {
-    for (var key in props) {
-      if ( hasOwnProperty.call(props, key) ) {
-        o[key] = props[key];
-      }
-    }
-  }
-  return o;
+    return Object.assign(Object.create(proto), props);
 }
 
 module.exports = beget;

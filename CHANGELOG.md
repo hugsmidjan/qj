@@ -5,6 +5,11 @@
 <!-- Add new lines here. Version number will be decided later -->
 
 - ...
+
+## 2.5.0
+
+_2019-07-31_
+
 - feat: Convert sources to TypeScript and emit declaration files
 - feat: `makeQueryString` spreads arrays into multple same-name query
   parameters

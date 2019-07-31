@@ -2,7 +2,6 @@ var punctuationRe = /[:;',!¡¿?]/g;
 var spaceRe = /[\s_./…–—-]+/g;
 var replaceRe = /[+&]+/g;
 var endSpaceRe = /^_|_$/g;
-
 var charMap = {};
 [
     ['àáãäâ', 'a'],
@@ -21,15 +20,15 @@ var charMap = {};
     ['þ', 'th'],
     ['ùúüû', 'u'],
     ['ýŷÿ', 'y'],
-    ['źżž', 'z'] ]
+    ['źżž', 'z'],
+]
     .forEach(function (mapping) {
-        var to = mapping[1];
-        [].forEach.call(mapping[0], function (from) {
-            charMap[from] = to;
-        });
+    var to = mapping[1];
+    [].forEach.call(mapping[0], function (from) {
+        charMap[from] = to;
     });
-
-var simpleSlugify = function (string/*:string*/)/*:string*/ { return string
+});
+var simpleSlugify = function (string) { return string
     .toLowerCase()
     .replace(punctuationRe, '')
     .replace(spaceRe, '_')

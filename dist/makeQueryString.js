@@ -1,16 +1,17 @@
-//@flow
-
-/*::
-    export type ParamsObj = { [key:string]: any };
-*/
-
-function makeQueryString(paramsObj/*:ParamsObj*/)/*:string*/ {
+function makeQueryString(paramsObj) {
     return Object.keys(paramsObj)
-        .map(function (key) {
-            var param = paramsObj[key];
-            return param!=null ? key+'='+encodeURIComponent(String(param)) : '';
-        })
-        .filter(function (item) { return item; })
+        .reduce(function (acc, key) {
+        var param = paramsObj[key];
+        if (!Array.isArray(param)) {
+            param = [param];
+        }
+        param.forEach(function (value) {
+            if (param != null) {
+                acc.push(key + '=' + encodeURIComponent(String(value)));
+            }
+        });
+        return acc;
+    }, [])
         .join('&');
 }
 

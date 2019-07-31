@@ -41,50 +41,44 @@
 var abcIdx = {};
 var abc = '| -0123456789aáàâäåbcdðeéèêëfghiíîïjklmnoóôpqrstuúùüvwxyýÿzþæö'; // prepend list with '|' to guarantee that abc.indexOf(chr) never returns 0 (falsy)
 var getAbcText = function (text) {
-  if ( typeof text === 'string' ) {
-    var idxStr = '';
-    text = (text.trim ? text.trim() : text.replace(/^\s+|\s+$/g,''))
-              .replace(/[/.,()]/g, '') // remove punctutation
-              .replace(/\s*-\s*/g,'-')  // normalize spacing around dashes
-              .replace(/(_|\s)+/g,' ')  // normalize/collapse space-characters
-              .toLowerCase();           // lowercase
-    var len = text.length;
-    var i = 0;
-    while ( i < len ) {
-      var chr = text.charAt(i);
-      var chrCode = abcIdx[chr];
-      if ( !chrCode ) {
-        var idx = abc.indexOf(chr);
-        idx = idx>-1 ? 32+idx : 99+chr.charCodeAt(0);
-        chrCode = abcIdx[chr] = String.fromCharCode( idx );
-      }
-      idxStr += chrCode;
-      i++;
+    if (text) {
+        var idxStr = '';
+        var txt = text.trim()
+            .replace(/[/.,()]/g, '') // remove punctutation
+            .replace(/\s*-\s*/g, '-') // normalize spacing around dashes
+            .replace(/(_|\s)+/g, ' ') // normalize/collapse space-characters
+            .toLowerCase(); // lowercase
+        var len = txt.length;
+        var i = 0;
+        while (i < len) {
+            var chr = txt.charAt(i);
+            var chrCode = abcIdx[chr];
+            if (!chrCode) {
+                var idx = abc.indexOf(chr);
+                idx = idx > -1 ? 32 + idx : 99 + chr.charCodeAt(0);
+                chrCode = abcIdx[chr] = String.fromCharCode(idx);
+            }
+            idxStr += chrCode;
+            i++;
+        }
+        return idxStr;
     }
-    return idxStr;
-  }
-  return text;
+    return text;
 };
-
-
-var defaultGetProp = function (item) { return item+''; };
-var defaultSortFn = function (a,b) { return a[0]===b[0] ? 0 : a[0]>b[0] ? 1 : -1; };
-
-function sortIsl( arr, opts ) {
-  opts = opts || {};
-  if ( typeof opts === 'string' ) {
-    var propName = opts;
-    opts = { getProp: function (item) { return item[propName]; } };
-  }
-  else if (opts.apply && opts.call) {
-    opts = { getProp: opts };
-  }
-  var getProp = opts.getProp  ||  defaultGetProp;
-  var sortFn = opts.sortFn  ||  defaultSortFn;
-  return arr
-      .map(function (itm) { return [ getAbcText(getProp(itm)), itm ]; })
-      .sort(opts.reverse ? function (a,b) { return -1*sortFn(a,b); } : sortFn)
-      .map(function (itm) { return itm[1]; });
+var defaultGetProp = function (item) { return item + ''; };
+var defaultSortFn = function (a, b) { return (a === b ? 0 : a > b ? 1 : -1); };
+function sortIsl(arr, options) {
+    var opts = (typeof options === 'string' || typeof options === 'number'
+        ? { getProp: function (item) { return item[options] + ''; } }
+        : typeof options === 'function'
+            ? { getProp: options }
+            : options || {});
+    var getProp = opts.getProp || defaultGetProp;
+    var sortFn = opts.sortFn || defaultSortFn;
+    return arr
+        .map(function (itm) { return [getAbcText(getProp(itm)), itm]; })
+        .sort(function (a, b) { return (opts.reverse ? -1 : 1) * sortFn(a[0], b[0]); })
+        .map(function (itm) { return itm[1]; });
 }
 
 module.exports = sortIsl;

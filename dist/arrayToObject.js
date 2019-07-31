@@ -13,26 +13,24 @@
   // { Tim:{name:'Tim',age:12}, Sam:{name:'Sam',age:10} };
 
   const arr2 = ['Orange', 'Apple', 'Tomato', 'Apple', 'Apple'];
+
   console.log( arrayToObject(arr2) );
   // { Orange:1, Apple:3, Tomato:1 }
 
 */
-function arrayToObject( list, prop ) {
-  if ( list ) {
-    var obj = {};
-    [].forEach.call(list, prop ?
-      function (item) {
-        var key = item[prop];
-        if ( !(key in obj) ) {
-          obj[key] = item;
-        }
-      }:
-      function (item) {
-        obj[item] = (obj[item] || 0) +1;
-      }
-    );
-    return obj;
-  }
+function arrayToObject(list, prop) {
+    return prop
+        ? [].reduce.call(list, function (obj, item) {
+            var key = item[prop];
+            if (!(key in obj)) {
+                obj[key] = item;
+            }
+            return obj;
+        }, {})
+        : [].reduce.call(list, function (obj, item) {
+            obj[item] = (obj[item] || 0) + 1;
+            return obj;
+        }, {});
 }
 
 module.exports = arrayToObject;

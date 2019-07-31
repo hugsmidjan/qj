@@ -1,38 +1,17 @@
-// const _curriers = [
-//     null,
-//     (func, args) => {
-//         return function (a) {
-//             return func.apply(this, args.concat([a]));
-//         };
-//     },
-//     (func, args) => {
-//         return function (a,b) {
-//             return func.apply(this, args.concat([a,b]));
-//         };
-//     },
-// ];
-// const _currierN = (func, args) => {
-//     return function (...args2) {
-//         return func.apply(this, args.concat(args2));
-//     };
-// };
-//
-// export default function curry(func, ...args) {
-//     const currier = _curriers[func.length - args.length] || _currierN;
-//     return currier(func, args);
-// }
-
-// Super simple minimal currier
+// Super-simple, minimal, non-recursive function currier
+// Complex typings
 function curry(func) {
-  var args = [], len = arguments.length - 1;
-  while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
-
-  return function () {
-    var args2 = [], len = arguments.length;
-    while ( len-- ) args2[ len ] = arguments[ len ];
-
-    return func.apply(this, args.concat(args2));
-  };
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
+    }
+    return function () {
+        var args2 = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args2[_i] = arguments[_i];
+        }
+        return func.apply(this, args.concat(args2));
+    };
 }
 
 module.exports = curry;

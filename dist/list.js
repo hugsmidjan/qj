@@ -10,9 +10,9 @@ var shuffle = require('./shuffle.js');
 
 
 
-exports.dedupeArray = dedupeArray.default;
-exports.A = A.default;
-exports.alphabetize = alphabetize.default;
-exports.arrayToObject = arrayToObject.default;
-exports.groupArrayBy = groupArrayBy.default;
-exports.shuffle = shuffle.default;
+exports.dedupeArray = dedupeArray;
+exports.A = A;
+exports.alphabetize = alphabetize;
+exports.arrayToObject = arrayToObject;
+exports.groupArrayBy = groupArrayBy;
+exports.shuffle = shuffle;

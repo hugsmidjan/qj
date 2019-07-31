@@ -1,6 +1,5 @@
-//@flow
 // List-to-Array converter
-function A/*::<List>*/(list/*:List*/)/*:$ElementType<List,number>[]*/ {
+function A(list) {
     return [].slice.call(list);
 }
 
