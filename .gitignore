@@ -3,5 +3,10 @@ yarn-error.log
 node-debug.log
 .vscode
 .idea
+.rpt2_cache
 _tests
-.flowconfig
+
+# # Add to .npmignore
+# tsconfig.json
+# package-lock.json
+# yarn.lock

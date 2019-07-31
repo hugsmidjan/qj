@@ -9,10 +9,12 @@ if (
     // local (dev) yarn install may have been run from a project subfolder
     initCwd.indexOf(env.PWD) !== 0
 ) {
-  if (typeof initCwd === 'undefined') {
-    console.warn('process.env.INIT_CWD is undefined.');
-  }
-  const exec = require('child_process').execSync;
+    if (typeof initCwd === 'undefined') {
+      console.warn('process.env.INIT_CWD is undefined.');
+    }
+    // require('./makeDeclarationFiles')();  // Nah, better just rely on prebuild.js
+
+    const exec = require('child_process').execSync;
     if (process.platform === 'win32') { // Ack!
         exec('xcopy dist\\* . /s' + ['', 'dist', 'build', 'src'].join('  &&  rmdir /s /q '));
     }

@@ -1,59 +1,43 @@
-//@flow
 import buble from 'rollup-plugin-buble';
-import glob from 'glob';
-import fs from 'fs';
+import typescript from 'rollup-plugin-typescript2';
 
-/*
-    type FileMap = { [fileName:string]: string };
-*/
+const {
+  makeInputMap,
+  getEntrypoints,
+  getPolyfills,
+  getTests,
+  distFolder
+} = require('./buildHelpers');
 
-const getFileMap = (files/*:Array<string>*/)/*:FileMap*/ => {
-    const fileMap = {};
-    files.forEach((fileName) => {
-        fileMap[fileName.split('/').pop().replace(/\.js$/,'')] = fileName;
-    });
-    return fileMap;
-};
-
-
-const polyfillsGlob = 'src/__polyfills/**/*.js';
-const testsGlob = 'src/**/*.test?(s).js';
-const privatesGlob = 'src/**/*.privates.js'; // `*.privates.js` contain private bits that need testing
-const testHelperGlob = 'src/__testing/**/*.js';
-const wipGlob = 'src/**/*.WIP.js'; // Scripts that should not be bundled/published yet
 
 export default [
     // Glob all src scipts – except polyfills.
     // No modules should be using polyfills.
     // polyfills are alwways strictly opt-in to minimize tech-dept
     {
-        input: getFileMap(
-            glob.sync(
-                'src/**/*.js',
-                { ignore: [polyfillsGlob, wipGlob, privatesGlob, testsGlob, testHelperGlob] }
-            )
-        ),
+        input: makeInputMap(getEntrypoints()),
         output: {
             format: 'cjs',
-            dir: 'dist',
+            dir: distFolder,
             strict: false,
         },
         plugins: [
-            buble({ objectAssign: true }),
+            typescript({
+              useTsconfigDeclarationDir: true,
+            }),
+            buble({ objectAssign: true, exclude: '**/*.ts' }),
         ],
         watch: {
             // clearScreen: false,
         },
     },
     // Handle polyfills seperately
-    // No Flow, ES6 or anything fancy
+    // No TS, ES6 or anything fancy
     {
-        input: getFileMap(
-            glob.sync(polyfillsGlob)
-        ),
+        input: makeInputMap(getPolyfills()),
         output: {
             format: 'cjs',
-            dir: 'dist/polyfills',
+            dir: distFolder + '/polyfills',
             strict: false,
         },
         watch: {
@@ -61,14 +45,19 @@ export default [
         },
     },
 ].concat(
-    glob.sync(testsGlob).map((fileName) => ({
+  getTests().map((fileName) => ({
         input: fileName,
         external: ['ospec', 'jsdom'],
         output: {
-            file: '_tests/' + fileName.split('/').pop(),
+            file: '_tests/' + fileName.split('/').pop().replace(/\.ts$/, '.js'),
             format: 'cjs',
         },
-        watch: {
+      plugins: [
+          typescript({
+            tsconfigOverride: { compilerOptions: { declaration: false } }
+          }),
+      ],
+      watch: {
             // clearScreen: false,
         },
     }))
