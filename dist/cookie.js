@@ -28,7 +28,6 @@ var cookie = {
     get: getCookie,
     set: setCookie,
 };
-cookie.set('foo', null);
 
 exports.default = cookie;
 exports.getCookie = getCookie;

@@ -4,6 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 // --------------------------------------------------------
 // Small, fast, stupid, practical, & care-free.
 // False-positives (like NaN and 0 v -0) considered acceptable.
+var hasOwnProperty = Object.prototype.hasOwnProperty;
 var _createEmpty = function (original) {
     return original.constructor
         ? //
@@ -21,7 +22,6 @@ var _clone = function (original) {
     }
     return clone;
 };
-var hasOwnProperty = Object.prototype.hasOwnProperty;
 function objectUpdate(original, newValues, customSameCheck) {
     var clone;
     for (var key in newValues) {

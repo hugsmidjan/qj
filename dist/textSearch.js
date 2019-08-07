@@ -1,5 +1,11 @@
 // Searches for `terms` in the `prop`s of the `items` Array
 // Returns a filtered array sorted according by how well the items matched the `term`
+// Helper function to prepare a String for the search function
+var normalizeText = function (str) { return ((typeof str === 'string' ? str : str.join(' '))
+    .replace(/\u00ad/g, '') // remove soft-hyphens
+    .replace(/[\s\-–—_.,@]+/g, ' ') // normalize spaces
+    .trim()
+    .toLowerCase()); };
 var textSearch = function (props) {
     var items = props.items, prop = props.prop, normalized = props.normalized;
     var term = props.term && props.term.trim();
@@ -42,12 +48,6 @@ var textSearch = function (props) {
             0); });
     return results.map(function (result) { return result.item; });
 };
-// Helper function to prepare a String for the search function
-var normalizeText = function (str) { return ((typeof str === 'string' ? str : str.join(' '))
-    .replace(/\u00ad/g, '') // remove soft-hyphens
-    .replace(/[\s\-–—_.,@]+/g, ' ') // normalize spaces
-    .trim()
-    .toLowerCase()); };
 textSearch.normalize = normalizeText;
 
 module.exports = textSearch;

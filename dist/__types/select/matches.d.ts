@@ -1,7 +1,7 @@
 declare type MatcherMethod = (selector: string) => boolean;
-declare type VendorMatcherMethods = {
+interface VendorMatcherMethods {
     msMatchesSelector?: MatcherMethod;
-};
+}
 declare type _Element = Element & VendorMatcherMethods;
 declare function matches<S extends keyof HTMLElementTagNameMap>(selectors: S, elm: _Element): elm is HTMLElementTagNameMap[S];
 declare function matches<S extends keyof SVGElementTagNameMap>(selectors: S, elm: _Element): elm is SVGElementTagNameMap[S];

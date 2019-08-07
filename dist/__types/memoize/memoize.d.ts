@@ -1,3 +1,3 @@
-declare type AnyFn = (...args: any) => any;
-declare const memoize: <F extends AnyFn>(fn: F, isVariadic?: boolean | undefined) => F;
+declare type AnyFn = (...args: Array<any>) => any;
+declare function memoize<F extends AnyFn>(fn: F, isVariadic?: boolean): F;
 export default memoize;

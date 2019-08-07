@@ -9,6 +9,13 @@ Object.defineProperty(exports, '__esModule', { value: true });
 //   setFrag('Fra%C3%AEce%2018%25', true);
 //   setFrag('');    // unset
 //   setFrag(null);  // unset
+// encodes a plain-text string to a URL #fragment friendly format (compatible with .get())
+var encodeFrag = function (_fragment) {
+    console.error('hi');
+    return encodeURI(_fragment)
+        .replace(/#/g, '%23')
+        .replace(/%7C/g, '|');
+};
 var setFrag = function (_fragment, _isEncoded) {
     _fragment = (_fragment || '').replace(/^#/, '');
     // check if there exists an element with .id same as _fragment
@@ -30,12 +37,6 @@ var setFrag = function (_fragment, _isEncoded) {
     // put the old DOM id back in it's place
     _elm && (_elm.id = _tmpId || '');
 };
-// encodes a plain-text string to a URL #fragment friendly format (compatible with .get())
-var encodeFrag = function (_fragment) {
-    return encodeURI(_fragment)
-        .replace(/#/g, '%23')
-        .replace(/%7C/g, '|');
-};
 // returns the #fragment portion of `url` (defaulting to using `document.location.href`)
 // returns a plaintext (decodeURIComponent) version of the fragment - unless a `_returnRaw` argument is passed.
 var getFrag = function (url, _returnRaw) {
@@ -45,7 +46,7 @@ var getFrag = function (url, _returnRaw) {
 var frag = {
     get: getFrag,
     set: setFrag,
-    encode: encodeFrag
+    encode: encodeFrag,
 };
 
 exports.default = frag;

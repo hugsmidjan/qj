@@ -1,5 +1,5 @@
 export declare type HtmlToDivDisableds = 'img' | 'script' | 'html' | 'head' | 'body' | 'title' | 'meta' | 'style' | 'link';
-export declare type HtmlToDivOpts = {
+export interface HtmlToDivOpts {
     keepimg?: boolean;
     keepscript?: boolean;
     keephtml?: boolean;
@@ -10,5 +10,5 @@ export declare type HtmlToDivOpts = {
     keepstyle?: boolean;
     keeplink?: boolean;
     document?: HTMLDocument;
-};
+}
 export default function htmlToDiv(html: string, opts?: HtmlToDivOpts): HTMLDivElement;

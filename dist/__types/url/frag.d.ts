@@ -1,5 +1,5 @@
-declare const setFrag: (_fragment?: string | undefined, _isEncoded?: boolean | undefined) => void;
 declare const encodeFrag: (_fragment: string) => string;
+declare const setFrag: (_fragment?: string | undefined, _isEncoded?: boolean | undefined) => void;
 declare const getFrag: (url?: string | undefined, _returnRaw?: boolean | undefined) => string;
 declare const frag: {
     get: (url?: string | undefined, _returnRaw?: boolean | undefined) => string;

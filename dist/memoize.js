@@ -64,12 +64,12 @@ var _memoizerN = function (fn, isVariadic) {
         return value;
     };
 };
-var memoize = function (fn, isVariadic) {
+function memoize(fn, isVariadic) {
     if (isVariadic) {
         return _memoizerN(fn, true);
     }
     var memoizer = _memoizers[fn.length - 1] || _memoizerN;
     return memoizer(fn);
-};
+}
 
 module.exports = memoize;
