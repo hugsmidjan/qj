@@ -5,6 +5,7 @@
 <!-- Add new lines here. Version number will be decided later -->
 
 - ...
+- fix: `inject` with Multiple variables didn't work
 
 ## 2.5.0
 

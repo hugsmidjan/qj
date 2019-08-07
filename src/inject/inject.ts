@@ -13,7 +13,7 @@ export default function inject(
   template: string,
   _vars: Array<any> | Record<string, any>
 ): string {
-  return template.replace(/%\{([^%{}}]+?)\}/, (m, key) => {
+  return template.replace(/%\{([^%{}}]+?)\}/g, (m, key) => {
     if (!hasOwnProperty.call(_vars, key)) {
       return m;
     }
