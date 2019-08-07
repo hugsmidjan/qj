@@ -92,7 +92,7 @@ o.spec('htmlToDiv', () => {
           keepmeta: true,
           keepstyle: true,
           keeplink: true,
-        }
+        };
         const div = htmlToDiv(fullHtml, keepAll);
         o(div.querySelectorAll('html, head, body').length).equals(0);
         o(div.querySelectorAll('html--disabled, head--disabled, body--disabled').length).equals(0);
@@ -120,7 +120,7 @@ o.spec('htmlToDiv', () => {
                 const div = document.createElement('div');
                 div.setAttribute('class', 'custom-div');
                 return div;
-            }
+            },
         });
         const div = htmlToDiv('<strong>Hi</strong>', { document: customDoc });
         o(div.tagName).equals('DIV');

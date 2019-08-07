@@ -43,7 +43,7 @@ function setCookie (
   }
 ): void;
 
-function setCookie (
+function setCookie(
   name: string,
   value: string | number | boolean | null | undefined,
   options?: {
@@ -67,14 +67,13 @@ function setCookie (
     (options.domain ? '; domain='+options.domain : '') +
     (options.secure ? '; secure' : '')
   );
-};
+}
 
 const cookie = {
   get: getCookie,
   set: setCookie,
 };
 
-cookie.set('foo', null)
 export {
   getCookie,
   setCookie,

@@ -54,14 +54,13 @@ const atNext = (timestamp: number, periodSizeMS: number): number => {
 
 type TimerId = ReturnType<typeof setTimeout>; // Ack this sidesteps that window.setTimeout and Node's setTimeout return different types
 
-const safeTimeout = (callback:Callback, delay:number): (()=>TimerId) => {
+const safeTimeout = (callback: Callback, delay: number): (() => TimerId) => {
   const startingTime = Date.now();
   let timeoutId = setTimeout(() => {
     const undershootMs = startingTime + delay - Date.now();
     if ( undershootMs > 0 ) {
       timeoutId = setTimeout(callback, undershootMs + 50);
-    }
-    else {
+    } else {
       callback();
     }
   }, delay + 50);
@@ -105,7 +104,7 @@ const onNext = (periodSizeMS: number, offsetMs: number | Callback, callback?: Ca
   const timeoutId = msToNext > 2000 ?
       safeTimeout(_callback, msToNext):
       // quicker (and dirtier) alternative to safeTimeout() for shorter periodSizes
-      (tId => () => tId)(setTimeout(_callback, msToNext + 50));
+      ((tId) => () => tId)(setTimeout(_callback, msToNext + 50));
 
   return {
     cancel: (execCallback?: boolean) => {

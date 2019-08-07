@@ -2,7 +2,7 @@ import o from 'ospec';
 import { objectClean } from './object';
 
 o.spec('objectClean', () => {
-  type T1 = {
+  interface T1 {
     a: string;
     a2: number | null;
     b: number | undefined;
@@ -10,8 +10,11 @@ o.spec('objectClean', () => {
     c?: string | null;
     c2?: number;
     d?: string | undefined;
-  };
-  const foo1: {
+  }
+  type AssertSame<A, B, Ar = Required<A>, Br = Required<B>> = Ar extends Br ?( Br extends Ar ? true : never) : never;
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const foo1 = objectClean({} as T1, true);
+  const foo1b: AssertSame<{
     a: string;
     a2?: number | null;
     b?: number;
@@ -19,9 +22,10 @@ o.spec('objectClean', () => {
     c?: string | null;
     c2?: number;
     d?: string;
-  } = objectClean({} as T1, true);
+  }, typeof foo1> = true;
 
-  const foo2: {
+  const foo2 = objectClean({} as T1);
+  const foo2b: AssertSame<{
     a: string;
     a2: number | null;
     b?: number;
@@ -29,7 +33,8 @@ o.spec('objectClean', () => {
     c?: string | null;
     c2?: number;
     d?: string;
-  } = objectClean({} as T1);
+  }, typeof foo2> = true;
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 
   o('Removes undefineds', () => {
     const obj = { a: 1, b: undefined, c: null };

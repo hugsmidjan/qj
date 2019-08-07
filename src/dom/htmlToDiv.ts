@@ -9,19 +9,19 @@ export type HtmlToDivDisableds =
   | 'style'
   | 'link';
 
-export type HtmlToDivOpts = {
-    keepimg?: boolean,
-    keepscript?: boolean,
-    keephtml?: boolean,
-    keephead?: boolean,
-    keepbody?: boolean,
-    keeptitle?: boolean,
-    keepmeta?: boolean,
-    keepstyle?: boolean,
-    keeplink?: boolean,
+export interface HtmlToDivOpts {
+    keepimg?: boolean;
+    keepscript?: boolean;
+    keephtml?: boolean;
+    keephead?: boolean;
+    keepbody?: boolean;
+    keeptitle?: boolean;
+    keepmeta?: boolean;
+    keepstyle?: boolean;
+    keeplink?: boolean;
 
-    document?: HTMLDocument,
-};
+    document?: HTMLDocument;
+}
 
 export default function htmlToDiv(html: string, opts?: HtmlToDivOpts): HTMLDivElement {
     const doc = (opts||{}).document || document;

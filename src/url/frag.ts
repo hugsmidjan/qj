@@ -8,6 +8,15 @@
 //   setFrag('');    // unset
 //   setFrag(null);  // unset
 
+// encodes a plain-text string to a URL #fragment friendly format (compatible with .get())
+const encodeFrag = (_fragment: string) => {
+  console.error('hi');
+  return encodeURI(_fragment)
+    .replace(/#/g, '%23')
+    .replace(/%7C/g, '|');
+};
+
+
 const setFrag = (_fragment?: string, _isEncoded?: boolean): void => {
   _fragment = (_fragment || '').replace(/^#/, '');
   // check if there exists an element with .id same as _fragment
@@ -38,13 +47,6 @@ const setFrag = (_fragment?: string, _isEncoded?: boolean): void => {
   _elm && (_elm.id = _tmpId || '');
 };
 
-// encodes a plain-text string to a URL #fragment friendly format (compatible with .get())
-const encodeFrag = (_fragment: string) => {
-  return encodeURI(_fragment)
-    .replace(/#/g, '%23')
-    .replace(/%7C/g, '|');
-};
-
 // returns the #fragment portion of `url` (defaulting to using `document.location.href`)
 // returns a plaintext (decodeURIComponent) version of the fragment - unless a `_returnRaw` argument is passed.
 const getFrag = (url?: string, _returnRaw?: boolean): string => {
@@ -55,7 +57,7 @@ const getFrag = (url?: string, _returnRaw?: boolean): string => {
 const frag = {
   get: getFrag,
   set: setFrag,
-  encode: encodeFrag
+  encode: encodeFrag,
 };
 
 export { setFrag, getFrag, encodeFrag, frag as default };

@@ -4,7 +4,7 @@ import memoize from './memoize';
 o.spec('Memoize', () => {
 
     o('Remembers result of last input', () => {
-        const wrapValue = memoize((value) => ({ value }) );
+        const wrapValue = memoize((value: unknown) => ({ value }) );
         const firstObject = wrapValue('a');
         o( wrapValue('a') ).equals(firstObject);
         const secondObject = wrapValue('b');
@@ -17,7 +17,7 @@ o.spec('Memoize', () => {
     });
 
     o('Only does shallow equals', () => {
-        const getValue = memoize((obj) => obj.value);
+        const getValue = memoize((obj: { value: number}) => obj.value);
         const obj = { value: 1 };
         o( getValue(obj) ).equals(1);
         obj.value = 2;
@@ -42,7 +42,7 @@ o.spec('Memoize', () => {
     });
 
     o('Memoizes 2 arguments', () =>  {
-        const _decimalize = o.spy((a:number, b:number) => a*10 + b);
+        const _decimalize = o.spy((a: number, b: number) => a*10 + b);
         const decimalize = memoize(_decimalize);
         decimalize(1, 2);
         o( decimalize(1, 2) ).equals(12);
@@ -51,7 +51,7 @@ o.spec('Memoize', () => {
     });
 
     o('Memoizes 3 arguments', () => {
-        const _decimalize = o.spy((a:number, b:number, c:number) => a*100 + b*10 + c);
+        const _decimalize = o.spy((a: number, b: number, c: number) => a*100 + b*10 + c);
         const decimalize = memoize(_decimalize);
         decimalize(1, 2, 3);
         o( decimalize(1, 2, 3) ).equals(123);
@@ -69,7 +69,7 @@ o.spec('Memoize', () => {
     });
 
     o('Memoizes 5 arguments', () => {
-        const _decimalize = o.spy((a:number, b:number, c:number, d:number, e:number) => a*10000 + b*1000 + c*100 + d*10 + e);
+        const _decimalize = o.spy((a: number, b: number, c: number, d: number, e: number) => a*10000 + b*1000 + c*100 + d*10 + e);
         const decimalize = memoize(_decimalize);
         decimalize(1, 2, 3, 4, 5);
         o( decimalize(1, 2, 3, 4, 5) ).equals(12345);

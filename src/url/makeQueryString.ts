@@ -8,9 +8,9 @@ export default function makeQueryString(paramsObj: ParamsObject): string {
             if (!Array.isArray(param) ) {
               param = [param];
             }
-            param.forEach(value => {
+            param.forEach((value) => {
               if ( param != null ) {
-                acc.push(key+'='+encodeURIComponent(String(value)))
+                acc.push(key+'='+encodeURIComponent(String(value)));
               }
             });
             return acc;

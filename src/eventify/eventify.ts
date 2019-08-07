@@ -1,9 +1,9 @@
 type Callback = (...args: any) => void
 
 type Eventified<T extends object> = T & {
-  on(eventName: string, callback: Callback): Eventified<T>
-  off(eventName: string, callback: Callback): Eventified<T>
-  emit<E extends { type: string }>(event: string | E, ...args: Array<any>): Eventified<T>
+  on(eventName: string, callback: Callback): Eventified<T>;
+  off(eventName: string, callback: Callback): Eventified<T>;
+  emit<E extends { type: string }>(event: string | E, ...args: Array<any>): Eventified<T>;
 };
 
 /*
@@ -67,7 +67,7 @@ type Eventified<T extends object> = T & {
 
 
 export default function eventify<T extends object>(object: T): Eventified<T> {
-  const eventified = object as Eventified<T>
+  const eventified = object as Eventified<T>;
 
   let events: Record<string, Array<Callback>> = {};
 
@@ -88,11 +88,9 @@ export default function eventify<T extends object>(object: T): Eventified<T> {
     const numArgs = arguments.length;
     if ( !numArgs ) {
       events = {};
-    }
-    else if ( numArgs === 1 ) {
+    } else if ( numArgs === 1 ) {
       delete events[eventName];
-    }
-    else if ( callback ) {
+    } else if ( callback ) {
       const callbackList = events[eventName] || [];
       const idx = callbackList.indexOf( callback );
       if ( idx > -1 ) {
@@ -108,8 +106,7 @@ export default function eventify<T extends object>(object: T): Eventified<T> {
     let evType;
     if ( typeof firstArg === 'string' ) {
       evType = args.shift();
-    }
-    else if ( firstArg ) {
+    } else if ( firstArg ) {
       evType = firstArg.type;
     }
     if ( evType != null ) {

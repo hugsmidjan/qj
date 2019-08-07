@@ -6,7 +6,11 @@ type Finishable<F> = F & { finish(): void }
 // throttleFn()
 // returns a throttled function that never runs more than every `delay` milliseconds
 // the returned function also has a nice .finish() method.
-const throttle = <A extends Array<any>, F extends (...args: A) => void>(func: F, delay: number, skipFirst?: boolean): Finishable<F> => {
+const throttle = <A extends Array<any>, F extends (...args: A) => void>(
+  func: F,
+  delay: number,
+  skipFirst?: boolean
+): Finishable<F> => {
   let timeout: TimerId | undefined;
   let throttled = 0;
   let _args: A;

@@ -1,5 +1,5 @@
-const punctuationRe = /[:;',!¡¿?]/g
-const spaceRe = /[\s_./…–—-]+/g
+const punctuationRe = /[:;',!¡¿?]/g;
+const spaceRe = /[\s_./…–—-]+/g;
 const replaceRe = /[+&]+/g;
 const endSpaceRe = /^_|_$/g;
 
@@ -28,7 +28,7 @@ const charMap: Record<string, string> = {};
         const to = mapping[1];
         [].forEach.call(mapping[0], (from: string) => {
             charMap[from] = to;
-        })
+        });
     });
 
 const simpleSlugify = (string: string): string => string

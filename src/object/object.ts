@@ -26,6 +26,8 @@ export type Apply<A extends object, B> = A extends B
 type SameChecker = (valA: any, valB: any, key: string) => boolean;
 type AnyObj = Record<string|number, any>
 
+const hasOwnProperty = Object.prototype.hasOwnProperty;
+
 const _createEmpty = <T extends object>(original: T): T =>
   original.constructor
     ? //
@@ -43,7 +45,6 @@ const _clone = <T extends object>(original: T): T => {
   }
   return clone;
 };
-const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 
 
@@ -82,7 +83,7 @@ function objectUpdate(
     }
   }
   return clone || original;
-};
+}
 
 
 type FilterFlags<Base, Cond> = {
@@ -110,8 +111,7 @@ const objectClean = <T extends object, N extends boolean = false>(original: T, a
       const originalVal = original[key];
       if ( (originalVal === undefined) || (originalVal === null && alsoNull) ) {
         deleted = true;
-      }
-      else {
+      } else {
         clone[key] = originalVal;
       }
     }
@@ -157,7 +157,7 @@ function objectIsSame(a: AnyObj, b: AnyObj, customSameCheck?: SameChecker): bool
     }
   }
   return true;
-};
+}
 
 
 // Returns a clone of original object with only the specified keys
@@ -169,8 +169,7 @@ const objectOnly = <T extends object, K extends keyof T>(original: T, keys: Arra
     if ( hasOwnProperty.call(original, key) ) {
       if ( keys.indexOf(key as any) > -1 ) {
         clone[key] = original[key];
-      }
-      else {
+      } else {
         extra = true;
       }
     }

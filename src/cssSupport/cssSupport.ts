@@ -28,25 +28,25 @@
 
 */
 
-type PropInfo = {
-  prop: string,
-  css: string
+interface PropInfo {
+  prop: string;
+  css: string;
 }
 
-const cache: Record<string, PropInfo | false> = {};
+const cache: Record<string, PropInfo | false> = {};
 let elmStyles: CSSStyleDeclaration;
 const vendorsJs = ['Khtml','O','Ms','Moz','Webkit'];
 const vendorsCss = ['-khtml-','-o-','-ms-','-moz-','-webkit-'];
 
 
-export default function cssSupport( propname: Exclude<keyof CSSStyleDeclaration, number> ): PropInfo | false {
+export default function cssSupport( propname: Exclude<keyof CSSStyleDeclaration, number> ): PropInfo | false {
     // lazy initalize elmStyle
     elmStyles = elmStyles || document.createElement('div').style;
 
     let prop = cache[propname];
     // If this is the first time we're asked about propname
     if ( prop === undefined ) {
-      let cssProp: string = '';
+      let cssProp = '';
       let jsProp: string | undefined;
       // Convert propname from CSS style `transform-origin`
       // into JavaScript-style `transformOrigin`
@@ -55,8 +55,7 @@ export default function cssSupport( propname: Exclude<keyof CSSStyleDeclaration,
         // Un-prefixed property is supported!
         jsProp = PropName;
         cssProp = propname;
-      }
-      else {
+      } else {
         // Capitalize PropName in preparation for vendor-prefixing
         // (i.e. from `transformOrigin` to `TransformOrigin`
         PropName = PropName.replace(/^[a-z]/, (chr) => chr.toUpperCase());

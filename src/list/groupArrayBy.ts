@@ -32,9 +32,9 @@ function groupArrayBy<T extends object | string | number, K extends keyof T>(
     });
 
     return grouped;
-};
+}
 
-type GroupList<T> = Array<{ name: string, items: Array<T> }>;
+type GroupList<T> = Array<{ name: string; items: Array<T> }>;
 
 function asArray<T extends object, K extends keyof T>(
   list: ArrayLike<T>,
@@ -56,7 +56,7 @@ function asArray<T extends object | string | number, K extends keyof T>(
         name,
         items: grouped[name],
     }));
-};
+}
 
 groupArrayBy.asArray = asArray;
 

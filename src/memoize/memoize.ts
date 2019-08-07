@@ -2,7 +2,7 @@
 // Checks for strict equality with the last parameter values.
 // Ignores changes in `this` context - like any other side-effect.
 
-type AnyFn = (...args: any) => any
+type AnyFn = (...args: Array<any>) => any
 type AnyFn1 = (...args: [any]) => any
 type AnyFn2 = (...args: [any, any]) => any
 type AnyFn3 = (...args: [any, any, any]) => any
@@ -41,9 +41,10 @@ const _memoizers: Array<<F extends AnyFn>(fn: F) => F> = [
 ];
 
 const _memoizerN = <F extends AnyFn>(fn: F, isVariadic?: boolean): F => {
-    let value: ReturnType<F>; let params: Parameters<F>;
+    type P = Parameters<F>
+    let value: ReturnType<F>; let params: P;
     // return function (...args/*:any[]*/)/*:mixed*/ {
-    return function (...args) {
+    return function (...args: P) {
         let dirty = !params;
         if (params) {
             let i = 0;

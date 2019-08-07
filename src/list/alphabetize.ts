@@ -39,7 +39,7 @@ function alphabetize<T extends string | number | object, K extends keyof T>(
       !!(supportsIcelandic = 'ð'.localeCompare('e','is') < 0 && 'ob'.localeCompare('öa','is') < 0)
     )
   ) {
-    let newArr = arr.map((item, idx) => ({ value: _getProp(item), idx }));
+    const newArr = arr.map((item, idx) => ({ value: _getProp(item), idx }));
     lang = langAliases[lang] || lang;
     newArr.sort( (a,b) => {
       return a.value.localeCompare(b.value, lang, {
@@ -49,8 +49,7 @@ function alphabetize<T extends string | number | object, K extends keyof T>(
       });
     });
     return newArr.map((item) => arr[item.idx]);
-  }
-  else {
+  } else {
     return sortIsl( arr, { getProp: _getProp } );
   }
 }

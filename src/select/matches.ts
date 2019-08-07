@@ -1,6 +1,6 @@
-type MatcherMethod = (selector:string) => boolean
-type VendorMatcherMethods = {
-    msMatchesSelector?: MatcherMethod
+type MatcherMethod = (selector: string) => boolean
+interface VendorMatcherMethods {
+    msMatchesSelector?: MatcherMethod;
 }
 type _Element = Element & VendorMatcherMethods
 

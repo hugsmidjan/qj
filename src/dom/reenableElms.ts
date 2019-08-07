@@ -10,10 +10,9 @@ export default function reenableElms(elm: Element, tagName: HtmlToDivDisableds )
     };
     if ( elm.tagName.toLowerCase() === disabledTagName ) {
         enable(elm);
-    }
-    // Since none of the elements disabled by htmlToDiv() may be nested
-    // we can assume this is an either or case.
-    else {
+    } else {
+        // Since none of the elements disabled by htmlToDiv() may be nested
+        // we can assume this is an either or case.
         qq(disabledTagName, elm).forEach(enable);
     }
     return elm;

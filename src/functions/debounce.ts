@@ -6,7 +6,11 @@ type Cancellable<F> = F & { cancel(): void }
 // debounceFn()
 // returns a debounced function that only runs after `delay` milliseconds of quiet-time
 // the returned function also has a nice .cancel() method.
-const debounce = <F extends (...args: any) => void>(func: F, delay: number, immediate?: boolean): Cancellable<F> => {
+const debounce = <F extends (...args: any) => void>(
+  func: F,
+  delay: number,
+  immediate?: boolean
+): Cancellable<F> => {
   let timeout: TimerId | undefined;
   const debouncedFn = function (...args) {
     const runNow = immediate && !timeout;
@@ -33,6 +37,6 @@ clearTimeout(setTimeout(() => {}, 1000));
 //     const myDebouncer = debounce.d(500);
 //     myDebouncer(() => { alert('Hello world'); });
 //     myDebouncer(() => { alert('I mean: Howdy world!'); });
-debounce.d = (delay: number, immediate?: boolean) => debounce((fn: ()=>void) => fn(), delay, immediate);
+debounce.d = (delay: number, immediate?: boolean) => debounce((fn: () => void) => fn(), delay, immediate);
 
 export default debounce;

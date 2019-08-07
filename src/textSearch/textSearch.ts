@@ -20,6 +20,16 @@ export type TextSearchProps<Item extends SearchItem> = {
   : { prop: TextGetter<Item> | keyof Item });
 
 
+// Helper function to prepare a String for the search function
+const normalizeText = (str: string | Array<string>): string => (
+  (typeof str === 'string' ? str : str.join(' '))
+      .replace(/\u00ad/g, '') // remove soft-hyphens
+      .replace(/[\s\-–—_.,@]+/g, ' ') // normalize spaces
+      .trim()
+      .toLowerCase()
+);
+
+
 const textSearch = <Item extends SearchItem>(props: TextSearchProps<Item>): Array<Item> => {
     const {
         items,
@@ -27,7 +37,7 @@ const textSearch = <Item extends SearchItem>(props: TextSearchProps<Item>): Arra
         normalized,
     } = props;
 
-    let term = props.term && props.term.trim();
+    const term = props.term && props.term.trim();
     if ( !term ) {
         return items;
     }
@@ -76,14 +86,6 @@ const textSearch = <Item extends SearchItem>(props: TextSearchProps<Item>): Arra
 };
 
 
-// Helper function to prepare a String for the search function
-const normalizeText = (str: string | Array<string>): string => (
-    (typeof str === 'string' ? str : str.join(' '))
-        .replace(/\u00ad/g, '') // remove soft-hyphens
-        .replace(/[\s\-–—_.,@]+/g, ' ') // normalize spaces
-        .trim()
-        .toLowerCase()
-);
 textSearch.normalize = normalizeText;
 
 
