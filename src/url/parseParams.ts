@@ -25,6 +25,7 @@ export default function parseParams(paramString?: string): Params {
           .replace(/\+/g, ' ')
           .split('&')
           .forEach((paramBit) => {
+              // eslint-disable-next-line prefer-const
               let [name, value] = paramBit.split('=');
               name = decodeURIComponent(name);
               const values = map[name] || (map[name] = []);
