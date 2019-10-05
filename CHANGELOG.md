@@ -5,6 +5,11 @@
 <!-- Add new lines here. Version number will be decided later -->
 
 - ...
+
+## 2.6.0
+
+_2019-10-05_
+
 - feat: Add `splitUrl()` returning `{ url, queryString, hash }` 
 - feat: Add FP helpers `pipe()` and `chain()`
 
