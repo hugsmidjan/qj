@@ -5,6 +5,7 @@
 <!-- Add new lines here. Version number will be decided later -->
 
 - ...
+- feat: Add `splitUrl()` returning `{ url, queryString, hash }` 
 - feat: Add FP helpers `pipe()` and `chain()`
 
 ## 2.5.1
