@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add `curryRight()` alternative to `curry`
 
 ## 2.6.0
 
