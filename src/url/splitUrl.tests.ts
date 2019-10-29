@@ -1,28 +1,44 @@
 import o from 'ospec';
-import splitUrl from './splitUrl';
+import splitUrl, { UrlComponents } from './splitUrl';
 
-const hashes = ['cool', encodeURIComponent('kúl'), ''];
-const queryStrings = ['foo=1&bar=' + encodeURIComponent('ß'), ''];
 const urls = ['https://foo.bar/baz', '/foo/bar/', '/foo/bar', 'baz/bar', ''];
+const queryStrings = ['foo=1&bar=' + encodeURIComponent('ß'), ''];
+const hashes = ['cool', encodeURIComponent('kúl'), ''];
+
+const assert = (input: string, { url, queryString, hash }: UrlComponents) =>
+  o('splits ' + input, () => {
+    o(splitUrl(input)).deepEquals({
+      url,
+      queryString,
+      hash,
+    });
+  });
 
 o.spec('splitUrl', () => {
   urls.forEach((url) => {
+    assert(url, {
+      url,
+      queryString: '',
+      hash: '',
+    });
     queryStrings.forEach((queryString) => {
-      hashes.forEach((hash) => {
-        const inputs = [
+      assert(url + '?' + queryString, {
+        url,
+        queryString,
+        hash: '',
+      });
+    });
+    hashes.forEach((hash) => {
+      assert(url + '#' + hash, {
+        url,
+        queryString: '',
+        hash,
+      });
+      queryStrings.forEach((queryString) => {
+        assert(url + '?' + queryString + '#' + hash, {
           url,
-          url + '#' + hash,
-          url + '?' + queryString,
-          url + '?' + queryString + '#' + hash,
-        ];
-        inputs.forEach((input) => {
-          o('splits ' + input, () => {
-            o(splitUrl(input)).deepEquals({
-              url,
-              queryString,
-              hash,
-            });
-          });
+          queryString,
+          hash,
         });
       });
     });
