@@ -1,4 +1,4 @@
-declare type UrlComponents = {
+export declare type UrlComponents = {
     url: string;
     queryString: string;
     hash: string;

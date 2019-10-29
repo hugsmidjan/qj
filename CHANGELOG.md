@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 2.7.0
+
+_2019-10-29_
+
 - feat: Add `curryRight()` alternative to `curry`
 
 ## 2.6.0
