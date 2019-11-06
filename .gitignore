@@ -4,7 +4,7 @@ node-debug.log
 .vscode
 .idea
 .rpt2_cache
-_tests
+__tests
 dist
 
 # # Add to .npmignore
