@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- **BREAKING** feat: Rename module to `@hugsmidjan_is/qj`
 
 ## 2.7.0
 

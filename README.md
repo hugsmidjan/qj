@@ -1,4 +1,4 @@
-# QJ - Quick JavaScripts
+# @hugsmidjan_is/qj - Quick JavaScripts
 
 Collection of useful miniature JavaScript helper functions exposed as es6
 modules.
@@ -7,7 +7,11 @@ The functions try to be small, stupid, and side-effect free.
 
 ## Install
 
-    npm install --save-dev git+git@github.com:hugsmidjan/qj.git#semver:^2.0.0
+    npm install --save-dev @hugsmidjan_is/qj
+
+...or aliased as simply 'qj'
+
+    npm install --save-dev qj@npm:@hugsmidjan_is/qj
 
 ## Usage
 
