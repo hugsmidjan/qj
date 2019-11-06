@@ -5,6 +5,7 @@ node-debug.log
 .idea
 .rpt2_cache
 _tests
+dist
 
 # # Add to .npmignore
 # tsconfig.json
