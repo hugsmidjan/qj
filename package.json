@@ -29,7 +29,7 @@
   "license": "UNLICENCED",
   "devDependencies": {
     "gulp": "^4.0.2",
-    "@hugsmidjan/gulp-rollup": "^0.3.13",
+    "@hugsmidjan/gulp-rollup": "^0.3.17",
     "@hugsmidjan/hxmstyle": "^2.3.1",
     "@types/jsdom": "^12.2.4",
     "@types/ospec": "^4.0.2",
