@@ -7,11 +7,13 @@ The functions try to be small, stupid, and side-effect free.
 
 ## Install
 
+Aliased as simply 'qj':
+
+    npm install --save-dev @hugsmidjan_is/qj@^3
+
+...or unaliased:
+
     npm install --save-dev @hugsmidjan_is/qj
-
-...or aliased as simply 'qj'
-
-    npm install --save-dev qj@npm:@hugsmidjan_is/qj
 
 ## Usage
 
