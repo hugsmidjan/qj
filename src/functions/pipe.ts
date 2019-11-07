@@ -7,72 +7,72 @@ type IfUndef<T, Y, N> = Extract<T, undefined> extends never ? N : Y;
 type FnX<I, O> = IfAny<I, FnOpt<I, O>, IfUndef<I, FnOpt<I, O>, Fn<I, O>>>;
 
 interface Piper {
-  <D, R>(fn1: Fn<D, R>): FnX<D, R>;
-  <D, D2, R>(fn1: Fn<D, D2>, fn2: Fn<D2, R>): FnX<D, R>;
-  <D, D2, D3, R>(fn1: Fn<D, D2>, fn2: Fn<D2, D3>, fn3: Fn<D3, R>): FnX<D, R>;
-  <D, D2, D3, D4, R>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, R>
-  ): FnX<D, R>;
-  <D, D2, D3, D4, D5, R>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, R>
-  ): FnX<D, R>;
-  <D, D2, D3, D4, D5, D6, R>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, D6>,
-    fn6: Fn<D6, R>
-  ): FnX<D, R>;
-  <D, D2, D3, D4, D5, D6, D7, R>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, D6>,
-    fn6: Fn<D6, D7>,
-    fn7: Fn<D7, R>
-  ): FnX<D, R>;
-  <D, D2, D3, D4, D5, D6, D7, D8, R>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, D6>,
-    fn6: Fn<D6, D7>,
-    fn7: Fn<D7, D8>,
-    fn8: Fn<D8, R>
-  ): FnX<D, R>;
-  <D, D2, D3, D4, D5, D6, D7, D8, D9, R>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, D6>,
-    fn6: Fn<D6, D7>,
-    fn7: Fn<D7, D8>,
-    fn8: Fn<D8, D9>,
-    fn9: Fn<D9, R>
-  ): FnX<D, R>;
-  <D, D2, D3, D4, D5, D6, D7, D8, D9>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, D6>,
-    fn6: Fn<D6, D7>,
-    fn7: Fn<D7, D8>,
-    fn8: Fn<D8, D9>,
-    fn9: Fn<D9, any>,
-    ...fns: Array<Fn<any, any>>
-  ): FnX<D, unknown>;
+	<D, R>(fn1: Fn<D, R>): FnX<D, R>;
+	<D, D2, R>(fn1: Fn<D, D2>, fn2: Fn<D2, R>): FnX<D, R>;
+	<D, D2, D3, R>(fn1: Fn<D, D2>, fn2: Fn<D2, D3>, fn3: Fn<D3, R>): FnX<D, R>;
+	<D, D2, D3, D4, R>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, R>
+	): FnX<D, R>;
+	<D, D2, D3, D4, D5, R>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, R>
+	): FnX<D, R>;
+	<D, D2, D3, D4, D5, D6, R>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, D6>,
+		fn6: Fn<D6, R>
+	): FnX<D, R>;
+	<D, D2, D3, D4, D5, D6, D7, R>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, D6>,
+		fn6: Fn<D6, D7>,
+		fn7: Fn<D7, R>
+	): FnX<D, R>;
+	<D, D2, D3, D4, D5, D6, D7, D8, R>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, D6>,
+		fn6: Fn<D6, D7>,
+		fn7: Fn<D7, D8>,
+		fn8: Fn<D8, R>
+	): FnX<D, R>;
+	<D, D2, D3, D4, D5, D6, D7, D8, D9, R>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, D6>,
+		fn6: Fn<D6, D7>,
+		fn7: Fn<D7, D8>,
+		fn8: Fn<D8, D9>,
+		fn9: Fn<D9, R>
+	): FnX<D, R>;
+	<D, D2, D3, D4, D5, D6, D7, D8, D9>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, D6>,
+		fn6: Fn<D6, D7>,
+		fn7: Fn<D7, D8>,
+		fn8: Fn<D8, D9>,
+		fn9: Fn<D9, any>,
+		...fns: Array<Fn<any, any>>
+	): FnX<D, unknown>;
 }
 
 /**
@@ -91,7 +91,7 @@ interface Piper {
  * ```
  */
 const pipe: Piper = (...fns: Array<Fn<any, any>>) => (value: any) =>
-  fns.reduce((v, fn) => fn(v), value);
+	fns.reduce((v, fn) => fn(v), value);
 
 export default pipe;
 

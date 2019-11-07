@@ -18,33 +18,28 @@ const DAY = 86400000;
       const ms_since_last_midnight = sinceLast(unixDate, DAY);
 */
 
-
 type Callback = () => any;
 
 const sinceLast = (timestamp: number, periodSizeMS: number): number => {
-  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  return timestamp >= 0 ?
-      timestamp % periodSizeMS:
-      (periodSizeMS + timestamp % periodSizeMS) % DAY;
+	// if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+	return timestamp >= 0
+		? timestamp % periodSizeMS
+		: (periodSizeMS + (timestamp % periodSizeMS)) % DAY;
 };
 const untilNext = (timestamp: number, periodSizeMS: number): number => {
-  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  return periodSizeMS - sinceLast(timestamp, periodSizeMS);
+	// if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+	return periodSizeMS - sinceLast(timestamp, periodSizeMS);
 };
 
 const atLast = (timestamp: number, periodSizeMS: number): number => {
-  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  return timestamp - sinceLast(timestamp, periodSizeMS);
+	// if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+	return timestamp - sinceLast(timestamp, periodSizeMS);
 };
 const atNext = (timestamp: number, periodSizeMS: number): number => {
-  // if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
-  // return timestamp + untilNext(timestamp, periodSizeMS);
-  return timestamp + (periodSizeMS - sinceLast(timestamp, periodSizeMS));
+	// if ( timestamp.getTime ) { timestamp = timestamp.getTime(); }
+	// return timestamp + untilNext(timestamp, periodSizeMS);
+	return timestamp + (periodSizeMS - sinceLast(timestamp, periodSizeMS));
 };
-
-
-
-
 
 /*
   Safe timeout which guarantees the timer doesn't undershoot
@@ -55,18 +50,17 @@ const atNext = (timestamp: number, periodSizeMS: number): number => {
 type TimerId = ReturnType<typeof setTimeout>; // Ack this sidesteps that window.setTimeout and Node's setTimeout return different types
 
 const safeTimeout = (callback: Callback, delay: number): (() => TimerId) => {
-  const startingTime = Date.now();
-  let timeoutId = setTimeout(() => {
-    const undershootMs = startingTime + delay - Date.now();
-    if ( undershootMs > 0 ) {
-      timeoutId = setTimeout(callback, undershootMs + 50);
-    } else {
-      callback();
-    }
-  }, delay + 50);
-  return () => timeoutId;
+	const startingTime = Date.now();
+	let timeoutId = setTimeout(() => {
+		const undershootMs = startingTime + delay - Date.now();
+		if (undershootMs > 0) {
+			timeoutId = setTimeout(callback, undershootMs + 50);
+		} else {
+			callback();
+		}
+	}, delay + 50);
+	return () => timeoutId;
 };
-
 
 /*
   Executes callback which is guaranteed to fire *AFTER* the clock strikes
@@ -91,87 +85,95 @@ const safeTimeout = (callback: Callback, delay: number): (() => TimerId) => {
 
 */
 
+const onNext = (
+	periodSizeMS: number,
+	offsetMs: number | Callback,
+	callback?: Callback
+) => {
+	if (typeof offsetMs !== 'number') {
+		callback = offsetMs;
+		offsetMs = 0;
+	}
+	const _callback = callback;
+	if (!_callback) {
+		return;
+	}
+	const msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
 
-const onNext = (periodSizeMS: number, offsetMs: number | Callback, callback?: Callback) => {
-  if (typeof offsetMs !== 'number') {
-    callback = offsetMs;
-    offsetMs = 0;
-  }
-  const _callback = callback;
-  if ( !_callback ) { return;}
-  const msToNext = untilNext(Date.now(), periodSizeMS) + offsetMs;
+	const timeoutId =
+		msToNext > 2000
+			? safeTimeout(_callback, msToNext)
+			: // quicker (and dirtier) alternative to safeTimeout() for shorter periodSizes
+			  ((tId) => () => tId)(setTimeout(_callback, msToNext + 50));
 
-  const timeoutId = msToNext > 2000 ?
-      safeTimeout(_callback, msToNext):
-      // quicker (and dirtier) alternative to safeTimeout() for shorter periodSizes
-      ((tId) => () => tId)(setTimeout(_callback, msToNext + 50));
-
-  return {
-    cancel: (execCallback?: boolean) => {
-      clearTimeout( timeoutId() );
-      execCallback && _callback();
-    },
-  };
+	return {
+		cancel: (execCallback?: boolean) => {
+			clearTimeout(timeoutId());
+			execCallback && _callback();
+		},
+	};
 };
 
 // Auto-repeating version of `onNext()`
-const onEvery = (periodSizeMS: number, offsetMs: number | Callback, callback?: Callback) => {
-  if (typeof offsetMs !== 'number') {
-    callback = offsetMs;
-    offsetMs = 0;
-  }
-  const _callback = callback;
-  if ( !_callback ) { return; }
-  let nextUp: ReturnType<typeof onNext>;
-  const callbackOnNext = () => {
-    nextUp = onNext(periodSizeMS, offsetMs, () => {
-      _callback();
-      callbackOnNext();
-    });
-  };
-  callbackOnNext();
-  return {
-    cancel: (execCallback?: boolean) => {
-      nextUp && nextUp.cancel(execCallback);
-    },
-  };
+const onEvery = (
+	periodSizeMS: number,
+	offsetMs: number | Callback,
+	callback?: Callback
+) => {
+	if (typeof offsetMs !== 'number') {
+		callback = offsetMs;
+		offsetMs = 0;
+	}
+	const _callback = callback;
+	if (!_callback) {
+		return;
+	}
+	let nextUp: ReturnType<typeof onNext>;
+	const callbackOnNext = () => {
+		nextUp = onNext(periodSizeMS, offsetMs, () => {
+			_callback();
+			callbackOnNext();
+		});
+	};
+	callbackOnNext();
+	return {
+		cancel: (execCallback?: boolean) => {
+			nextUp && nextUp.cancel(execCallback);
+		},
+	};
 };
-
 
 export {
-  SECOND,
-  MINUTE,
-  HOUR,
-  DAY,
-
-  sinceLast,
-  untilNext,
-  atLast,
-  atNext,
-  atLast as atStart,
-  atNext as atEnd,
-
-  onNext,
-  onEvery,
-  safeTimeout,
+	SECOND,
+	MINUTE,
+	HOUR,
+	DAY,
+	sinceLast,
+	untilNext,
+	atLast,
+	atNext,
+	atLast as atStart,
+	atNext as atEnd,
+	onNext,
+	onEvery,
+	safeTimeout,
 };
-
 
 // FIXME: Remove this default export in v2
 export default {
-  SECOND,
-  MINUTE,
-  HOUR,
-  DAY,
+	SECOND,
+	MINUTE,
+	HOUR,
+	DAY,
 
-  sinceLast,
-  untilNext,
-  atLast,
-  atNext,
-  atStart: atLast,
-  atEnd: atNext,
+	sinceLast,
+	untilNext,
+	atLast,
+	atNext,
+	atStart: atLast,
+	atEnd: atNext,
 
-  onNext,
-  onEvery,
-  safeTimeout,
+	onNext,
+	onEvery,
+	safeTimeout,
 };

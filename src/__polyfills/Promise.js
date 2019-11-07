@@ -1,6 +1,9 @@
-if ( typeof window !== 'undefined' && (!window.Promise || !window.Promise.prototype.finally) ) {
-  // https://github.com/lhorie/mithril.js/blob/next/promise/promise.js
-  /* eslint-disable */
+if (
+	typeof window !== 'undefined' &&
+	(!window.Promise || !window.Promise.prototype.finally)
+) {
+	// https://github.com/lhorie/mithril.js/blob/next/promise/promise.js
+	/* eslint-disable */
 
   var PromisePolyfill = function(executor) {
     if (!(this instanceof PromisePolyfill)) throw new Error("Promise must be called with `new`")
@@ -115,9 +118,7 @@ if ( typeof window !== 'undefined' && (!window.Promise || !window.Promise.protot
 
 	if (!window.Promise) {
 		window.Promise = PromisePolyfill;
-  }
-  else if (!window.Promise.prototype.finally) {
+	} else if (!window.Promise.prototype.finally) {
 		window.Promise.prototype.finally = PromisePolyfill.prototype.finally;
 	}
-
 }

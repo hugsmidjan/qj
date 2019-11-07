@@ -15,22 +15,22 @@
 type Params = Record<string, Array<string>>;
 
 export default function parseParams(paramString?: string): Params {
-    var map: Params = {};
-    paramString = ( paramString!=null ? paramString : document.location.search )
-        .trim()
-        .replace(/^[?&]/, '')
-        .replace(/&$/, '');
-  if ( paramString ) {
-      paramString
-          .replace(/\+/g, ' ')
-          .split('&')
-          .forEach((paramBit) => {
-              // eslint-disable-next-line prefer-const
-              let [name, value] = paramBit.split('=');
-              name = decodeURIComponent(name);
-              const values = map[name] || (map[name] = []);
-              values.push( decodeURIComponent(value||'') );
-          });
-  }
-  return map;
+	const map: Params = {};
+	paramString = (paramString != null ? paramString : document.location.search)
+		.trim()
+		.replace(/^[?&]/, '')
+		.replace(/&$/, '');
+	if (paramString) {
+		paramString
+			.replace(/\+/g, ' ')
+			.split('&')
+			.forEach((paramBit) => {
+				// eslint-disable-next-line prefer-const
+				let [name, value] = paramBit.split('=');
+				name = decodeURIComponent(name);
+				const values = map[name] || (map[name] = []);
+				values.push(decodeURIComponent(value || ''));
+			});
+	}
+	return map;
 }

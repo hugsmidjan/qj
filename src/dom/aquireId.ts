@@ -11,31 +11,39 @@ const _guidPrefix = 'tmp_' + Date.now() + '_';
 let _guid = 1;
 
 // aquireId
-export default function aquireId(el?: Element | Array<Element> | NodeListOf<Element> | null, prefDefaultId?: string) { // el is an optional parameter.
-  if (typeof el === 'string') {
-    prefDefaultId = el;
-    el = undefined;
-  }
-  if ( el ) {
-    el = 'nodeType' in el ? el : el[0];
-  }
-  if (!el || !el.id) {
-    let id = prefDefaultId  ||  _guidPrefix + _guid++;
-    if (prefDefaultId) {
-      let count;
-      let idPrefix = prefDefaultId;
-      while ( document.getElementById(id) ) {
-        if (count === undefined) {
-          const m = prefDefaultId.match(/\d+$/);
-          count = m ? parseInt(m[0]) : 1;
-          idPrefix = m ? prefDefaultId.replace(/\d+$/, '') : prefDefaultId;
-        }
-        count++;
-        id = idPrefix + count;
-      }
-    }
-    if (!el) { return id; }
-    if (!el.id) { el.id = id; }
-  }
-  return el.id;
+export default function aquireId(
+	el?: Element | Array<Element> | NodeListOf<Element> | null,
+	prefDefaultId?: string
+) {
+	// el is an optional parameter.
+	if (typeof el === 'string') {
+		prefDefaultId = el;
+		el = undefined;
+	}
+	if (el) {
+		el = 'nodeType' in el ? el : el[0];
+	}
+	if (!el || !el.id) {
+		let id = prefDefaultId || _guidPrefix + _guid++;
+		if (prefDefaultId) {
+			let count;
+			let idPrefix = prefDefaultId;
+			while (document.getElementById(id)) {
+				if (count === undefined) {
+					const m = prefDefaultId.match(/\d+$/);
+					count = m ? parseInt(m[0]) : 1;
+					idPrefix = m ? prefDefaultId.replace(/\d+$/, '') : prefDefaultId;
+				}
+				count++;
+				id = idPrefix + count;
+			}
+		}
+		if (!el) {
+			return id;
+		}
+		if (!el.id) {
+			el.id = id;
+		}
+	}
+	return el.id;
 }

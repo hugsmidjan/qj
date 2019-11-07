@@ -5,19 +5,19 @@
 //
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-export default function inject<V =((key: string) => string) | any>(
-  template: string,
-  vars: Array<V> | Record<string, V>
+export default function inject<V = ((key: string) => string) | any>(
+	template: string,
+	vars: Array<V> | Record<string, V>
 ): string {
-  return template.replace(/%\{([^%{}}]+?)\}/g, (m, key) => {
-    if (!hasOwnProperty.call(vars, key)) {
-      return m;
-    }
-    // @ts-ignore  (Bah)
-    const value = vars[key];
-    if (typeof value === 'function') {
-      return value(key);
-    }
-    return value;
-  });
+	return template.replace(/%\{([^%{}}]+?)\}/g, (m, key) => {
+		if (!hasOwnProperty.call(vars, key)) {
+			return m;
+		}
+		// @ts-ignore  (Bah)
+		const value = vars[key];
+		if (typeof value === 'function') {
+			return value(key);
+		}
+		return value;
+	});
 }

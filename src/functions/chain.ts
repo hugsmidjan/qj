@@ -1,67 +1,67 @@
 type Fn<I, O> = (value: I) => O;
 
 interface Chainer<D> {
-  <R>(fn1: Fn<D, R>): R;
-  <D2, R>(fn1: Fn<D, D2>, fn2: Fn<D2, R>): R;
-  <D2, D3, R>(fn1: Fn<D, D2>, fn2: Fn<D2, D3>, fn3: Fn<D3, R>): R;
-  <D2, D3, D4, R>(fn1: Fn<D, D2>, fn2: Fn<D2, D3>, fn3: Fn<D3, D4>, fn4: Fn<D4, R>): R;
-  <D2, D3, D4, D5, R>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, R>
-  ): R;
-  <D2, D3, D4, D5, D6, R>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, D6>,
-    fn6: Fn<D6, R>
-  ): R;
-  <D2, D3, D4, D5, D6, D7, R>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, D6>,
-    fn6: Fn<D6, D7>,
-    fn7: Fn<D7, R>
-  ): R;
-  <D2, D3, D4, D5, D6, D7, D8, R>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, D6>,
-    fn6: Fn<D6, D7>,
-    fn7: Fn<D7, D8>,
-    fn8: Fn<D8, R>
-  ): R;
-  <D2, D3, D4, D5, D6, D7, D8, D9, R>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, D6>,
-    fn6: Fn<D6, D7>,
-    fn7: Fn<D7, D8>,
-    fn8: Fn<D8, D9>,
-    fn9: Fn<D9, R>
-  ): R;
-  <D2, D3, D4, D5, D6, D7, D8, D9>(
-    fn1: Fn<D, D2>,
-    fn2: Fn<D2, D3>,
-    fn3: Fn<D3, D4>,
-    fn4: Fn<D4, D5>,
-    fn5: Fn<D5, D6>,
-    fn6: Fn<D6, D7>,
-    fn7: Fn<D7, D8>,
-    fn8: Fn<D8, D9>,
-    fn9: Fn<D9, any>,
-    ...fns: Array<Fn<any, any>>
-  ): unknown;
+	<R>(fn1: Fn<D, R>): R;
+	<D2, R>(fn1: Fn<D, D2>, fn2: Fn<D2, R>): R;
+	<D2, D3, R>(fn1: Fn<D, D2>, fn2: Fn<D2, D3>, fn3: Fn<D3, R>): R;
+	<D2, D3, D4, R>(fn1: Fn<D, D2>, fn2: Fn<D2, D3>, fn3: Fn<D3, D4>, fn4: Fn<D4, R>): R;
+	<D2, D3, D4, D5, R>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, R>
+	): R;
+	<D2, D3, D4, D5, D6, R>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, D6>,
+		fn6: Fn<D6, R>
+	): R;
+	<D2, D3, D4, D5, D6, D7, R>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, D6>,
+		fn6: Fn<D6, D7>,
+		fn7: Fn<D7, R>
+	): R;
+	<D2, D3, D4, D5, D6, D7, D8, R>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, D6>,
+		fn6: Fn<D6, D7>,
+		fn7: Fn<D7, D8>,
+		fn8: Fn<D8, R>
+	): R;
+	<D2, D3, D4, D5, D6, D7, D8, D9, R>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, D6>,
+		fn6: Fn<D6, D7>,
+		fn7: Fn<D7, D8>,
+		fn8: Fn<D8, D9>,
+		fn9: Fn<D9, R>
+	): R;
+	<D2, D3, D4, D5, D6, D7, D8, D9>(
+		fn1: Fn<D, D2>,
+		fn2: Fn<D2, D3>,
+		fn3: Fn<D3, D4>,
+		fn4: Fn<D4, D5>,
+		fn5: Fn<D5, D6>,
+		fn6: Fn<D6, D7>,
+		fn7: Fn<D7, D8>,
+		fn8: Fn<D8, D9>,
+		fn9: Fn<D9, any>,
+		...fns: Array<Fn<any, any>>
+	): unknown;
 }
 
 /**
@@ -81,7 +81,7 @@ interface Chainer<D> {
  * ```
  */
 const chain = <D>(value?: D): Chainer<D> => (...fns: Array<any>) =>
-  fns.reduce((v, fn) => fn(v), value);
+	fns.reduce((v, fn) => fn(v), value);
 
 export default chain;
 

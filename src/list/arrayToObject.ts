@@ -23,36 +23,36 @@ type ItemCount<T extends string | number> = Record<T, number>;
 type ByProp<T> = Record<string, T>;
 
 function arrayToObject<T extends object, K extends keyof T>(
-  list: ArrayLike<T>,
-  prop: K
+	list: ArrayLike<T>,
+	prop: K
 ): ByProp<T>;
 function arrayToObject<T extends string | number>(list: ArrayLike<T>): ItemCount<T>;
 
 function arrayToObject<
-  T extends object | string | number,
-  TL extends Exclude<T, object>,
-  K extends keyof T
+	T extends object | string | number,
+	TL extends Exclude<T, object>,
+	K extends keyof T
 >(list: ArrayLike<T>, prop?: K): ByProp<T> | ItemCount<TL> {
-  return prop
-    ? [].reduce.call(
-        list,
-        (obj: ByProp<T>, item: T) => {
-          const key = (item[prop] as unknown) as string;
-          if (!(key in obj)) {
-            obj[key] = item;
-          }
-          return obj;
-        },
-        {}
-      )
-    : [].reduce.call(
-        list,
-        (obj: ItemCount<TL>, item: TL) => {
-          obj[item] = (obj[item] || 0) + 1;
-          return obj;
-        },
-        {}
-      );
+	return prop
+		? [].reduce.call(
+				list,
+				(obj: ByProp<T>, item: T) => {
+					const key = (item[prop] as unknown) as string;
+					if (!(key in obj)) {
+						obj[key] = item;
+					}
+					return obj;
+				},
+				{}
+		  )
+		: [].reduce.call(
+				list,
+				(obj: ItemCount<TL>, item: TL) => {
+					obj[item] = (obj[item] || 0) + 1;
+					return obj;
+				},
+				{}
+		  );
 }
 
 export default arrayToObject;
