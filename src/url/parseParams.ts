@@ -14,9 +14,11 @@
 
 type Params<P extends string> = Record<P, Array<string>>;
 
-export default function parseParams<P extends string>(paramString?: string): Params<P> {
+export default function parseParams<P extends string>(
+	...args: Array<string | undefined>
+): Params<P> {
 	const map: Record<string, Array<string>> = {};
-	paramString = (paramString != null ? paramString : document.location.search)
+	const paramString = (args.length === 0 ? document.location.search : args[0] || '')
 		.trim()
 		.replace(/^[?&]/, '')
 		.replace(/&$/, '');

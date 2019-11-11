@@ -4,6 +4,7 @@
 
 - ... <!-- Add new lines here. Version number will be decided later -->
 - feat: Add generic type support to `parseParams()`
+- fix: Make `parseParams` return empty object for `undefined` input
 
 ## 3.0.0
 
