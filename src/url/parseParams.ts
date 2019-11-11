@@ -12,14 +12,15 @@
 //    var obj = parseParamS( "" );
 //      ==>  { }
 
-type Params = Record<string, Array<string>>;
+type Params<P extends string> = Record<P, Array<string>>;
 
-export default function parseParams(paramString?: string): Params {
-	const map: Params = {};
+export default function parseParams<P extends string>(paramString?: string): Params<P> {
+	const map: Record<string, Array<string>> = {};
 	paramString = (paramString != null ? paramString : document.location.search)
 		.trim()
 		.replace(/^[?&]/, '')
 		.replace(/&$/, '');
+
 	if (paramString) {
 		paramString
 			.replace(/\+/g, ' ')
@@ -32,5 +33,5 @@ export default function parseParams(paramString?: string): Params {
 				values.push(decodeURIComponent(value || ''));
 			});
 	}
-	return map;
+	return map as Params<P>;
 }
