@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 3.1.0
+
+_2019-11-11_
+
 - feat: Add `getScrollbarWidth` to get browser scrollbar width
 - feat: Add generic type support to `parseParams()`
 - fix: Make `parseParams` return empty object for `undefined` input
