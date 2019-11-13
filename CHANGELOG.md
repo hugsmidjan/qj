@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 3.2.0
+
+_2019-11-13_
+
 - feat: Add `polyfills/IntersectionObserver`
 
 ## 3.1.0
