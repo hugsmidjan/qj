@@ -9,7 +9,7 @@ The functions try to be small, stupid, and side-effect free.
 
 Aliased as simply 'qj':
 
-    npm install --save-dev @hugsmidjan_is/qj@^3
+    npm install --save-dev qj@npm:@hugsmidjan_is/qj@^3
 
 ...or unaliased:
 
