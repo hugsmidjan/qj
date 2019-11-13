@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix(ts): Mark `focusElm()` options parameter as optional
 
 ## 3.2.0
 
@@ -15,7 +16,7 @@ _2019-11-13_
 _2019-11-11_
 
 - feat: Add `getScrollbarWidth` to get browser scrollbar width
-- feat: Add generic type support to `parseParams()`
+- feat(ts): Add generic type support to `parseParams()`
 - fix: Make `parseParams` return empty object for `undefined` input
 
 ## 3.0.0
