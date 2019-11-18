@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 3.2.1
+
+_2019-11-18_
+
 - fix(ts): Mark `focusElm()` options parameter as optional
 
 ## 3.2.0
