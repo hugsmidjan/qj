@@ -4,10 +4,11 @@
 
 - ... <!-- Add new lines here. Version number will be decided later -->
 
-## 3.2.1
+## 3.2.1 – 3.2.2
 
 _2019-11-18_
 
+- fix: `removeNode()` should accept `null`
 - fix(ts): Mark `focusElm()` options parameter as optional
 
 ## 3.2.0
