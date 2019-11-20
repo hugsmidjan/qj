@@ -1,6 +1,6 @@
 // shuffle the contents of an array
 export default function shuffle<T extends Array<any>>(array: T, mutate?: boolean): T {
-	array = mutate ? [].slice.call(array) : array;
+	array = mutate ? array : [].slice.call(array);
 	let left = array.length;
 	while (left) {
 		const p = Math.floor(left * Math.random());
