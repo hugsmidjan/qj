@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 3.2.3
+
+_2019-11-20_
+
 - fix: Prevent `parseParams()` emitting nully URL params
 - fix: Make `shuffle()` non-mutating by default
 
