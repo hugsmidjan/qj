@@ -20,6 +20,8 @@ o.spec('parseParams', () => {
 	o('Parses params', () => {
 		o(parseParams('foo=bar')).deepEquals({ foo: ['bar'] });
 		o(parseParams('?foo=bar')).deepEquals({ foo: ['bar'] });
+		o(parseParams('foo=')).deepEquals({ foo: [''] });
+		o(parseParams('foo')).deepEquals({ foo: [''] });
 		o(parseParams('&foo=bar')).deepEquals({ foo: ['bar'] });
 		o(parseParams('foo=bar&foo2=baz')).deepEquals({ foo: ['bar'], foo2: ['baz'] });
 	});

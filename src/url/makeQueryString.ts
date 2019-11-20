@@ -9,8 +9,9 @@ export default function makeQueryString(paramsObj: ParamsObject): string {
 				param = [param];
 			}
 			param.forEach((value) => {
-				if (param != null) {
-					acc.push(key + '=' + encodeURIComponent(String(value)));
+				if (value != null) {
+					const strVal = encodeURIComponent(String(value));
+					acc.push(key + (strVal ? '=' + strVal : ''));
 				}
 			});
 			return acc;

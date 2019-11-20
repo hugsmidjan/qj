@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix: Prevent `parseParams()` emitting nully URL params
 - fix: Make `shuffle()` non-mutating by default
 
 ## 3.2.1 – 3.2.2
