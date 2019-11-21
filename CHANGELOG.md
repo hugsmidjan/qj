@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 3.3.0
+
+_2019-11-21_
+
 - feat: Add `polyfills/Array.prototype.findIndex`
 - feat: Add `polyfills/Object.fromEntries`
 - feat: Add `polyfills/Event` for IE11
