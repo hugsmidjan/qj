@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add `polyfills/Array.prototype.findIndex`
 - feat: Add `polyfills/Object.fromEntries`
 - feat: Add `polyfills/Event` for IE11
 
