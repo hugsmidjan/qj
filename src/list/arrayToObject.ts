@@ -1,8 +1,7 @@
 // Convert an array-like list into an object keyed by prop.
-// Prop values are assumed to be unique.
-// Array items with repeated keys (prop value) are skipped
+// Prop values are assumed to be unique and repeat keys are
+// overwritten
 // If prop is undefined, the Array values are used as keys
-// with the value being a count of how many times each key occured
 /*
   const arr1 = [
     {name:'Tim', age:12},
@@ -10,49 +9,46 @@
     {name:'Tim', age:29},
   ];
   console.log( arrayToObject(arr1, 'name') );
-  // { Tim:{name:'Tim',age:12}, Sam:{name:'Sam',age:10} };
+  // { Tim: {name:'Tim', age:12},  Sam: {name:'Sam', age:10} };
 
   const arr2 = ['Orange', 'Apple', 'Tomato', 'Apple', 'Apple'];
 
   console.log( arrayToObject(arr2) );
-  // { Orange:1, Apple:3, Tomato:1 }
+  // { Orange: 'Orange',  Apple: 'Apple',  Tomato: 'Tomato' }
 
 */
 
-type ItemCount<T extends string | number> = Record<T, number>;
-type ByProp<T> = Record<string, T>;
-
 function arrayToObject<T extends object, K extends keyof T>(
 	list: ArrayLike<T>,
-	prop: K
-): ByProp<T>;
-function arrayToObject<T extends string | number>(list: ArrayLike<T>): ItemCount<T>;
+	prop: K | ((item: T) => string)
+): Record<string, T>;
 
-function arrayToObject<
-	T extends object | string | number,
-	TL extends Exclude<T, object>,
-	K extends keyof T
->(list: ArrayLike<T>, prop?: K): ByProp<T> | ItemCount<TL> {
-	return prop
-		? [].reduce.call(
-				list,
-				(obj: ByProp<T>, item: T) => {
-					const key = (item[prop] as unknown) as string;
-					if (!(key in obj)) {
-						obj[key] = item;
-					}
-					return obj;
-				},
-				{}
-		  )
-		: [].reduce.call(
-				list,
-				(obj: ItemCount<TL>, item: TL) => {
-					obj[item] = (obj[item] || 0) + 1;
-					return obj;
-				},
-				{}
-		  );
+function arrayToObject<T extends string | number>(
+	list: ArrayLike<T>,
+	prop?: (item: T) => string
+): Record<string, T>;
+
+function arrayToObject<T extends object | string | number, K extends keyof T>(
+	list: ArrayLike<T>,
+	prop?: K | ((item: T) => string)
+): Record<string, T> {
+	const getKey =
+		typeof prop === 'function'
+			? prop
+			: prop
+			? (item: T) => String(item[prop])
+			: (item: T) => String(item);
+	return [].reduce.call(
+		list || [],
+		(obj: Record<string, T>, item: T) => {
+			const key = getKey(item);
+			if (!(key in obj)) {
+				obj[key] = item;
+			}
+			return obj;
+		},
+		{}
+	);
 }
 
 export default arrayToObject;
