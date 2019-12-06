@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 3.4.0
+
+_2019-12-06_
+
 - feat: Add a simple `validKennitala()` and `validCreditcard()` checkers
 - feat: `arrayToObject()` now takes "prop" function, emits uniform objects –
   Where for non-object arrays the values of the returned object are now the
