@@ -11,7 +11,6 @@ Object.defineProperty(exports, '__esModule', { value: true });
 //   setFrag(null);  // unset
 // encodes a plain-text string to a URL #fragment friendly format (compatible with .get())
 var encodeFrag = function (_fragment) {
-    console.error('hi');
     return encodeURI(_fragment)
         .replace(/#/g, '%23')
         .replace(/%7C/g, '|');

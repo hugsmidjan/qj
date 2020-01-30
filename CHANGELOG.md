@@ -4,6 +4,12 @@
 
 - ... <!-- Add new lines here. Version number will be decided later -->
 
+## 2.7.1
+
+_2012-01-30_
+
+- fix: Remove `console.error` message in `frag`
+
 ## 2.7.0
 
 _2019-10-29_
