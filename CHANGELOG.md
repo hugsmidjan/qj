@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add `assertNever()` exhaustive type check helper
 
 ## 3.4.0
 
