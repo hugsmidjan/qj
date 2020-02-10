@@ -7,7 +7,8 @@
 		"prepublishOnly": "echo \"\nRun 'yarn run publishdist' to publish this package\n\n\"  && exit 1",
 		"format": "eslint --fix  \"*.js\" \"build/*.js\" \"src/**/*.{js,ts,tsx}\"  &&  prettier --write \"*.md\" \"*.json\"  \"src/**/*.json\"",
 		"build": "gulp build  &&  yarn run test",
-		"dev": "yarn && gulp dev",
+		"dev": "node --max-old-space-size=4096 node_modules/.bin/gulp dev",
+		"__dev": "yarn && gulp dev",
 		"test": "ospec '__tests/**/*.js'",
 		"test:dev": "yarn run test  &&  onchange '__tests/**/*.js' -f add,change -- ospec {{changed}}"
 	},
