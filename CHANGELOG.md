@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 3.5.0
+
+_2020-02-10_
+
 - feat: Add `assertNever()` exhaustive type check helper
 - feat: Add `range(from, to, step)`
 
