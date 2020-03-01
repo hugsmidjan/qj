@@ -1,15 +1,17 @@
 type TimerId = ReturnType<typeof setTimeout>; // Ack this sidesteps that window.setTimeout and Node's setTimeout return different types
 
-type Finishable<F> = F & { finish(cancel?: boolean): void };
+type Finishable<A extends Array<any>> = ((...args: A) => void) & {
+	finish(cancel?: boolean): void;
+};
 
 // throttleFn()
 // returns a throttled function that never runs more than every `delay` milliseconds
 // the returned function also has a nice .finish() method.
-const throttle = <A extends Array<any>, F extends (...args: A) => void>(
-	func: F,
+const throttle = <A extends Array<any>>(
+	func: (...args: A) => void,
 	delay: number,
 	skipFirst?: boolean
-): Finishable<F> => {
+): Finishable<A> => {
 	let timeout: TimerId | undefined;
 	let throttled = 0;
 	let _args: A;
@@ -22,7 +24,7 @@ const throttle = <A extends Array<any>, F extends (...args: A) => void>(
 			timeout = (setTimeout(throttledFn.finish, delay) as unknown) as TimerId; // Go home TypeScript, you're drunk!
 		}
 		throttled++;
-	} as Finishable<F>;
+	} as Finishable<A>;
 	throttledFn.finish = (cancel?: boolean) => {
 		timeout && clearTimeout(timeout);
 		!cancel && throttled > 1 && func.apply(_this, _args);
