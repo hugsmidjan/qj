@@ -33,4 +33,21 @@ const throttle = <A extends Array<any>>(
 	return throttledFn;
 };
 
+/** Sugar to produce a dynamic debounced function that accepts its contents/behavior at call time.
+ *
+ * Usage:
+ *
+ *      const myThrottler = throttle.d(500);
+ *      myThrottler(() => { alert('Hello world'); });
+ *      myThrottler(() => { alert('I mean: Howdy world!'); });
+ *      myThrottler((name) => { alert('Wazzap ' + name); }, 'world');
+ */
+throttle.d = (delay: number, skipFirst?: boolean) =>
+	throttle(
+		<A extends Array<any>>(fn: (...args: A) => void, ...args: A) => fn(...args),
+		delay,
+		skipFirst
+	);
+// TODO: Add tests for `throttle.d()`
+
 export default throttle;

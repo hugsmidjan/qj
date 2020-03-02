@@ -40,13 +40,20 @@ const debounce = <A extends Array<any>>(
 	return debouncedFn;
 };
 
-// Sugar to produce a dynamic debounced function
-// that accepts its contents/behavior at call time.
-// Usage:
-//     const myDebouncer = debounce.d(500);
-//     myDebouncer(() => { alert('Hello world'); });
-//     myDebouncer(() => { alert('I mean: Howdy world!'); });
+/** Sugar to produce a dynamic debounced function that accepts its contents/behavior at call time.
+ *
+ * Usage:
+ *
+ *      const myDebouncer = debounce.d(500);
+ *      myDebouncer(() => { alert('Hello world'); });
+ *      myDebouncer(() => { alert('I mean: Howdy world!'); });
+ *      myDebouncer((name) => { alert('Wazzap ' + name); }, 'world');
+ */
 debounce.d = (delay: number, immediate?: boolean) =>
-	debounce((fn: () => void) => fn(), delay, immediate);
+	debounce(
+		<A extends Array<any>>(fn: (...args: A) => void, ...args: A) => fn(...args),
+		delay,
+		immediate
+	);
 
 export default debounce;
