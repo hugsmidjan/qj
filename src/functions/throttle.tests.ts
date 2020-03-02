@@ -7,7 +7,7 @@ const _add = (a: number, b: number) => {
 	return a + b;
 };
 
-o.spec('Throttle', () => {
+o.spec('throttle', () => {
 	o('creates a wrapped function', () => {
 		const add = o.spy(_add);
 		const tAdd = throttle(add, 20);
@@ -110,6 +110,31 @@ o.spec('Throttle', () => {
 			}, 30);
 		});
 	});
+});
 
-	// TODO: Add tests for `throttle.d()`
+o.spec('throttle.d', () => {
+	const throttler = throttle.d(20);
+	let sideEffect: number | undefined;
+	const add = (a: number, b: number) => {
+		sideEffect = a + b;
+	};
+	const multiply = (a: number, b: number) => {
+		sideEffect = a * b;
+	};
+
+	o('creates a dynamic function', (done) => {
+		throttler(add, 3, 3);
+		o(sideEffect).equals(6);
+
+		throttler(multiply, 3, 3);
+		throttler.finish();
+		o(sideEffect).equals(9);
+
+		throttler(add, 5, 5);
+		throttler(multiply, 5, 5);
+		setTimeout(() => {
+			o(sideEffect).equals(25);
+			done();
+		}, 30);
+	});
 });

@@ -57,4 +57,6 @@ debounce.d = (delay: number, immediate?: boolean) =>
 		immediate
 	);
 
+// TODO: Write tests based on ./throttle.tests.ts
+
 export default debounce;

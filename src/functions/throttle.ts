@@ -54,6 +54,5 @@ throttle.d = (delay: number, skipFirst?: boolean) =>
 		delay,
 		skipFirst
 	);
-// TODO: Add tests for `throttle.d()`
 
 export default throttle;
