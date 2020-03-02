@@ -4,9 +4,10 @@ type Cancellable<A extends Array<any>> = ((...args: A) => void) & {
 	cancel(finish?: boolean): void;
 };
 
-// debounceFn()
-// returns a debounced function that only runs after `delay` milliseconds of quiet-time
-// the returned function also has a nice .cancel() method.
+/** returns a debounced function that only runs after `delay` milliseconds
+ * of quiet-time.
+ * The returned function also has a nice `.cancel()` method.
+ */
 const debounce = <A extends Array<any>>(
 	func: (...args: A) => void,
 	delay: number,
