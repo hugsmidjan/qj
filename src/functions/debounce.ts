@@ -52,7 +52,9 @@ const debounce = <A extends Array<any>>(
  */
 debounce.d = (delay: number, immediate?: boolean) =>
 	debounce(
-		<A extends Array<any>>(fn: (...args: A) => void, ...args: A) => fn(...args),
+		function<A extends Array<any>>(fn: (...args: A) => void, ...args: A) {
+			fn.apply(this, args);
+		},
 		delay,
 		immediate
 	);

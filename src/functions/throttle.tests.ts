@@ -7,6 +7,8 @@ const _add = (a: number, b: number) => {
 	return a + b;
 };
 
+// TODO: Add tests asserting how `this` is preserved/passed-through
+
 o.spec('throttle', () => {
 	o('creates a wrapped function', () => {
 		const add = o.spy(_add);
