@@ -1,15 +1,17 @@
 type TimerId = ReturnType<typeof setTimeout>; // Ack this sidesteps that window.setTimeout and Node's setTimeout return different types
 
-type Cancellable<F> = F & { cancel(): void };
+type Cancellable<A extends Array<any>> = ((...args: A) => void) & {
+	cancel(): void;
+};
 
 // debounceFn()
 // returns a debounced function that only runs after `delay` milliseconds of quiet-time
 // the returned function also has a nice .cancel() method.
-const debounce = <F extends (...args: any) => void>(
-	func: F,
+const debounce = <A extends Array<any>>(
+	func: (...args: A) => void,
 	delay: number,
 	immediate?: boolean
-): Cancellable<F> => {
+): Cancellable<A> => {
 	let timeout: TimerId | undefined;
 
 	const debouncedFn = function(...args) {
@@ -23,7 +25,7 @@ const debounce = <F extends (...args: any) => void>(
 		}, delay);
 
 		runNow && func.apply(_this, args);
-	} as Cancellable<F>;
+	} as Cancellable<A>;
 
 	debouncedFn.cancel = () => {
 		timeout && clearTimeout(timeout);
