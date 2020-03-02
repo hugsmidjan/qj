@@ -3,7 +3,8 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
-- feat: Add `throttle.finish(true);` signature to cancel the trailing call
+- feat: Add `dbcdFn.cancel(true);` signature to finish (run) a debounced call
+- feat: Add `thrtldFn.finish(true);` signature to cancel the trailing call
 
 ## 3.5.0
 

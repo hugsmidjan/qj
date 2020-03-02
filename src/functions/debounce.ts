@@ -1,7 +1,7 @@
 type TimerId = ReturnType<typeof setTimeout>; // Ack this sidesteps that window.setTimeout and Node's setTimeout return different types
 
 type Cancellable<A extends Array<any>> = ((...args: A) => void) & {
-	cancel(): void;
+	cancel(finish?: boolean): void;
 };
 
 // debounceFn()
@@ -13,23 +13,28 @@ const debounce = <A extends Array<any>>(
 	immediate?: boolean
 ): Cancellable<A> => {
 	let timeout: TimerId | undefined;
+	let _args: A;
+	let _this = this; // eslint-disable-line @typescript-eslint/no-this-alias
+	let runNow: boolean | undefined;
 
 	const debouncedFn = function(...args) {
-		const runNow = immediate && !timeout;
-		const _this = this; // eslint-disable-line @typescript-eslint/no-this-alias
+		_args = args;
+		_this = this;
+		runNow = immediate && !timeout;
 
 		timeout && clearTimeout(timeout);
 		timeout = setTimeout(() => {
-			!runNow && func.apply(_this, args); // don't re-invoke `func` if runNow is true
-			timeout = undefined;
+			debouncedFn.cancel(true);
 		}, delay);
 
-		runNow && func.apply(_this, args);
+		runNow && func.apply(_this, _args);
 	} as Cancellable<A>;
 
-	debouncedFn.cancel = () => {
+	debouncedFn.cancel = (finish) => {
 		timeout && clearTimeout(timeout);
+		finish && !runNow && func.apply(_this, _args);
 		timeout = undefined;
+		runNow = false;
 	};
 
 	return debouncedFn;
