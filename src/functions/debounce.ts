@@ -15,7 +15,7 @@ const debounce = <A extends Array<any>>(
 ): Cancellable<A> => {
 	let timeout: TimerId | undefined;
 	let _args: A;
-	let _this = this; // eslint-disable-line @typescript-eslint/no-this-alias
+	let _this: unknown;
 
 	const debouncedFn: Cancellable<A> = function(...args) {
 		_args = args;
