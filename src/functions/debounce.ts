@@ -16,26 +16,23 @@ const debounce = <A extends Array<any>>(
 	let timeout: TimerId | undefined;
 	let _args: A;
 	let _this = this; // eslint-disable-line @typescript-eslint/no-this-alias
-	let runNow: boolean | undefined;
 
-	const debouncedFn = function(...args) {
+	const debouncedFn: Cancellable<A> = function(...args) {
 		_args = args;
 		_this = this;
-		runNow = immediate && !timeout;
+
+		immediate && !timeout && func.apply(_this, _args);
 
 		timeout && clearTimeout(timeout);
 		timeout = setTimeout(() => {
 			debouncedFn.cancel(true);
 		}, delay);
-
-		runNow && func.apply(_this, _args);
-	} as Cancellable<A>;
+	};
 
 	debouncedFn.cancel = (finish) => {
 		timeout && clearTimeout(timeout);
-		finish && !runNow && func.apply(_this, _args);
+		finish && !!timeout && func.apply(_this, _args);
 		timeout = undefined;
-		runNow = false;
 	};
 
 	return debouncedFn;
