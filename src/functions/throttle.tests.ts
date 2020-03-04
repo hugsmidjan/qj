@@ -8,8 +8,6 @@ const prep = (skipFirst?: boolean) => {
 	return [add, throttle(add, 20, skipFirst)] as const;
 };
 
-// TODO: Add tests asserting how `this` is preserved/passed-through
-
 o.spec('throttle', () => {
 	o('creates a wrapped function', () => {
 		const [add, tAdd] = prep();
@@ -129,6 +127,21 @@ o.spec('throttle', () => {
 			}, 30);
 		});
 	});
+
+	o('passes `this` to the throttled function', () => {
+		const add = o.spy(function(this: { b: number; c?: number }, a: number) {
+			this.c = a + this.b;
+		});
+		const foo = {
+			tAdd: throttle(add, 20),
+			b: 10,
+			c: -1 as number,
+		};
+
+		foo.tAdd(5);
+		o(add.callCount).equals(1);
+		o(foo.c).equals(15);
+	});
 });
 
 o.spec('throttle.d', () => {
@@ -155,5 +168,26 @@ o.spec('throttle.d', () => {
 			o(sideEffect).equals(25);
 			done();
 		}, 30);
+	});
+
+	o('passes `this` to the dynamic function', () => {
+		const foo = {
+			do: throttle.d(20),
+			b: 10,
+			c: -1 as number,
+		};
+		const add = function(this: typeof foo, a: number) {
+			this.c = a + this.b;
+		};
+		const multiply = function(this: typeof foo, a: number) {
+			this.c = a * this.b;
+		};
+
+		foo.do(add, 3);
+		o(foo.c).equals(13);
+
+		foo.do(multiply, 3);
+		foo.do.finish();
+		o(foo.c).equals(30);
 	});
 });
