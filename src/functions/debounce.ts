@@ -56,6 +56,16 @@ debounce.d = (delay: number, immediate?: boolean) =>
 		immediate
 	);
 
-// TODO: Write tests based on ./throttle.tests.ts
+/** /
+const debouncer = debounce.d(20, true);
+const add = (a: number, b: number) => a * b;
+
+// FIXME: This test should fail!
+// $ExpectError
+debouncer(add, 'a', 'b');
+// $ExpectError
+debouncer('a', 'b');
+
+/**/
 
 export default debounce;

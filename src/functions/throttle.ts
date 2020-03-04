@@ -57,4 +57,16 @@ throttle.d = (delay: number, skipFirst?: boolean) =>
 		skipFirst
 	);
 
+/** /
+const throttler = throttle.d(20, true);
+const add = (a: number, b: number) => a * b;
+
+// FIXME: This test should fail!
+// $ExpectError
+throttler(add, 'a', 'b');
+// $ExpectError
+throttler('a', 'b');
+
+/**/
+
 export default throttle;
