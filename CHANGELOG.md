@@ -2,11 +2,15 @@
 
 ## Upcoming...
 
+## 3.6.0
+
+_2020-03-04_
+
 - ... <!-- Add new lines here. Version number will be decided later -->
 - feat: Add `throttle.d(delay, skipFirst)` sugar for dynamic function bodies
 - feat: Pass extra arguments into the function passed to `debounce.d()`
-- feat: Add `dbcdFn.cancel(true);` signature to finish (run) a debounced call
-- feat: Add `thrtldFn.finish(true);` signature to cancel the trailing call
+- feat: Add `debFn.cancel(true);` signature to finish (run) a debounced call
+- feat: Add `thrttlFn.finish(true);` signature to cancel the trailing call
 
 ## 3.5.0
 
