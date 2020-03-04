@@ -3,16 +3,16 @@ import throttle from './throttle';
 
 type Spied<Fn extends (...args: any) => any> = Spy<Parameters<Fn>, ReturnType<Fn>>;
 
-const _add = (a: number, b: number) => {
-	return a + b;
+const prep = (skipFirst?: boolean) => {
+	const add = o.spy((a: number, b: number) => a + b);
+	return [add, throttle(add, 20, skipFirst)] as const;
 };
 
 // TODO: Add tests asserting how `this` is preserved/passed-through
 
 o.spec('throttle', () => {
 	o('creates a wrapped function', () => {
-		const add = o.spy(_add);
-		const tAdd = throttle(add, 20);
+		const [add, tAdd] = prep();
 
 		o(tAdd(1, 2)).equals(undefined); // throttled Functions don't return anything
 		o(add.args).deepEquals([1, 2]);
@@ -21,14 +21,11 @@ o.spec('throttle', () => {
 	});
 
 	o.spec('throttles a function', () => {
-		const add = o.spy(_add);
-		const tAdd = throttle(add, 20);
-
-		tAdd(1, 2);
-		tAdd(2, 3);
-		tAdd(3, 4);
-
 		o('throttled calls wait for the delay', (done) => {
+			const [add, tAdd] = prep();
+			tAdd(1, 2);
+			tAdd(2, 3);
+
 			setTimeout(() => {
 				o(add.callCount).equals(1);
 				o(add.args).deepEquals([1, 2]);
@@ -37,6 +34,11 @@ o.spec('throttle', () => {
 		});
 
 		o('throttled calls are performed after the delay', (done) => {
+			const [add, tAdd] = prep();
+			tAdd(1, 2);
+			tAdd(2, 3);
+			tAdd(3, 4);
+
 			setTimeout(() => {
 				o(add.callCount).equals(2);
 				o(add.args).deepEquals([3, 4]);
@@ -46,10 +48,8 @@ o.spec('throttle', () => {
 	});
 
 	o.spec('finish method', () => {
-		const add = o.spy(_add);
-		const tAdd = throttle(add, 20);
-
 		o('runs the throttled call instantly', () => {
+			const [add, tAdd] = prep();
 			tAdd(1, 2);
 			tAdd(2, 3);
 			tAdd(3, 4);
@@ -60,6 +60,10 @@ o.spec('throttle', () => {
 		});
 
 		o('only runs the throttled call once', () => {
+			const [add, tAdd] = prep();
+			tAdd(1, 2);
+			tAdd(2, 3);
+			tAdd(3, 4);
 			tAdd.finish();
 			tAdd.finish();
 			tAdd.finish();
@@ -69,6 +73,12 @@ o.spec('throttle', () => {
 		});
 
 		o('finished calls do not run after the delay', (done) => {
+			const [add, tAdd] = prep();
+			tAdd(1, 2);
+			tAdd(2, 3);
+			tAdd(3, 4);
+			tAdd.finish();
+
 			setTimeout(() => {
 				o(add.callCount).equals(2);
 				o(add.args).deepEquals([3, 4]);
@@ -77,34 +87,41 @@ o.spec('throttle', () => {
 		});
 
 		o('can cancel the throttled call', () => {
+			const [add, tAdd] = prep();
 			tAdd(1, 2);
 			tAdd(2, 3);
 			tAdd(3, 4);
 			tAdd.finish(true);
 
-			o(add.callCount).equals(3);
+			o(add.callCount).equals(1);
 			o(add.args).deepEquals([1, 2]);
 		});
 
 		o('does not run cancelled calls later', () => {
+			const [add, tAdd] = prep();
+			tAdd(1, 2);
+			tAdd(2, 3);
+			tAdd.finish(true);
 			tAdd.finish();
 
-			o(add.callCount).equals(3);
+			o(add.callCount).equals(1);
 			o(add.args).deepEquals([1, 2]);
 		});
 	});
 
 	o.spec('skipFirst option', () => {
-		const add = o.spy(_add);
-		const tAdd = throttle(add, 20, true);
-
 		o('skips the first call', () => {
+			const [add, tAdd] = prep(true);
 			tAdd(1, 2);
 			tAdd(2, 3);
 			o(add.callCount).equals(0);
 		});
 
 		o('throttled calls are performed after the delay', (done) => {
+			const [add, tAdd] = prep(true);
+			tAdd(1, 2);
+			tAdd(2, 3);
+
 			setTimeout(() => {
 				o(add.callCount).equals(1);
 				o(add.args).deepEquals([2, 3]);
@@ -115,16 +132,16 @@ o.spec('throttle', () => {
 });
 
 o.spec('throttle.d', () => {
-	const throttler = throttle.d(20);
-	let sideEffect: number | undefined;
-	const add = (a: number, b: number) => {
-		sideEffect = a + b;
-	};
-	const multiply = (a: number, b: number) => {
-		sideEffect = a * b;
-	};
-
 	o('creates a dynamic function', (done) => {
+		const throttler = throttle.d(20);
+		let sideEffect: number | undefined;
+		const add = (a: number, b: number) => {
+			sideEffect = a + b;
+		};
+		const multiply = (a: number, b: number) => {
+			sideEffect = a * b;
+		};
+
 		throttler(add, 3, 3);
 		o(sideEffect).equals(6);
 
