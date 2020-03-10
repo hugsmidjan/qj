@@ -6,11 +6,12 @@ type Eventified<T extends object> = T & {
 	emit<E extends { type: string }>(event: string | E, ...args: Array<any>): Eventified<T>;
 };
 
-/*
-  Add a simple chainable `.on()`, `.off()`, `.emit()` interface to any object.
+/**
+	Add a simple chainable `.on()`, `.off()`, `.emit()` interface to any object.
 
-  Example usage:
-  --------------
+	Defaults to returning a new, empty object with these methods.
+
+  ### Example usage:
 
       const app = {};
       eventify( app );
@@ -65,8 +66,8 @@ type Eventified<T extends object> = T & {
 //   const eventified = object as Eventified<T, Events>
 //   let events = {} as EventStore<Events>;
 
-export default function eventify<T extends object>(object: T): Eventified<T> {
-	const eventified = object as Eventified<T>;
+export default function eventify<T extends object>(object?: T): Eventified<T> {
+	const eventified = (object || {}) as Eventified<T>;
 
 	let events: Record<string, Array<Callback>> = {};
 
