@@ -1,5 +1,3 @@
-//@flow
-
 // ScrollTo top of _elm
 
 export interface ScrollToElmOptions<E extends HTMLElement> {

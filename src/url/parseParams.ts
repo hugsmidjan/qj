@@ -1,5 +1,3 @@
-//@flow
-
 // parseParams( queryString )
 //
 // Convert queryString type Strings into a neat object

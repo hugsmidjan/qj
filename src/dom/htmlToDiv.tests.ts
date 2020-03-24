@@ -1,4 +1,3 @@
-//@flow
 import o from 'ospec';
 import '../__testing/polyfill-document';
 import htmlToDiv, { HtmlToDivOpts, HtmlToDivDisableds } from './htmlToDiv';
