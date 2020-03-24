@@ -4,6 +4,7 @@
 
 - <!-- Add new lines here. Version number will be decided later -->
 - feat: Allow calling `eventify()` with no arguents
+- docs: Improve docs and type signature of `parseParams()`
 
 ## 3.6.0
 
