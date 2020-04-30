@@ -2,6 +2,9 @@ const { parallel, series, src, dest } = require('gulp');
 const rollupTaskFactory = require('@hugsmidjan/gulp-rollup');
 const del = require('del');
 const writeFile = require('fs').writeFileSync;
+
+// ===========================================================================
+
 const {
 	srcFolder,
 	distFolder,
@@ -11,7 +14,7 @@ const {
 	polyfillsGlobs,
 	polyfillsSrcFolder,
 	polyfillsDistFolder,
-} = require('./build/helpers');
+} = require('./build-config');
 
 // ===========================================================================
 
@@ -32,12 +35,9 @@ const baseOpts = {
 const [scriptsBundle, scriptsWatch] = rollupTaskFactory({
 	...baseOpts,
 	name: 'scripts',
-	// glob: scriptGlobs, // using `entryPoints` instead
 	entryPoints: scriptsBundleMap,
 	dist: distFolder,
-	typescriptOpts: {
-		useTsconfigDeclarationDir: true,
-	},
+	typescriptOpts: { declaration: true },
 });
 
 const [polyfillsBundle, polyfillsWatch] = rollupTaskFactory({
@@ -46,10 +46,6 @@ const [polyfillsBundle, polyfillsWatch] = rollupTaskFactory({
 	src: polyfillsSrcFolder,
 	glob: polyfillsGlobs,
 	dist: polyfillsDistFolder,
-	codeSplit: false,
-	typescriptOpts: {
-		tsconfigOverride: { compilerOptions: { declaration: false } },
-	},
 });
 
 const [testsBundle, testsWatch] = rollupTaskFactory({
@@ -57,10 +53,6 @@ const [testsBundle, testsWatch] = rollupTaskFactory({
 	name: 'build_tests',
 	glob: testGlobs,
 	dist: testingFolder,
-	codeSplit: false,
-	typescriptOpts: {
-		tsconfigOverride: { compilerOptions: { declaration: false } },
-	},
 	// TODO: Create a ospec gulp plugin
 	// onWatchEvent: (e) => {
 	// 	if (e.code === 'BUNDLE_END') {
@@ -75,13 +67,6 @@ const [testsBundle, testsWatch] = rollupTaskFactory({
 // ---------------------------------------------------------------------------
 
 const cleanup = () => del([distFolder, testingFolder]);
-
-const makeDTsFiles = (done) => {
-	// Hacky workaround until this issue is resolved
-	// https://github.com/ezolenko/rollup-plugin-typescript2/issues/136#issuecomment-515170524
-	require('./build/makeDeclarationFiles')();
-	done();
-};
 
 const makePackageJson = (done) => {
 	const pkg = require('./package.json');
@@ -102,7 +87,7 @@ const copyDocs = () => src(['README.md', 'CHANGELOG.md']).pipe(dest(distFolder))
 
 const build = parallel(scriptsBundle, polyfillsBundle, testsBundle);
 const watch = parallel(scriptsWatch, polyfillsWatch, testsWatch);
-const publishPrep = parallel(makePackageJson, makeDTsFiles, copyDocs);
+const publishPrep = parallel(makePackageJson, copyDocs);
 
 // ---------------------------------------------------------------------------
 

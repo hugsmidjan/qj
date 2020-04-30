@@ -37,9 +37,6 @@ const makeInputMap = (files /*: Array<string> */) /*: InputMap */ => {
 };
 
 exports.srcFolder = srcFolder;
-exports.scriptGlobs = [scriptsGlobs].concat(
-	Object.values(globs).map((glob) => '!' + glob)
-);
 exports.scriptsBundleMap = makeInputMap(getEntrypoints());
 exports.testGlobs = [globs.tests];
 exports.distFolder = 'dist/';
@@ -48,6 +45,3 @@ exports.testingFolder = '__tests/';
 exports.polyfillsGlobs = polyfillsGlob;
 exports.polyfillsSrcFolder = srcFolder + polyfillsSrcFolder;
 exports.polyfillsDistFolder = exports.distFolder + 'polyfills/';
-
-exports.getEntrypoints = getEntrypoints;
-exports.makeInputMap = makeInputMap;
