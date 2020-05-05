@@ -17,7 +17,7 @@ import domid from './domid';
  */
 
 export default function aquireId(
-	el?: Element | Array<Element> | NodeListOf<Element> | null,
+	el?: string | Element | Array<Element> | NodeListOf<Element> | null,
 	prefDefaultId?: string
 ) {
 	// el is an optional parameter.
