@@ -1,3 +1,5 @@
+import domid from './domid';
+
 /**
  * **Usage:**
  *
@@ -14,12 +16,6 @@
  * – returns the value of elm.id -- if needed automatically assigning a unique id based on `prefDefaultIdString`.
  */
 
-// suffix and prefix used to generate temporary @id-values for HTMLelements without an @id
-const _guidPrefix = 'tmp_' + Date.now() + '_';
-// a counter that should be incremented with each use.
-let _guid = 1;
-
-// aquireId
 export default function aquireId(
 	el?: Element | Array<Element> | NodeListOf<Element> | null,
 	prefDefaultId?: string
@@ -33,7 +29,7 @@ export default function aquireId(
 		el = 'nodeType' in el ? el : el[0];
 	}
 	if (!el || !el.id) {
-		let id = prefDefaultId || _guidPrefix + _guid++;
+		let id = prefDefaultId || 'tmp_' + domid();
 		if (prefDefaultId) {
 			let count;
 			let idPrefix = prefDefaultId;
