@@ -1,9 +1,18 @@
-// Usage:
-//   aquireId();                         // returns a valid unique DOM id string that can be safely assigned to an element.
-//   aquireId(prefDefaultIdString);      // returns a valid unique DOM id based on `prefDefaultIdString` (appending/autoincrementing a trailing integer if needed)
-//   aquireId(elm);                      // returns the value of elm.id -- automatically assigning a unique id first, if needed.
-//   aquireId(elm, prefDefaultIdString); // returns the value of elm.id -- if needed automatically assigning a unique id based on `prefDefaultIdString`.
-//
+/**
+ * **Usage:**
+ *
+ * `aquireId();`
+ * – returns a valid unique DOM id string that can be safely assigned to an element.
+ *
+ * `aquireId(prefDefaultIdString);`
+ * – returns a valid unique DOM id based on `prefDefaultIdString` (appending/autoincrementing a trailing integer if needed)
+ *
+ * `aquireId(elm);`
+ * – returns the value of elm.id -- automatically assigning a unique id first, if needed.
+ *
+ * `aquireId(elm, prefDefaultIdString);`
+ * – returns the value of elm.id -- if needed automatically assigning a unique id based on `prefDefaultIdString`.
+ */
 
 // suffix and prefix used to generate temporary @id-values for HTMLelements without an @id
 const _guidPrefix = 'tmp_' + Date.now() + '_';
