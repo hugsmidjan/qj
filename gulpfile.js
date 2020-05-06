@@ -53,6 +53,7 @@ const [testsBundle, testsWatch] = rollupTaskFactory({
 	name: 'build_tests',
 	glob: testGlobs,
 	dist: testingFolder,
+	codeSplit: false, // prevents false-positives in onchange
 	// TODO: Create a ospec gulp plugin
 	// onWatchEvent: (e) => {
 	// 	if (e.code === 'BUNDLE_END') {
