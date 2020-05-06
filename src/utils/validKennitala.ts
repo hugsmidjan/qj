@@ -1,4 +1,4 @@
-const cleanKt = (kt: string): string => kt.replace(/[\s\-]/g, '');
+const cleanKt = (kt: string): string => kt.replace(/[\s-]/g, '');
 
 type KtType = 'einst' | 'fyrirt';
 

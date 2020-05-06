@@ -1,7 +1,7 @@
 type Fn<I, O> = (value: I) => O;
 type FnOpt<I, O> = (value?: I) => O;
 
-type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N; // https://stackoverflow.com/a/55541672/16271
+type IfAny<T, Y, N> = 0 extends 1 & T ? Y : N; // https://stackoverflow.com/a/55541672/16271
 type IfUndef<T, Y, N> = Extract<T, undefined> extends never ? N : Y;
 
 type FnX<I, O> = IfAny<I, FnOpt<I, O>, IfUndef<I, FnOpt<I, O>, Fn<I, O>>>;

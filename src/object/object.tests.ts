@@ -12,7 +12,9 @@ o.spec('objectClean', () => {
 		d?: string | undefined;
 	}
 	type AssertSame<A, B, Ar = Required<A>, Br = Required<B>> = Ar extends Br
-		? (Br extends Ar ? true : never)
+		? Br extends Ar
+			? true
+			: never
 		: never;
 	/* eslint-disable @typescript-eslint/no-unused-vars */
 	const foo1 = objectClean({} as T1, true);

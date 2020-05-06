@@ -15,12 +15,12 @@
 export type Apply<A extends object, B> = A extends B
 	? A
 	: B extends object
-	? ({
+	? {
 			[K in Exclude<keyof A, keyof B>]: A[K];
 	  } &
 			{
 				[K in (keyof A & keyof B) | Exclude<keyof B, keyof A>]: B[K];
-			})
+			}
 	: A;
 
 type SameChecker = (valA: any, valB: any, key: string) => boolean;
