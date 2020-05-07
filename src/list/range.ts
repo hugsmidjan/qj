@@ -12,7 +12,8 @@ const range = (from: number, to: number, step?: number) => {
 		throw new Error('invalid range');
 	}
 	const asc = from < to;
-	step = (asc ? 1 : -1) * Math.max(step || 0, 1);
+	const validStep = step && step > 0 && Number(step) === step;
+	step = (asc ? 1 : -1) * ((validStep && step) || 1);
 	const arr: Array<number> = [];
 	let curr = from;
 	while (asc ? curr <= to : to <= curr) {

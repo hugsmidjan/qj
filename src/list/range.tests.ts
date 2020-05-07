@@ -6,6 +6,7 @@ o.spec('range', () => {
 		o(range(1, 4)).deepEquals([1, 2, 3, 4])('makes a range');
 		o(range(10, 14)).deepEquals([10, 11, 12, 13, 14])('accepts arbitrary from values');
 		o(range(-2, 2)).deepEquals([-2, -1, 0, 1, 2])('can start from a negative value');
+		o(range(0, 2, 0.5)).deepEquals([0, 0.5, 1, 1.5, 2])('handles small steps');
 		o(range(1, 5, 2)).deepEquals([1, 3, 5])('handles custom steps');
 		o(range(1, 1)).deepEquals([1])('Tolerates from and to being the same');
 	});
@@ -13,6 +14,7 @@ o.spec('range', () => {
 	o('makes descending ranges', () => {
 		o(range(5, 3)).deepEquals([5, 4, 3])('makes a range');
 		o(range(2, -2)).deepEquals([2, 1, 0, -1, -2])('safely crosses into negative values');
+		o(range(2, 0, 0.5)).deepEquals([2, 1.5, 1, 0.5, 0])('handles small steps');
 		o(range(5, 1, 2)).deepEquals([5, 3, 1])('handles custom steps');
 	});
 
@@ -45,5 +47,7 @@ o.spec('range', () => {
 		o(range(4, 1, -1)).deepEquals([4, 3, 2, 1]);
 		// gracefully ignore NaN
 		o(range(1, 4, NaN)).deepEquals([1, 2, 3, 4]);
+		// @ts-ignore  (@ts-expect-error)
+		o(range(1, 4, '3')).deepEquals([1, 2, 3, 4])('treat numeric strings as invalid');
 	});
 });
