@@ -3,6 +3,8 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- **BREAKING** feat: `removeNode`, `closestParent`, `q` now return `undefined`
+  not `null`.
 - feat: Allow calling `eventify()` with no arguents
 - feat: `range()` should support small steps
 - fix(ts): Allow `aquireId()` to accept `string` as first param

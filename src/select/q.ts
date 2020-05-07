@@ -1,23 +1,26 @@
 function q<S extends keyof HTMLElementTagNameMap>(
 	selectors: S,
 	root?: Element | null
-): HTMLElementTagNameMap[S] | null;
+): HTMLElementTagNameMap[S] | undefined;
 
 function q<S extends keyof SVGElementTagNameMap>(
 	selectors: S,
 	root?: Element | null
-): SVGElementTagNameMap[S] | null;
+): SVGElementTagNameMap[S] | undefined;
 
 function q<E extends Element = Element>(
 	selectors: string,
 	root?: Element | null
-): E | null;
+): E | undefined;
 
 function q<E extends Element = Element>(
 	selectors: string,
 	root?: Element | null
-): E | null {
-	return !selectors || root === null ? null : (root || document).querySelector(selectors);
+): E | undefined {
+	return (
+		(selectors && root !== null && (root || document).querySelector<E>(selectors)) ||
+		undefined
+	);
 }
 
 export default q;
