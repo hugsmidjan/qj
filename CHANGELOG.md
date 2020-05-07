@@ -5,6 +5,7 @@
 - ... <!-- Add new lines here. Version number will be decided later -->
 - feat: Allow calling `eventify()` with no arguents
 - fix(ts): Allow `aquireId()` to accept `string` as first param
+- fix: Make `range()` error on invalid from/to inputs - not get stuck
 - docs: Improve docs and type signature of `parseParams()`
 - docs: Improve docs for `aquireId()`
 

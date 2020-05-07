@@ -26,6 +26,16 @@ o.spec('range', () => {
 	});
 
 	o('Throws on invalid/NaN `to`/`from` inputs', () => {
+		o(() => range(1, NaN)).throws(Error);
+		o(() => range(NaN, 10, 2)).throws(Error);
+		// @ts-ignore  (@ts-expect-error)
+		o(() => range('1', '4')).throws(Error)('treat numeric strings as invalid');
+		// @ts-ignore  (@ts-expect-error)
+		o(() => range(1, 'a')).throws(Error);
+		// @ts-ignore  (@ts-expect-error)
+		o(() => range('a', 'z')).throws(Error);
+	});
+
 	o('invalid steps are ignored', () => {
 		// zero step size is just silly
 		o(range(1, 4, 0)).deepEquals([1, 2, 3, 4]);

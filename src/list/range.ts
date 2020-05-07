@@ -7,6 +7,10 @@
  * @param step Positive number. Defaults to `1`
  */
 const range = (from: number, to: number, step?: number) => {
+	// Fuck JavaScript's type coercion!
+	if (Number(from + to) !== from + to) {
+		throw new Error('invalid range');
+	}
 	const asc = from < to;
 	step = (asc ? 1 : -1) * Math.max(step || 0, 1);
 	const arr: Array<number> = [];
