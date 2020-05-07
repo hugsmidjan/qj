@@ -7,6 +7,7 @@
 - feat: `range()` should support small steps
 - fix(ts): Allow `aquireId()` to accept `string` as first param
 - fix: Make `range()` error on invalid from/to inputs - not get stuck
+- fix(ts): Relax and allow `undefined` most places where `null` was tolerated
 - docs: Improve docs and type signature of `parseParams()`
 - docs: Improve docs for `aquireId()`
 

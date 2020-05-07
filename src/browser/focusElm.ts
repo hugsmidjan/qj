@@ -49,7 +49,7 @@ const _focusElm = <E extends HTMLElement>(_elm: E, opts: FocusElmOpts<E>): void 
 type TimerId = ReturnType<typeof setTimeout>;
 
 export default function focusElm<E extends HTMLElement>(
-	elm: E | null,
+	elm: E | null | undefined,
 	options?: FocusElmOpts<E>
 ): void | TimerId {
 	if (elm) {
