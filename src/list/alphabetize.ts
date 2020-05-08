@@ -15,7 +15,7 @@ function alphabetize<T extends object, K extends keyof T>(
 function alphabetize<T extends object | string | number>(
 	arr: Array<T>,
 	lang: string,
-	options?: ToStringer<T>
+	getProp?: ToStringer<T>
 ): Array<T>;
 
 function alphabetize<T extends string | number | object, K extends keyof T>(
