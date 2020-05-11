@@ -1,21 +1,21 @@
-# @hugsmidjan_is/qj - Quick JavaScripts
+# @hugsmidjan/qj - Quick JavaScripts
 
-Collection of useful miniature JavaScript helper functions exposed as es6
-modules.
-
-The functions try to be small, stupid, and side-effect free.
+Collection of mostly useful miniature JavaScript helper functions, that try to
+be small, stupid, fast, and side-effect free.
 
 ## Install
 
 Aliased as simply 'qj':
 
-    npm install --save-dev qj@npm:@hugsmidjan_is/qj@^3
+    npm install --save-dev qj@npm:@hugsmidjan/qj@^3
 
 ...or unaliased:
 
-    npm install --save-dev @hugsmidjan_is/qj
+    npm install --save-dev @hugsmidjan/qj
 
 ## Usage
+
+(Alised in package.json):
 
 ```js
 import alphabetize from 'qj/alphabetize';

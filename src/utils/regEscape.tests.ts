@@ -1,5 +1,4 @@
 import o from 'ospec';
-import '../__testing/polyfill-document';
 import regEscape from './regEscape';
 
 o.spec('regEscape()', () => {

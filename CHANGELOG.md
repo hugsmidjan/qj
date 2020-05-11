@@ -5,11 +5,18 @@
 - ... <!-- Add new lines here. Version number will be decided later -->
 - **BREAKING** feat: `removeNode`, `closestParent`, `q` now return `undefined`
   not `null`.
+- fix(ts): Relax and allow `undefined` most places where `null` was tolerated
+
+## 4.0.0
+
+_2020-05-11_
+
+- **BREAKING** feat: Rename package to `@hugsmidjan/qj`
+- feat: Add `htmlLang()` utility to resolve an Element's language
 - feat: Allow calling `eventify()` with no arguents
 - feat: `range()` should support small steps
 - fix(ts): Allow `aquireId()` to accept `string` as first param
 - fix: Make `range()` error on invalid from/to inputs - not get stuck
-- fix(ts): Relax and allow `undefined` most places where `null` was tolerated
 - docs: Improve docs and type signature of `parseParams()`
 - docs: Improve docs for `aquireId()`
 
