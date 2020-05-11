@@ -3,7 +3,12 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
-- **BREAKING** feat: Rename module to `@hugsmidjan/qj`
+
+## 4.0.0
+
+_2020-05-11_
+
+- **BREAKING** feat: Rename package to `@hugsmidjan/qj`
 - feat: Add `htmlLang()` utility to resolve an Element's language
 - feat: Allow calling `eventify()` with no arguents
 - feat: `range()` should support small steps
