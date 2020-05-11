@@ -16,18 +16,17 @@ import closestParent from '../select/closestParent';
  * ```
  */
 function htmlLang(returnFull?: boolean): string | undefined;
-function htmlLang(elm?: HTMLElement, returnFull?: boolean): string | undefined;
+function htmlLang(elm?: Node | null, returnFull?: boolean): string | undefined;
 
-function htmlLang(elm?: HTMLElement | boolean, returnFull?: boolean): string | undefined {
+function htmlLang(elm?: Node | null | boolean, returnFull?: boolean): string | undefined {
 	if (typeof elm === 'boolean') {
 		returnFull = elm;
-		elm = undefined;
+		elm = document.documentElement;
+	} else if (arguments.length === 0) {
+		elm = document.documentElement;
 	}
-	const lang =
-		(elm && elm.lang) ||
-		((elm && closestParent<HTMLElement>('[lang]', elm)) || document.documentElement)
-			.lang ||
-		'';
+	const langElm = elm && closestParent('[lang]', elm);
+	const lang = langElm && (langElm as HTMLElement).lang;
 	return lang ? (!returnFull ? lang.substr(0, 2) : lang).toLowerCase() : undefined;
 }
 
