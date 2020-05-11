@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add `htmlLang()` utility to resolve an Element's language
 - feat: Allow calling `eventify()` with no arguents
 - feat: `range()` should support small steps
 - fix(ts): Allow `aquireId()` to accept `string` as first param
