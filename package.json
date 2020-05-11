@@ -28,6 +28,7 @@
 		"yarn": ">=1.11",
 		"npm": ">=6.4"
 	},
+	"private": true,
 	"license": "UNLICENCED",
 	"devDependencies": {
 		"@hugsmidjan/gulp-rollup": "^0.4.1",

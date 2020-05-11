@@ -74,6 +74,7 @@ const makePackageJson = (done) => {
 	const { dist_package_json } = pkg;
 	delete pkg.scripts;
 	delete pkg.engines;
+	delete pkg.private;
 	delete pkg.devDependencies;
 	delete pkg.hxmstyle;
 	delete pkg.dist_package_json;
