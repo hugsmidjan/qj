@@ -1,5 +1,8 @@
 const doc = document;
 
+/**
+ * Measures the width of scrollbars in the browser
+ */
 export default function getScrollbarWidth(): number {
 	if (!(doc && doc.body)) {
 		return 0;
@@ -12,3 +15,11 @@ export default function getScrollbarWidth(): number {
 	doc.body.removeChild(scrollDiv);
 	return scrollbarWidth;
 }
+
+/**
+ * Measures the scrollbar width and sets it as a CSS variable on the `<html/>` element
+ */
+getScrollbarWidth.setCSSvar = (varName = 'browser-scrollbar-width') => {
+	doc &&
+		doc.documentElement.style.setProperty('--' + varName, getScrollbarWidth() + 'px');
+};

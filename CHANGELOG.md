@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add `getScrollbarWidth.setCSSvar(varName?)` convenience method
 
 ## 4.0.0 – 4.0.1
 
