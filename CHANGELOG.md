@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.1.1
+
+_2020-06-03_
+
 - fix: Make `getScrollbarWidth` better tolerate undefined `document`
 
 ## 4.1.0
