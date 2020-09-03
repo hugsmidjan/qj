@@ -9,7 +9,7 @@ export type PrettyNumOptions = {
 	/** Max number of decimals to render */
 	decimals?: number;
 	/** Should decimals be uniformly applied to all numbers */
-	// fixedDecimals?: boolean;
+	fixedDecimals?: boolean;
 	/** Default: `true` */
 	leadingZero?: boolean;
 	/** Default: `'en'`
@@ -31,7 +31,7 @@ export type PrettyNumOptions = {
 export const prettyNum = (number?: string | number, opts: PrettyNumOptions = {}) => {
 	const {
 		decimals = 0, // is this the right default?
-		// fixedDecimals,
+		fixedDecimals,
 		leadingZero = true,
 		lang = 'en',
 		// NOTE: explicit `splitters` value always trumps the `lang` option
@@ -43,7 +43,12 @@ export const prettyNum = (number?: string | number, opts: PrettyNumOptions = {})
 	const dSep = splitters[0] || '.';
 	const tSep = splitters[1] || '';
 
-	const numSplit = number.toFixed(decimals).split('.');
+	const re = new RegExp(`\\.\\d{${decimals}}`);
+	const numSplit = (fixedDecimals || re.test(String(number))
+		? number.toFixed(decimals)
+		: String(number)
+	).split('.');
+
 	let num = numSplit[0].replace(/\d(?=(\d{3})+$)/g, '$&' + tSep);
 	num = !leadingZero && num[0] === '0' ? num.replace(/\d/, '') : num;
 	return num + (numSplit[1] ? dSep + numSplit[1] : '');
