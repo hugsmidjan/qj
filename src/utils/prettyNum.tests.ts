@@ -3,9 +3,9 @@ import { prettyNum } from './prettyNum';
 
 o.spec('prettyNum()', () => {
 	o('Prettify numbers', () => {
-		o(prettyNum()).equals('0');
-		o(prettyNum(NaN)).equals('0');
-		o(prettyNum('bob')).equals('0');
+		o(prettyNum()).equals('error');
+		o(prettyNum(NaN)).equals('error');
+		o(prettyNum('bob')).equals('error');
 		o(prettyNum(42)).equals('42');
 		o(prettyNum('42', { decimals: 2, fixedDecimals: true })).equals('42.00');
 		o(prettyNum(123456789)).equals('123,456,789');

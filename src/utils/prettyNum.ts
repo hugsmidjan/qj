@@ -37,16 +37,19 @@ export const prettyNum = (number?: string | number, opts: PrettyNumOptions = {})
 		// NOTE: explicit `splitters` value always trumps the `lang` option
 		splitters = i18n[lang] || [],
 	} = opts;
-	number = parseFloat('' + number);
-	number = !number || isNaN(number) ? 0 : number;
+	const numFloat = parseFloat('' + number);
+	if (isNaN(numFloat)) {
+		console.error('Invalid numer: ', number);
+		return 'error';
+	}
 
 	const dSep = splitters[0] || '.';
 	const tSep = splitters[1] || '';
 
 	const re = new RegExp(`\\.\\d{${decimals}}`);
-	const numSplit = (fixedDecimals || re.test(String(number))
-		? number.toFixed(decimals)
-		: String(number)
+	const numSplit = (fixedDecimals || re.test(String(numFloat))
+		? numFloat.toFixed(decimals)
+		: String(numFloat)
 	).split('.');
 
 	let num = numSplit[0].replace(/\d(?=(\d{3})+$)/g, '$&' + tSep);
