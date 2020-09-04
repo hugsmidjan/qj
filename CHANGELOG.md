@@ -3,6 +3,8 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add simple `prettyNum()` utility to i18n format numbers – Chrome is 
+  buggy
 
 ## 4.1.1
 
