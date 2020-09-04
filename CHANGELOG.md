@@ -3,7 +3,12 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
-- feat: Add simple `prettyNum()` utility to i18n format numbers – Chrome is 
+
+## 4.2.1
+
+_2020-09-04_
+
+- feat: Add simple `prettyNum()` utility to i18n format numbers – Chrome is
   buggy
 
 ## 4.1.1
