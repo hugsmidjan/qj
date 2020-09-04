@@ -5,6 +5,8 @@ const i18n = {
 } as const;
 type SupportedLanguages = keyof typeof i18n;
 
+const reCache: Array<RegExp> = [];
+
 export type PrettyNumOptions = {
 	/** Max number of decimals to render */
 	decimals?: number;
@@ -37,16 +39,18 @@ export const prettyNum = (number?: string | number, opts: PrettyNumOptions = {})
 		// NOTE: explicit `splitters` value always trumps the `lang` option
 		splitters = i18n[lang] || [],
 	} = opts;
-	const numFloat = parseFloat('' + number);
+	const numFloat = typeof number !== 'number' ? parseFloat('' + number) : number;
 	if (isNaN(numFloat)) {
-		console.error('Invalid numer: ', number);
-		return 'error';
+		if (typeof process !== undefined && process.env.NODE_ENV !== 'production') {
+			console.error("prettyNum can't format:", number);
+		}
+		return '';
 	}
 
 	const dSep = splitters[0] || '.';
 	const tSep = splitters[1] || '';
 
-	const re = new RegExp(`\\.\\d{${decimals}}`);
+	const re = reCache[decimals] || (reCache[decimals] = new RegExp(`\\.\\d{${decimals}}`));
 	const numSplit = (fixedDecimals || re.test(String(numFloat))
 		? numFloat.toFixed(decimals)
 		: String(numFloat)
