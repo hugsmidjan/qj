@@ -3,14 +3,14 @@
 
 import { Leftovers } from './_types.privates';
 
-export default function curry<
+function curry<
 	O extends Array<any>,
 	A extends O[0],
 	P extends [A],
 	L extends Leftovers<O, P>,
 	R
 >(func: (...args: O) => R, ...args: P): (...args: L) => R;
-export default function curry<
+function curry<
 	O extends Array<any>,
 	A extends O[0],
 	B extends O[1],
@@ -18,7 +18,7 @@ export default function curry<
 	L extends Leftovers<O, P>,
 	R
 >(func: (...args: O) => R, ...args: P): (...args: L) => R;
-export default function curry<
+function curry<
 	O extends Array<any>,
 	A extends O[0],
 	B extends O[1],
@@ -27,7 +27,7 @@ export default function curry<
 	L extends Leftovers<O, P>,
 	R
 >(func: (...args: O) => R, ...args: P): (...args: L) => R;
-export default function curry<
+function curry<
 	O extends Array<any>,
 	A extends O[0],
 	B extends O[1],
@@ -37,7 +37,7 @@ export default function curry<
 	L extends Leftovers<O, P>,
 	R
 >(func: (...args: O) => R, ...args: P): (...args: L) => R;
-export default function curry<
+function curry<
 	O extends Array<any>,
 	A extends O[0],
 	B extends O[1],
@@ -49,11 +49,10 @@ export default function curry<
 	R
 >(func: (...args: O) => R, ...args: P): (...args: L) => R;
 
-export default function curry<R>(
-	func: (...args: any) => R,
-	...args: any
-): (...args: any) => R {
+function curry<R>(func: (...args: any) => R, ...args: any): (...args: any) => R {
 	return function(...args2) {
 		return func.apply(this, args.concat(args2));
 	};
 }
+
+export default curry;

@@ -3,14 +3,14 @@
 
 import { Leftovers } from './_types.privates';
 
-export default function curryRight<
+function curryRight<
 	O extends Array<any>,
 	A extends O[0],
 	P extends [A],
 	L extends Leftovers<O, P>,
 	R
 >(func: (...args: O) => R, ...args: L): (...args: P) => R;
-export default function curryRight<
+function curryRight<
 	O extends Array<any>,
 	A extends O[0],
 	B extends O[1],
@@ -18,7 +18,7 @@ export default function curryRight<
 	L extends Leftovers<O, P>,
 	R
 >(func: (...args: O) => R, ...args: L): (...args: P) => R;
-export default function curryRight<
+function curryRight<
 	O extends Array<any>,
 	A extends O[0],
 	B extends O[1],
@@ -27,7 +27,7 @@ export default function curryRight<
 	L extends Leftovers<O, P>,
 	R
 >(func: (...args: O) => R, ...args: L): (...args: P) => R;
-export default function curryRight<
+function curryRight<
 	O extends Array<any>,
 	A extends O[0],
 	B extends O[1],
@@ -37,7 +37,7 @@ export default function curryRight<
 	L extends Leftovers<O, P>,
 	R
 >(func: (...args: O) => R, ...args: L): (...args: P) => R;
-export default function curryRight<
+function curryRight<
 	O extends Array<any>,
 	A extends O[0],
 	B extends O[1],
@@ -49,17 +49,18 @@ export default function curryRight<
 	R
 >(func: (...args: O) => R, ...args: L): (...args: P) => R;
 
-export default function curryRight<R>(
-	func: (...args: any) => R,
-	...args: any
-): (...args: any) => R {
+function curryRight<R>(func: (...args: any) => R, ...args: any): (...args: any) => R {
 	return function(...args2) {
 		return func.apply(this, args2.concat(args));
 	};
 }
 
+export default curryRight;
+
 /* eslint-disable  @typescript-eslint/no-unused-vars */
+/*
 const foo = (a: string, b: number, c: boolean): RegExp => {
 	return /./;
 };
 const foo1 = curryRight(foo, 1, true);
+*/
