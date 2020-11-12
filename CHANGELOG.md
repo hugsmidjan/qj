@@ -3,7 +3,9 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
-- fix: Nissing generic/fallback type signatures for `removeNode`, `curry`, `curryRight`
+- feat: Add `wait` module exporting `wait` and `addLag` helpers
+- fix: Nissing generic/fallback type signatures for `removeNode`, `curry`,
+  `curryRight`
 
 ## 4.2.1
 
