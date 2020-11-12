@@ -159,21 +159,3 @@ export {
 	safeTimeout,
 };
 
-// FIXME: Remove this default export in v2
-export default {
-	SECOND,
-	MINUTE,
-	HOUR,
-	DAY,
-
-	sinceLast,
-	untilNext,
-	atLast,
-	atNext,
-	atStart: atLast,
-	atEnd: atNext,
-
-	onNext,
-	onEvery,
-	safeTimeout,
-};
