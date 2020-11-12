@@ -41,14 +41,13 @@ const atNext = (timestamp: number, periodSizeMS: number): number => {
 	return timestamp + (periodSizeMS - sinceLast(timestamp, periodSizeMS));
 };
 
-/*
+type TimerId = ReturnType<typeof setTimeout>; // Ack this sidesteps that window.setTimeout and Node's setTimeout return different types
+
+/**
   Safe timeout which guarantees the timer doesn't undershoot
   (i.e. doesn't fire a few milliseconds too early)
   Returns a getter function for the current timeout ID
 */
-
-type TimerId = ReturnType<typeof setTimeout>; // Ack this sidesteps that window.setTimeout and Node's setTimeout return different types
-
 const safeTimeout = (callback: Callback, delay: number): (() => TimerId) => {
 	const startingTime = Date.now();
 	let timeoutId = setTimeout(() => {
@@ -62,7 +61,7 @@ const safeTimeout = (callback: Callback, delay: number): (() => TimerId) => {
 	return () => timeoutId;
 };
 
-/*
+/**
   Executes callback which is guaranteed to fire *AFTER* the clock strikes
   the next whole `periodSizeMs`.
   Returns an object with a `cancel` function - which optionally executes the callback.
@@ -84,7 +83,6 @@ const safeTimeout = (callback: Callback, delay: number): (() => TimerId) => {
       at12_15.cancel(true);
 
 */
-
 const onNext = (
 	periodSizeMS: number,
 	offsetMs: number | Callback,
@@ -114,7 +112,9 @@ const onNext = (
 	};
 };
 
-// Auto-repeating version of `onNext()`
+/**
+  Auto-repeating version of `onNext()`
+*/
 const onEvery = (
 	periodSizeMS: number,
 	offsetMs: number | Callback,
@@ -158,4 +158,3 @@ export {
 	onEvery,
 	safeTimeout,
 };
-
