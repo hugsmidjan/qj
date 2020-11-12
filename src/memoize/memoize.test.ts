@@ -16,8 +16,8 @@ o.spec('Memoize', () => {
 	});
 
 	o('Only does shallow equals', () => {
-		const getValue = memoize((obj: { value: number }) => obj.value);
-		const obj = { value: 1 };
+		const getValue = memoize((obj: { value?: number }) => obj.value);
+		const obj = { value: 1 as number | undefined };
 		o(getValue(obj)).equals(1);
 		obj.value = 2;
 		o(getValue(obj)).equals(1);

@@ -49,7 +49,7 @@ function asArray<T extends object | string | number, K extends keyof T>(
 	prop: K | ToStringer<T>
 ): GroupList<T> {
 	// @ts-ignore  (tsc doesn't know this is safe because the two functions have the same signature overload)
-	const grouped = groupArrayBy(list, prop);
+	const grouped = groupArrayBy<T>(list, prop);
 
 	return Object.keys(grouped).map((name) => ({
 		name,

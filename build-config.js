@@ -1,3 +1,4 @@
+/* eslint-env node */
 const glob = require('glob');
 
 const srcFolder = 'src/';
