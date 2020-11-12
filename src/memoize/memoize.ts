@@ -11,7 +11,7 @@ const _memoizers: Array<<F extends AnyFn>(fn: F) => F> = [
 	<F extends AnyFn1>(fn: F) => {
 		let value: ReturnType<F>;
 		let params: Parameters<F>;
-		return function(a) {
+		return function (a) {
 			if (!params || a !== params[0]) {
 				params = [a] as Parameters<F>;
 				value = fn.apply(this, params);
@@ -22,7 +22,7 @@ const _memoizers: Array<<F extends AnyFn>(fn: F) => F> = [
 	<F extends AnyFn2>(fn: F) => {
 		let value: ReturnType<F>;
 		let params: Parameters<F>;
-		return function(a, b) {
+		return function (a, b) {
 			if (!params || a !== params[0] || b !== params[1]) {
 				params = [a, b] as Parameters<F>;
 				value = fn.apply(this, params);
@@ -33,7 +33,7 @@ const _memoizers: Array<<F extends AnyFn>(fn: F) => F> = [
 	<F extends AnyFn3>(fn: F) => {
 		let value: ReturnType<F>;
 		let params: Parameters<F>;
-		return function(a, b, c) {
+		return function (a, b, c) {
 			if (!params || a !== params[0] || b !== params[1] || c !== params[2]) {
 				params = [a, b, c] as Parameters<F>;
 				value = fn.apply(this, params);
@@ -48,7 +48,7 @@ const _memoizerN = <F extends AnyFn>(fn: F, isVariadic?: boolean): F => {
 	let value: ReturnType<F>;
 	let params: P;
 	// return function (...args/*:any[]*/)/*:mixed*/ {
-	return function(...args: P) {
+	return function (...args: P) {
 		let dirty = !params;
 		if (params) {
 			let i = 0;

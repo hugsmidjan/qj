@@ -50,7 +50,7 @@ function curryRight<
 >(func: (...args: O) => R, ...args: L): (...args: P) => R;
 
 function curryRight<R>(func: (...args: any) => R, ...args: any): (...args: any) => R {
-	return function(...args2) {
+	return function (...args2) {
 		return func.apply(this, args2.concat(args));
 	};
 }

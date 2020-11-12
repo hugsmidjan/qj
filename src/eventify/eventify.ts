@@ -71,7 +71,7 @@ export default function eventify<T extends object>(object?: T): Eventified<T> {
 
 	let events: Record<string, Array<Callback>> = {};
 
-	eventified.on = function(eventName, callback) {
+	eventified.on = function (eventName, callback) {
 		if (callback) {
 			let callbackList = events[eventName];
 			if (!callbackList) {
@@ -84,7 +84,7 @@ export default function eventify<T extends object>(object?: T): Eventified<T> {
 		return this;
 	};
 
-	eventified.off = function(eventName, callback) {
+	eventified.off = function (eventName, callback) {
 		const numArgs = arguments.length;
 		if (!numArgs) {
 			events = {};
@@ -100,7 +100,7 @@ export default function eventify<T extends object>(object?: T): Eventified<T> {
 		return this;
 	};
 
-	eventified.emit = function(...args) {
+	eventified.emit = function (...args) {
 		const firstArg = args[0];
 		let evType;
 		if (typeof firstArg === 'string') {

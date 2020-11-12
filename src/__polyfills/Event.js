@@ -1,6 +1,6 @@
 if (typeof window !== 'undefined' && typeof window.CustomEvent !== 'function') {
 	// Polyfill `new Event()` in IE11
-	const CustomEvent = function(event, params) {
+	const CustomEvent = function (event, params) {
 		params = params || {
 			bubbles: false,
 			cancelable: false,

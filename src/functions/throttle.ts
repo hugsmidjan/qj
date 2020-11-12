@@ -18,7 +18,7 @@ const throttle = <A extends Array<any>>(
 	let _args: A;
 	let _this: unknown;
 
-	const throttledFn = function(...args) {
+	const throttledFn = function (...args) {
 		_args = args;
 		_this = this;
 
@@ -50,7 +50,7 @@ const throttle = <A extends Array<any>>(
  */
 throttle.d = (delay: number, skipFirst?: boolean) =>
 	throttle(
-		function<A extends Array<any>>(fn: (...args: A) => void, ...args: A) {
+		function <A extends Array<any>>(fn: (...args: A) => void, ...args: A) {
 			fn.apply(this, args);
 		},
 		delay,

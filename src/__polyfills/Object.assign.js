@@ -1,6 +1,6 @@
 Object.assign =
 	Object.assign ||
-	function(target) {
+	function (target) {
 		if (target == null) {
 			throw new TypeError('Cannot convert undefined or null to object');
 		}

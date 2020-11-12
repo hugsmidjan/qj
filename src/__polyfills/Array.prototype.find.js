@@ -1,5 +1,5 @@
 if (!Array.prototype.find) {
-	Array.prototype.find = function(predicate) {
+	Array.prototype.find = function (predicate) {
 		const list = this;
 		let i = 0;
 		const l = list.length;

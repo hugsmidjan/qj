@@ -10,9 +10,7 @@
 
 // encodes a plain-text string to a URL #fragment friendly format (compatible with .get())
 const encodeFrag = (_fragment: string) => {
-	return encodeURI(_fragment)
-		.replace(/#/g, '%23')
-		.replace(/%7C/g, '|');
+	return encodeURI(_fragment).replace(/#/g, '%23').replace(/%7C/g, '|');
 };
 
 const setFrag = (_fragment?: string, _isEncoded?: boolean): void => {

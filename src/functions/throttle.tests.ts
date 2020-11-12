@@ -129,7 +129,7 @@ o.spec('throttle', () => {
 	});
 
 	o('passes `this` to the throttled function', () => {
-		const add = o.spy(function(this: { b: number; c?: number }, a: number) {
+		const add = o.spy(function (this: { b: number; c?: number }, a: number) {
 			this.c = a + this.b;
 		});
 		const foo = {
@@ -176,10 +176,10 @@ o.spec('throttle.d', () => {
 			b: 10,
 			c: -1 as number,
 		};
-		const add = function(this: typeof foo, a: number) {
+		const add = function (this: typeof foo, a: number) {
 			this.c = a + this.b;
 		};
-		const multiply = function(this: typeof foo, a: number) {
+		const multiply = function (this: typeof foo, a: number) {
 			this.c = a * this.b;
 		};
 

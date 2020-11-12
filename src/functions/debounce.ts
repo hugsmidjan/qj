@@ -17,7 +17,7 @@ const debounce = <A extends Array<any>>(
 	let _args: A;
 	let _this: unknown;
 
-	const debouncedFn: Cancellable<A> = function(...args) {
+	const debouncedFn: Cancellable<A> = function (...args) {
 		_args = args;
 		_this = this;
 
@@ -49,7 +49,7 @@ const debounce = <A extends Array<any>>(
  */
 debounce.d = (delay: number, immediate?: boolean) =>
 	debounce(
-		function<A extends Array<any>>(fn: (...args: A) => void, ...args: A) {
+		function <A extends Array<any>>(fn: (...args: A) => void, ...args: A) {
 			fn.apply(this, args);
 		},
 		delay,
