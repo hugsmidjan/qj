@@ -83,8 +83,6 @@ const makeE: EMaker = (window) => {
 };
 
 /** Hyperscript (JSX friendly) function that spits out DOM nodes. */
-const E = makeE(
-	typeof window !== 'undefined' ? window : ((undefined as unknown) as Window)
-);
+const E = makeE(typeof window !== 'undefined' ? window : ({} as Window));
 
 export default E;
