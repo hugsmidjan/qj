@@ -25,7 +25,9 @@ interface HyperScriptDOM {
 	make: EMaker;
 }
 
-type EMaker = (window: Window) => HyperScriptDOM;
+type Windoid = Pick<Window, 'document' | 'Node' | 'NodeList'>;
+
+declare type EMaker = (window: Windoid) => HyperScriptDOM;
 
 // ---------------------------------------------------------------------------
 
