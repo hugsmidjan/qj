@@ -4,7 +4,7 @@
 
 - ... <!-- Add new lines here. Version number will be decided later -->
 
-## 4.3.0
+## 4.3.0 – 4.3.1
 
 _2020-11-20_
 
