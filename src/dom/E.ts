@@ -75,5 +75,5 @@ const makeE: EMaker = (document) => {
 };
 
 export default makeE(
-	typeof document !== null ? document : ((undefined as unknown) as Document)
+	typeof document !== 'undefined' ? document : ((undefined as unknown) as Document)
 );
