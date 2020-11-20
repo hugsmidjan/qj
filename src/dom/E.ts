@@ -6,6 +6,9 @@ declare global {
 	}
 }
 
+type HTMLProp = 'id'; // to silence TypeScript
+type CSSStyleProp = 'all'; // to silence TypeScript
+
 interface Attrs {
 	[attrName: string]: any;
 	style?: CSSStyleDeclaration;
@@ -37,22 +40,19 @@ const makeE: EMaker = (window) => {
 					if (name === 'style') {
 						for (const cssProp in value) {
 							if (cssProp in elm.style) {
-								// @ts-ignore
-								elm.style[cssProp] = value[cssProp];
+								elm.style[cssProp as CSSStyleProp] = value[cssProp];
 							}
 						}
 					} else if (name in elm) {
 						// Note: This includes lowercased `onevent` attrs
-						// @ts-ignore
-						elm[name] = value;
+						elm[name as HTMLProp] = value;
 					} else if (/^on[A-Z]/.test(name)) {
 						// Camel-cased onEvent attrs
 						elm.addEventListener(name.substr(2).toLowerCase(), value);
 					} else if (name.charAt(0) === '_') {
 						// Prefixing ambigious prop/attr names with an underscore
 						// signals they should be treated as properties
-						// @ts-ignore
-						elm[name.substr(1)] = value;
+						elm[name.substr(1) as HTMLProp] = value;
 					} else {
 						// Default to setAttribute()
 						elm.setAttribute(name, value);
