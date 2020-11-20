@@ -7,7 +7,7 @@ be small, stupid, fast, and side-effect free.
 
 Aliased as simply 'qj':
 
-    npm install --save-dev qj@npm:@hugsmidjan/qj@^3
+    npm install --save-dev qj@npm:@hugsmidjan/qj@^4
 
 ...or unaliased:
 
