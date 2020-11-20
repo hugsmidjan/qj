@@ -1,4 +1,11 @@
-// Hyperscript function that spits out DOM nodes.
+// Fix TypeScript's weird/borked DOM typing
+declare global {
+	interface Window {
+		NodeList: typeof NodeList;
+		Node: typeof Node;
+	}
+}
+
 interface Attrs {
 	[attrName: string]: any;
 	style?: CSSStyleDeclaration;
@@ -15,13 +22,12 @@ interface HyperScriptDOM {
 	make: EMaker;
 }
 
-type EMaker = (
-	document: Pick<Document, 'createElement' | 'createTextNode'>
-) => HyperScriptDOM;
+type EMaker = (window: Window) => HyperScriptDOM;
 
 // ---------------------------------------------------------------------------
 
-const makeE: EMaker = (document) => {
+const makeE: EMaker = (window) => {
+	const { document, Node, NodeList } = window;
 	const E: HyperScriptDOM = (tagName, attrs, ...children) => {
 		const elm = document.createElement(tagName);
 		if (attrs) {
@@ -74,6 +80,9 @@ const makeE: EMaker = (document) => {
 	return E;
 };
 
-export default makeE(
-	typeof document !== 'undefined' ? document : ((undefined as unknown) as Document)
+/** Hyperscript (JSX friendly) function that spits out DOM nodes. */
+const E = makeE(
+	typeof window !== 'undefined' ? window : ((undefined as unknown) as Window)
 );
+
+export default E;
