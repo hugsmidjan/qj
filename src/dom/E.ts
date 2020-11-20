@@ -6,12 +6,23 @@ interface Attrs {
 type Child = Node | string | number | null | undefined | false;
 type ChildOrChildren = Child | Array<Child> | NodeList;
 
-const makeE = (document: Pick<Document, 'createElement' | 'createTextNode'>) => {
-	const E = <T extends keyof HTMLElementTagNameMap>(
+interface HyperScriptDOM {
+	<T extends keyof HTMLElementTagNameMap>(
 		tagName: T,
 		attrs?: Attrs | null,
 		...children: Array<ChildOrChildren>
-	): HTMLElementTagNameMap[T] => {
+	): HTMLElementTagNameMap[T];
+	make: EMaker;
+}
+
+type EMaker = (
+	document: Pick<Document, 'createElement' | 'createTextNode'>
+) => HyperScriptDOM;
+
+// ---------------------------------------------------------------------------
+
+const makeE: EMaker = (document) => {
+	const E: HyperScriptDOM = (tagName, attrs, ...children) => {
 		const elm = document.createElement(tagName);
 		if (attrs) {
 			for (const name in attrs) {
