@@ -1,14 +1,13 @@
-export type ClassName = string | undefined | null | false;
+export type ClassName = string | undefined | null | false | ReadonlyArray<ClassName>;
 
 /** Filters and concatenates any messy list of CSS classNames.
  *
  * All falsy values are neatly skipped.
  */
-const classes = (classNames: ClassName | ReadonlyArray<ClassName>): string =>
-	!classNames
-		? ''
-		: typeof classNames === 'string'
-		? classNames
-		: classNames.filter((item) => !item).join(' ');
+const classes = (...classNames: ReadonlyArray<ClassName>): string =>
+	classNames
+		.filter((name): name is string | ReadonlyArray<ClassName> => !!name)
+		.map((name) => (Array.isArray(name) ? classes(...name) : name))
+		.join(' ');
 
 export default classes;
