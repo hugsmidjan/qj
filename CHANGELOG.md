@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.4.0
+
+_2020-12-15_
+
 - feat: Add simple `classes` helper to filter + concatenate class-names
 
 ## 4.3.0 – 4.3.4
