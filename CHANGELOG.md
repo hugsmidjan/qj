@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add `validEmail` function
 
 ## 4.4.0 – 4.4.1
 
