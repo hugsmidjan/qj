@@ -32,8 +32,8 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@hugsmidjan/gulp-rollup": "^0.8",
-		"@hugsmidjan/hxmstyle": "^3.2",
-		"@types/jsdom": "^12.2.4",
+		"@hugsmidjan/hxmstyle": "^3.3",
+		"@types/jsdom": "^16.2.6",
 		"@types/ospec": "^4",
 		"@typescript-eslint/eslint-plugin": "^4.3.0",
 		"@typescript-eslint/parser": "^4.3.0",
