@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- docs: Add JSDocs for `qj/object` methods
 
 ## 4.5.0
 

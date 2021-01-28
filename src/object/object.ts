@@ -46,8 +46,10 @@ const _clone = <T extends object>(original: T): T => {
 	return clone;
 };
 
-// Returns a clone of original object with only the changed newValues assigned
-// Returns the original if nothing changed.
+/**
+ * Returns a clone of original object with only the changed newValues assigned
+ * Returns the original if nothing changed.
+ */
 function objectUpdate<O extends object, N extends object>(
 	original: O,
 	newValues: N,
@@ -90,16 +92,21 @@ type FilterFlags<Base, Cond> = {
 type AllowedNames<Base, Cond> = FilterFlags<Base, Cond>[keyof Base];
 type SubType<Base, Cond> = Pick<Base, AllowedNames<Base, Cond>>;
 
-// Makes a derivative of T where all fields that accept `undefined`
-// (and/or optionally `null`) values are made optional (allowed to be missing).
+/**
+ * Makes a derivative of T where all fields that accept `undefined`
+ * (and/or optionally `null`) values are made optional (allowed to be missing).
+ */
 type Optionaled<
 	T,
 	AndNull,
 	U = AndNull extends true ? undefined | null : undefined
 > = Omit<T, AllowedNames<T, U>> & Partial<Pick<T, AllowedNames<T, U>>>;
 
-// Returns a clone of original object with all keys that have undefined values deleted
-// Returns the original if nothing changed.
+/**
+ * Returns a clone of original object with all keys that have undefined values deleted
+ *
+ * Returns the original if nothing changed.
+ */
 const objectClean = <T extends object, N extends boolean = false>(
 	original: T,
 	alsoNull?: N
@@ -119,7 +126,7 @@ const objectClean = <T extends object, N extends boolean = false>(
 	return deleted ? clone : original;
 };
 
-// Returns true if object as no properties of its own
+/** Returns true if object as no properties of its own */
 const objectIsEmpty = (object: object): boolean => {
 	for (const key in object) {
 		if (hasOwnProperty.call(object, key)) {
@@ -129,7 +136,7 @@ const objectIsEmpty = (object: object): boolean => {
 	return true;
 };
 
-// Returns true if objects a and b contain 100% the same values.
+/** Returns true if objects a and b contain 100% the same values. */
 function objectIsSame(a: object, b: object, customSameCheck?: SameChecker): boolean;
 
 function objectIsSame(a: AnyObj, b: AnyObj, customSameCheck?: SameChecker): boolean {
@@ -158,8 +165,10 @@ function objectIsSame(a: AnyObj, b: AnyObj, customSameCheck?: SameChecker): bool
 	return true;
 }
 
-// Returns a clone of original object with only the specified keys
-// Returns the original if nothing changed.
+/**
+ * Returns a clone of original object with only the specified keys
+ * Returns the original if nothing changed.
+ */
 const objectOnly = <T extends object, K extends keyof T>(
 	original: T,
 	keys: Array<K>
@@ -178,8 +187,10 @@ const objectOnly = <T extends object, K extends keyof T>(
 	return extra ? clone : original;
 };
 
-// Returns a clone of original object without the specified keys
-// Returns the original if nothing changed.
+/**
+ * Returns a clone of original object without the specified keys
+ * Returns the original if nothing changed.
+ */
 const objectWithout = <T extends object, K extends keyof T>(
 	original: T,
 	keys: Array<K>
@@ -201,13 +212,17 @@ const objectWithout = <T extends object, K extends keyof T>(
 	return clone || original;
 };
 
-// Returns original if replacement has the same keys + values.
-// Otherwise returns replacement as is.
+/**
+ * Returns original if replacement has the same keys + values.
+ * Otherwise returns replacement as is.
+ */
 const objectReplace = (
 	original: object,
 	replacement: object,
 	customSameCheck?: SameChecker
 ) => (objectIsSame(original, replacement, customSameCheck) ? original : replacement);
+
+// ---------------------------------------------------------------------------
 
 export {
 	objectClean,
