@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix: Correct type signature for `objectClean()` method
 - docs: Add JSDocs for `qj/object` methods
 
 ## 4.5.0

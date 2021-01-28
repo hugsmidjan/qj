@@ -92,6 +92,10 @@ type FilterFlags<Base, Cond> = {
 type AllowedNames<Base, Cond> = FilterFlags<Base, Cond>[keyof Base];
 type SubType<Base, Cond> = Pick<Base, AllowedNames<Base, Cond>>;
 
+type NotNull<T> = {
+	[Key in keyof T]: Exclude<T[Key], null>;
+};
+
 /**
  * Makes a derivative of T where all fields that accept `undefined`
  * (and/or optionally `null`) values are made optional (allowed to be missing).
@@ -100,7 +104,8 @@ type Optionaled<
 	T,
 	AndNull,
 	U = AndNull extends true ? undefined | null : undefined
-> = Omit<T, AllowedNames<T, U>> & Partial<Pick<T, AllowedNames<T, U>>>;
+> = Omit<T, AllowedNames<T, U>> &
+	Partial<Pick<AndNull extends true ? NotNull<T> : T, AllowedNames<T, U>>>;
 
 /**
  * Returns a clone of original object with all keys that have undefined values deleted

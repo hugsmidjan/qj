@@ -22,10 +22,10 @@ o.spec('objectClean', () => {
 	const foo1b: AssertSame<
 		{
 			a: string;
-			a2?: number | null;
+			a2?: number;
 			b?: number;
-			b2?: number | null;
-			c?: string | null;
+			b2?: number;
+			c?: string;
 			c2?: number;
 			d?: string;
 		},
