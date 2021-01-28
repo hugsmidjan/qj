@@ -46,12 +46,12 @@ o.spec('splitUrl', () => {
 
 	o('throws on bad/missing input', () => {
 		o(() => {
-			// @ts-ignore
+			// @ts-expect-error  (testing invalid input)
 			splitUrl();
 		}).throws(Error);
 
 		o(() => {
-			// @ts-ignore
+			// @ts-expect-error  (testing invalid input)
 			splitUrl(42);
 		}).throws(Error);
 	});

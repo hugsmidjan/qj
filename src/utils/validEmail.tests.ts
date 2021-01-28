@@ -15,9 +15,9 @@ o.spec('validEmail', () => {
 	o('Treats empty (and falsy) input as "valid"', () => {
 		o(validEmail('')).equals(true);
 
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(validEmail(undefined)).equals(true);
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(validEmail(false)).equals(true);
 	});
 });

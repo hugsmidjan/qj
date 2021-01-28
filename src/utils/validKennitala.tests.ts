@@ -25,9 +25,9 @@ o.spec('validKenntitala', () => {
 	o('Treats empty (and falsy) input as "valid"', () => {
 		o(validKennitala('')).equals(true);
 
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(validKennitala(undefined)).equals(true);
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(validKennitala(false)).equals(true);
 	});
 
@@ -46,9 +46,9 @@ o.spec('validKenntitala', () => {
 	});
 
 	o('Invalid `type` flags are ignored', () => {
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(validKennitala(ktPerson, { type: 'foo' })).equals(true);
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(validKennitala(ktCompany, { type: 'foo' })).equals(true);
 	});
 

@@ -57,20 +57,19 @@ o.spec('arrayToObject', () => {
 	});
 
 	o('Returns empty object on weird/invalid input', () => {
-		// @ts-ignore  (testing weird input)
+		// @ts-expect-error  (testing weird input)
 		o(arrayToObject({ a: 'foo', b: 'bar' })).deepEquals({});
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(arrayToObject(true)).deepEquals({});
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(arrayToObject(false)).deepEquals({});
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(arrayToObject(42)).deepEquals({});
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(arrayToObject(0)).deepEquals({});
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(arrayToObject(null)).deepEquals({});
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(arrayToObject(undefined)).deepEquals({});
-		// @ts-ignore  (testing invalid input)
 	});
 });

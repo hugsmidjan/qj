@@ -29,9 +29,9 @@ o.spec('validCreditcard', () => {
 	o('Treats empty (and falsy) input as "valid"', () => {
 		o(validCreditcard('')).equals(true);
 
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(validCreditcard(undefined)).equals(true);
-		// @ts-ignore  (testing invalid input)
+		// @ts-expect-error  (testing invalid input)
 		o(validCreditcard(false)).equals(true);
 	});
 

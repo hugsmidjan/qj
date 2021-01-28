@@ -20,11 +20,11 @@ o.spec('shuffle', () => {
 
 	o("won't accept nully input", () => {
 		o(() => {
-			// @ts-ignore  (Shameful, I know)
+			// @ts-expect-error  (testing invalid input)
 			shuffle();
 		}).throws(Error);
 		o(() => {
-			// @ts-ignore  (Shameful, I know)
+			// @ts-expect-error  (testing invalid input)
 			shuffle(null);
 		}).throws(Error);
 	});

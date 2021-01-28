@@ -34,7 +34,7 @@ o.spec('Memoize', () => {
 		o(_getRandom.callCount).equals(1);
 		// Extra params are ignored
 		const callCountBefore = _getRandom.callCount;
-		// @ts-ignore  (Parameter not allowed)
+		// @ts-expect-error  (Parameter not allowed)
 		o(getRandom(2)).equals(random);
 		o(getRandom()).equals(random);
 		o(_getRandom.callCount).equals(callCountBefore);
@@ -58,12 +58,12 @@ o.spec('Memoize', () => {
 		o(decimalize(3, 2, 1)).equals(321);
 		// Extra params are ignored
 		const callCountBefore = _decimalize.callCount;
-		// @ts-ignore  (4th parameter not allowed)
+		// @ts-expect-error  (4th parameter not allowed)
 		decimalize(3, 2, 1, 0);
 		decimalize(3, 2, 1);
 		o(_decimalize.callCount).equals(callCountBefore);
 		// missing params are not
-		// @ts-ignore  (3rd parameter missing)
+		// @ts-expect-error  (3rd parameter missing)
 		o(isNaN(decimalize(3, 2))).equals(true);
 	});
 

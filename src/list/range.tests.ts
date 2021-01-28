@@ -30,11 +30,11 @@ o.spec('range', () => {
 	o('Throws on invalid/NaN `to`/`from` inputs', () => {
 		o(() => range(1, NaN)).throws(Error);
 		o(() => range(NaN, 10, 2)).throws(Error);
-		// @ts-ignore  (@ts-expect-error)
+		// @ts-expect-error  (testing invalid input)
 		o(() => range('1', '4')).throws(Error)('treat numeric strings as invalid');
-		// @ts-ignore  (@ts-expect-error)
+		// @ts-expect-error  (testing invalid input)
 		o(() => range(1, 'a')).throws(Error);
-		// @ts-ignore  (@ts-expect-error)
+		// @ts-expect-error  (testing invalid input)
 		o(() => range('a', 'z')).throws(Error);
 	});
 
@@ -47,7 +47,7 @@ o.spec('range', () => {
 		o(range(4, 1, -1)).deepEquals([4, 3, 2, 1]);
 		// gracefully ignore NaN
 		o(range(1, 4, NaN)).deepEquals([1, 2, 3, 4]);
-		// @ts-ignore  (@ts-expect-error)
+		// @ts-expect-error  (testing invalid input)
 		o(range(1, 4, '3')).deepEquals([1, 2, 3, 4])('treat numeric strings as invalid');
 	});
 });

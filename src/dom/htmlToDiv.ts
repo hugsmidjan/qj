@@ -33,9 +33,7 @@ export default function htmlToDiv(html: string, opts?: HtmlToDivOpts): HTMLDivEl
 			(m, p1, p2, p3) => {
 				return (
 					p1 +
-					(opts &&
-					// @ts-ignore  (slighly hacky single-pass rather than mulitple enumerating passes)
-					opts['keep' + p2.toLowerCase()]
+					(opts && opts[('keep' + p2.toLowerCase()) as keyof HtmlToDivOpts]
 						? ''
 						: '--disabled') +
 					p3
