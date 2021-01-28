@@ -28,10 +28,10 @@
 
 */
 
-interface PropInfo {
+type PropInfo = {
 	prop: string;
 	css: string;
-}
+};
 
 const cache: Record<string, PropInfo | false> = {};
 let elmStyles: CSSStyleDeclaration;

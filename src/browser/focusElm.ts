@@ -1,10 +1,10 @@
 // place keyboard focus on _elm - setting tabindex="" when needed
 // and make sure any window scrolling is both sane and useful
 
-export interface FocusElmOpts<T extends HTMLElement = HTMLElement> {
+export type FocusElmOpts<T extends HTMLElement = HTMLElement> = {
 	delay?: number;
 	offset?: number | ((elm: T) => number);
-}
+};
 
 export const getYScroll = () =>
 	window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;

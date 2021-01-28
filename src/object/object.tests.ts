@@ -2,7 +2,7 @@ import o from 'ospec';
 import { objectClean } from './object';
 
 o.spec('objectClean', () => {
-	interface T1 {
+	type T1 = {
 		a: string;
 		a2: number | null;
 		b: number | undefined;
@@ -10,12 +10,13 @@ o.spec('objectClean', () => {
 		c?: string | null;
 		c2?: number;
 		d?: string | undefined;
-	}
+	};
 	type AssertSame<A, B, Ar = Required<A>, Br = Required<B>> = Ar extends Br
 		? Br extends Ar
 			? true
 			: never
 		: never;
+
 	/* eslint-disable @typescript-eslint/no-unused-vars */
 	const foo1 = objectClean({} as T1, true);
 	const foo1b: AssertSame<

@@ -1,8 +1,8 @@
-export interface UrlComponents {
+export type UrlComponents = {
 	url: string;
 	queryString: string;
 	hash: string;
-}
+};
 
 const splitUrl = (url: string): UrlComponents => {
 	const [urlAndQuery, _hash] = url.split('#');

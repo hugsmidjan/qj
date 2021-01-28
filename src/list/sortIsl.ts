@@ -71,11 +71,11 @@ const getAbcText = (text: string): string => {
 type ToStringer<T> = (item: T) => string;
 type Sorter = (a: string, b: string) => -1 | 1 | 0;
 
-export interface SortIslOptions<T extends object | string | number> {
+export type SortIslOptions<T extends object | string | number> = {
 	reverse?: boolean;
 	sortFn?: Sorter;
 	getProp?: ToStringer<T>;
-}
+};
 
 const defaultGetProp: ToStringer<any> = (item: unknown) => item + '';
 const defaultSortFn: Sorter = (a, b) => (a === b ? 0 : a > b ? 1 : -1);

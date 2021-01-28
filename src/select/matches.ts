@@ -1,7 +1,7 @@
 type MatcherMethod = (selector: string) => boolean;
-interface VendorMatcherMethods {
+type VendorMatcherMethods = {
 	msMatchesSelector?: MatcherMethod;
-}
+};
 type _Element = Element & VendorMatcherMethods;
 
 let _matcher: MatcherMethod;

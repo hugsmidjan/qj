@@ -1,6 +1,6 @@
 type Fn<I, O> = (value: I) => O;
 
-interface Chainer<D> {
+type Chainer<D> = {
 	<R>(fn1: Fn<D, R>): R;
 	<D2, R>(fn1: Fn<D, D2>, fn2: Fn<D2, R>): R;
 	<D2, D3, R>(fn1: Fn<D, D2>, fn2: Fn<D2, D3>, fn3: Fn<D3, R>): R;
@@ -62,7 +62,7 @@ interface Chainer<D> {
 		fn9: Fn<D9, any>,
 		...fns: Array<Fn<any, any>>
 	): unknown;
-}
+};
 
 /**
  * A value-first syntatic twist on the classic FP pipe pattern.

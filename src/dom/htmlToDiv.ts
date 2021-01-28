@@ -9,7 +9,7 @@ export type HtmlToDivDisableds =
 	| 'style'
 	| 'link';
 
-export interface HtmlToDivOpts {
+export type HtmlToDivOpts = {
 	keepimg?: boolean;
 	keepscript?: boolean;
 	keephtml?: boolean;
@@ -21,7 +21,7 @@ export interface HtmlToDivOpts {
 	keeplink?: boolean;
 
 	document?: HTMLDocument;
-}
+};
 
 export default function htmlToDiv(html: string, opts?: HtmlToDivOpts): HTMLDivElement {
 	const doc = (opts || {}).document || document;

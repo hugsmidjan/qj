@@ -9,21 +9,21 @@ declare global {
 type HTMLProp = 'id'; // to silence TypeScript
 type CSSStyleProp = 'all'; // to silence TypeScript
 
-interface Attrs {
+type Attrs = {
 	[attrName: string]: any;
 	style?: CSSStyleDeclaration;
-}
+};
 type Child = Node | string | number | null | undefined | false;
 type ChildOrChildren = Child | Array<Child> | NodeList;
 
-interface HyperScriptDOM {
+type HyperScriptDOM = {
 	<T extends keyof HTMLElementTagNameMap>(
 		tagName: T,
 		attrs?: Attrs | null,
 		...children: Array<ChildOrChildren>
 	): HTMLElementTagNameMap[T];
 	make: EMaker;
-}
+};
 
 type Windoid = Pick<Window, 'document' | 'Node' | 'NodeList'>;
 

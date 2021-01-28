@@ -32,7 +32,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@hugsmidjan/gulp-rollup": "^0.8",
-		"@hugsmidjan/hxmstyle": "^3.3",
+		"@hugsmidjan/hxmstyle": "^4.0",
 		"@types/jsdom": "^16.2.6",
 		"@types/ospec": "^4",
 		"@typescript-eslint/eslint-plugin": "^4.3.0",
@@ -48,7 +48,7 @@
 		"jsdom": "^16.4.0",
 		"onchange": "^6.0.0",
 		"ospec": "^4",
-		"prettier": "^2.1.2",
+		"prettier": "^2.2.1",
 		"typescript": "^4"
 	},
 	"hxmstyle": {

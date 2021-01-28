@@ -6,7 +6,7 @@ type IfUndef<T, Y, N> = Extract<T, undefined> extends never ? N : Y;
 
 type FnX<I, O> = IfAny<I, FnOpt<I, O>, IfUndef<I, FnOpt<I, O>, Fn<I, O>>>;
 
-interface Piper {
+type Piper = {
 	<D, R>(fn1: Fn<D, R>): FnX<D, R>;
 	<D, D2, R>(fn1: Fn<D, D2>, fn2: Fn<D2, R>): FnX<D, R>;
 	<D, D2, D3, R>(fn1: Fn<D, D2>, fn2: Fn<D2, D3>, fn3: Fn<D3, R>): FnX<D, R>;
@@ -73,7 +73,7 @@ interface Piper {
 		fn9: Fn<D9, any>,
 		...fns: Array<Fn<any, any>>
 	): FnX<D, unknown>;
-}
+};
 
 /**
  * Classic FP pipe function.

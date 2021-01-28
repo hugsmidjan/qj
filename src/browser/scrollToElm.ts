@@ -1,13 +1,13 @@
 // ScrollTo top of _elm
 
-export interface ScrollToElmOptions<E extends HTMLElement> {
+export type ScrollToElmOptions<E extends HTMLElement> = {
 	offset?: number | ((elm?: E) => number);
 	setFocus?: boolean;
 	delay?: number;
 	// TODO: Add basic animation support
 	// speed?: number, // ms for each 100vh - capped at 200vh
 	// easing?: EasingFn,
-}
+};
 
 export default function scrollToElm<E extends HTMLElement>(
 	_elm: E,

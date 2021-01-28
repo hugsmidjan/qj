@@ -72,10 +72,10 @@
     mkdirp "^0.5.1"
     node-notifier "^5.4.0"
 
-"@hugsmidjan/hxmstyle@^3.3":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@hugsmidjan/hxmstyle/-/hxmstyle-3.3.0.tgz#21a29cd501e0845ab1f96a85f87efd7dcc391663"
-  integrity sha512-ZnX16ASXg+9DMY1c/zNIRLoaUMBAKmPiCAZiJchI6PV8SY2XW1B4l4MfdxT+dpMJaMCwu9vE5cQztziwg+Sfeg==
+"@hugsmidjan/hxmstyle@^4.0":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@hugsmidjan/hxmstyle/-/hxmstyle-4.0.1.tgz#b21f45a2339787004b3fb1dad81cc145d7f91a93"
+  integrity sha512-WxZ+vXfsmpXOPsliPlK7sso6LXj/JtKzO42GXnlwyoxZlzvrIJlHi9SUOWG5PFn8BzgFSN8LX57DtOlxoBPaOw==
 
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
@@ -3160,7 +3160,7 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^2.1.2:
+prettier@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.2.1.tgz#795a1a78dd52f073da0cd42b21f9c91381923ff5"
   integrity sha512-PqyhM2yCjg/oKkFPtTGUojv7gnZAoG80ttl45O6x2Ug/rMJw4wcc9k6aaf2hibP7BGVCCM33gZoGjyvt9mm16Q==
