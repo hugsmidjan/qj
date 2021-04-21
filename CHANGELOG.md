@@ -3,6 +3,8 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add `promiseAllObject` (inlined copy of
+  ['promise-all-properties'](https://www.npmjs.com/package/promise-all-properties))
 
 ## 4.5.1
 
