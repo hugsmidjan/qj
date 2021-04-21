@@ -1,7 +1,9 @@
 // Copied from https://github.com/marcelowa/promise-all-properties
 // Available via `yarn add promise-all-properties@`
 
-export type PromisesMap<T> = { [P in keyof T]: Promise<T[P]> | T[P] };
+export type PromisesMap<T extends Record<string, unknown>> = {
+	[P in keyof T]: Promise<T[P]> | T[P];
+};
 
 /**
  * Receives an object with promise containing properties and returns a promise that resolves to an object
@@ -9,9 +11,16 @@ export type PromisesMap<T> = { [P in keyof T]: Promise<T[P]> | T[P] };
  * @param  {PromisesMap<T>} promisesMap  the input object with a promise in each property
  * @return {Promise<T>}  a promise that resolved to an object with the same properties containing the resolved values
  */
-export default function promiseAllProperties<T>(promisesMap: PromisesMap<T>): Promise<T> {
-	if (promisesMap === null || typeof promisesMap !== 'object') {
-		return Promise.reject(new TypeError('The input argument must be of type Object'));
+export default function promiseAllProperties<T extends Record<string, unknown>>(
+	promisesMap: PromisesMap<T>
+): Promise<T> {
+	if (
+		!(typeof process !== undefined && process.env.NODE_ENV === 'production') &&
+		(promisesMap === null ||
+			typeof promisesMap !== 'object' ||
+			Array.isArray(promisesMap))
+	) {
+		return Promise.reject(new TypeError('The input argument must be a plain object'));
 	}
 
 	const keys = Object.keys(promisesMap);
