@@ -98,7 +98,7 @@ function validKennitala(
  */
 validKennitala.clean = carefulClean;
 
-/** Aggressively strips away all spaces and dashs from the string,
+/** Aggressively strips away all spaces and dashes from the string,
  * as well as any trailing and leading non-digit gunk.
  *
  * Examples:
@@ -132,7 +132,7 @@ validKennitala.format = (ktShaped: string) => {
 /** Returns an birthday (UTC) for a "kennitala-shaped" string
  * ...without checking if it is a valid kennitala.
  *
- * For out-shaped strings it returns undefned.
+ * For out-shaped strings it returns undefined.
  */
 validKennitala.getBirthday = (ktShaped: string) => {
 	const kt = cleanIfKtShaped(ktShaped);
