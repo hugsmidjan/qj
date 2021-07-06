@@ -3,6 +3,12 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- `validateKennitala` improvements:
+  - feat: Add `clean: 'aggressive'` option to `validateKennitala` – for more
+    aggressive trimming and space-collapsing of the input string
+  - feat: Add `validateKennitala` helper methods: `.cleanAggressive()`,
+    `.format()`, `.getBirthday()`
+  - fix: `validateKennitala` now rejects weird (over-spaced/-dashed) strings
 
 ## 4.6.0 – 4.6.1
 
