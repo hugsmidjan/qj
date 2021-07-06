@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.7.0
+
+_2021-07-06_
+
 - `validateKennitala` improvements:
   - feat: Add `clean: 'aggressive'` option to `validateKennitala` – for more
     aggressive trimming and space-collapsing of the input string
