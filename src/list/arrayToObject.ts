@@ -1,23 +1,29 @@
-// Convert an array-like list into an object keyed by prop.
-// Prop values are assumed to be unique and repeat keys are
-// overwritten
-// If prop is undefined, the Array values are used as keys
-/*
-  const arr1 = [
-    {name:'Tim', age:12},
-    {name:'Sam', age:10},
-    {name:'Tim', age:29},
-  ];
-  console.log( arrayToObject(arr1, 'name') );
-  // { Tim: {name:'Tim', age:12},  Sam: {name:'Sam', age:10} };
-
-  const arr2 = ['Orange', 'Apple', 'Tomato', 'Apple', 'Apple'];
-
-  console.log( arrayToObject(arr2) );
-  // { Orange: 'Orange',  Apple: 'Apple',  Tomato: 'Tomato' }
-
-*/
-
+/**
+ * Converts an array-like list into an object keyed by prop.
+ *
+ * Prop values are assumed to be unique and repeat keys are
+ * ignored.
+ *
+ * If the `prop` parameter is `undefined`, the Array values are used as keys
+ *
+ * Examples:
+ *
+ * ```js
+ *  const arr1 = [
+ *    {name:'Tim', age:12},
+ *    {name:'Sam', age:10},
+ *    {name:'Tim', age:29},
+ *  ];
+ *  console.log( arrayToObject(arr1, 'name') );
+ *  // { Tim: {name:'Tim', age:12},  Sam: {name:'Sam', age:10} };
+ *
+ *  const arr2 = ['Orange', 'Apple', 'Tomato', 'Apple', 'Apple'];
+ *
+ *  console.log( arrayToObject(arr2) );
+ *  // { Orange: 'Orange',  Apple: 'Apple',  Tomato: 'Tomato' }
+ * ```
+ *
+ */
 function arrayToObject<T extends object, K extends keyof T>(
 	list: ArrayLike<T>,
 	prop: K | ((item: T) => string)
