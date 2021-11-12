@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.7.1
+
+_2021-11-12_
+
 - fix: Return type of `parseParams` said params were never `undefined`
 
 ## 4.7.0
