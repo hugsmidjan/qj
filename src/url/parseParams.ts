@@ -15,7 +15,7 @@ type Params<P extends string> = Record<P, Array<string>>;
 export default function parseParams<P extends string>(
 	queryString?: string | undefined
 ): Params<P> {
-	const map: Record<string, Array<string>> = {};
+	const map: Record<string, Array<string> | undefined> = {};
 	const paramString = (arguments.length === 0
 		? document.location.search
 		: queryString || ''

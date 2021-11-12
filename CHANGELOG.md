@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix: Return type of `parseParams` said params were never `undefined`
 
 ## 4.7.0
 
