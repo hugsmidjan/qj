@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix: `promiseAllObjects` should never throw on bad input, only reject
 
 ## 4.7.1 – 4.7.2
 

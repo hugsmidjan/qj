@@ -7,40 +7,66 @@ const errorOnReject = (error: unknown) => {
 
 o.spec('promiseAllObject', () => {
 	o.spec('validate rejections', () => {
-		o('should reject if not receiving an object', () => {
-			let successes = 0;
-			let fails = 0;
+		if (process.env.NODE_ENV !== 'production') {
+			o('should reject in dev mode if not receiving an object', () => {
+				let successes = 0;
+				let fails = 0;
 
-			const promises = [
-				// @ts-expect-error  (testing bad input)
-				promiseAll(/*undefined*/),
-				// @ts-expect-error  (testing bad input)
-				promiseAll(null),
-				// @ts-expect-error  (testing bad input)
-				promiseAll('string'),
-				// @ts-expect-error  (testing bad input)
-				promiseAll(123),
-				// @ts-expect-error  (testing bad input)
-				promiseAll(true),
-				// @ts-expect-error  (testing bad input)
-				promiseAll([1]),
-			].map((promise) =>
-				promise
-					.then(() => {
-						successes++;
-					})
-					.catch((e: Error) => {
-						o(e instanceof TypeError).equals(true);
-						o(e.message).equals('The input argument must be a plain object');
-						fails++;
-					})
-			);
+				const promises = [
+					// @ts-expect-error  (testing bad input)
+					promiseAll(/*undefined*/),
+					// @ts-expect-error  (testing bad input)
+					promiseAll(null),
+					// @ts-expect-error  (testing bad input)
+					promiseAll('string'),
+					// @ts-expect-error  (testing bad input)
+					promiseAll(123),
+					// @ts-expect-error  (testing bad input)
+					promiseAll(true),
+					// @ts-expect-error  (testing bad input)
+					promiseAll([1]),
+				].map((promise) =>
+					promise
+						.then(() => {
+							successes++;
+						})
+						.catch((e: Error) => {
+							o(e instanceof TypeError).equals(true);
+							o(e.message).equals('The input argument must be a plain object');
+							fails++;
+						})
+				);
 
-			return Promise.all(promises).then(() => {
-				o(fails).equals(promises.length);
-				o(successes).equals(0);
+				return Promise.all(promises).then(() => {
+					o(fails).equals(promises.length);
+					o(successes).equals(0);
+				});
 			});
-		});
+		} else {
+			o('should reject in production if receiving a nully value', () => {
+				let successes = 0;
+				let fails = 0;
+
+				const promises = [
+					// @ts-expect-error  (testing bad input)
+					promiseAll(/*undefined*/),
+					// @ts-expect-error  (testing bad input)
+					promiseAll(null),
+				].map((promise) =>
+					promise
+						.then(() => {
+							successes++;
+						})
+						.catch((e: Error) => {
+							fails++;
+						})
+				);
+				return Promise.all(promises).then(() => {
+					o(fails).equals(promises.length);
+					o(successes).equals(0);
+				});
+			});
+		}
 
 		o('should not reject an object', () =>
 			promiseAll({ x: Promise.resolve(1) })
@@ -89,7 +115,7 @@ o.spec('promiseAllObject', () => {
 		);
 	});
 
-	o.spec('input with promises that should resolve', () => {
+	o.spec('input with promises that should reject', () => {
 		o('should be rejected if at least one of the promises is rejected', () =>
 			promiseAll({
 				firstPromise: Promise.resolve('result of first promise'),

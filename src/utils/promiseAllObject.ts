@@ -25,15 +25,19 @@ export default function promiseAllProperties<T extends PlainObj>(
 		return Promise.reject(new TypeError('The input argument must be a plain object'));
 	}
 
-	const keys = Object.keys(promisesMap);
-	const promises = keys.map((key) => {
-		return (promisesMap as any)[key];
-	});
+	try {
+		const keys = Object.keys(promisesMap);
+		const promises = keys.map((key) => {
+			return (promisesMap as any)[key];
+		});
 
-	return Promise.all(promises).then((results) => {
-		return results.reduce((resolved, result, index) => {
-			resolved[keys[index]] = result;
-			return resolved;
-		}, {});
-	});
+		return Promise.all(promises).then((results) => {
+			return results.reduce((resolved, result, index) => {
+				resolved[keys[index]] = result;
+				return resolved;
+			}, {});
+		});
+	} catch (error) {
+		return Promise.reject(error);
+	}
 }
