@@ -1,4 +1,4 @@
-type Params<P extends string> = Record<P, Array<string>>;
+type Params<P extends string> = Record<P, Array<string> | undefined>;
 
 /**
  * Convert queryString type Strings into a neat object
