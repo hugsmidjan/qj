@@ -31,7 +31,7 @@
 	"private": true,
 	"license": "MIT",
 	"devDependencies": {
-		"@hugsmidjan/gulp-rollup": "^0.8",
+		"@hugsmidjan/gulp-rollup": "^0.9",
 		"@hugsmidjan/hxmstyle": "^4.0",
 		"@types/jsdom": "^16.2.6",
 		"@types/ospec": "^4",
