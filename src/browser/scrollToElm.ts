@@ -1,5 +1,7 @@
 // ScrollTo top of _elm
 
+import getPageScrollElm from '../dom/getPageScrollElm';
+
 export type ScrollToElmOptions<E extends HTMLElement> = {
 	offset?: number | ((elm?: E) => number);
 	setFocus?: boolean;
@@ -30,9 +32,12 @@ export default function scrollToElm<E extends HTMLElement>(
 				_elm.focus();
 			}
 			const offset = offsetFn(_elm);
+
+			const scrollElm = getPageScrollElm();
+
 			const targetScrollPos =
-				window.pageYOffset + _elm.getBoundingClientRect().top - offset;
-			window.scrollTo(window.pageXOffset, targetScrollPos);
+				scrollElm.scrollTop + _elm.getBoundingClientRect().top - offset;
+			scrollElm.scrollTo(scrollElm.scrollLeft, targetScrollPos);
 			resolve();
 		}, opts.delay || 0);
 	});
