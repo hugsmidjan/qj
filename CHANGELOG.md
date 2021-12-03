@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.8.0
+
+_2021-12-03_
+
 - feat: Add `getPageScrollElm` … returns `<html/>` unless `<body/>` is
   scrollable
 - fix: `setFrag`, `focusElm`, `scrollToElm` assume `<html/>` is always the
