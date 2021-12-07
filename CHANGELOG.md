@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.8.2
+
+_2021-12-07_
+
 - fix: focusElm accessing `document` at initialization
 
 ## 4.8.0 – 4.8.1
