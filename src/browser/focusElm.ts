@@ -8,10 +8,8 @@ export type FocusElmOpts<T extends HTMLElement = HTMLElement> = {
 	offset?: number | ((elm: T) => number);
 };
 
-const htmlElm = document.documentElement;
-const bodyElm = document.body;
-
-export const getYScroll = () => htmlElm.scrollTop || bodyElm.scrollTop;
+export const getYScroll = () =>
+	document.documentElement.scrollTop || document.body.scrollTop;
 
 const _focusElm = <E extends HTMLElement>(_elm: E, opts: FocusElmOpts<E>): void => {
 	if (_elm.tabIndex < 0) {
