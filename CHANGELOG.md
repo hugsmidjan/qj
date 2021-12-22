@@ -4,7 +4,7 @@
 
 - ... <!-- Add new lines here. Version number will be decided later -->
 - feat: Add new `types` module including `DeepPartial`, `SparseArray`,
-  `ReadonlySparseArray`, `SaneRecord`, `ExcludesFalse`, and more
+  `ReadonlySparseArray`, `SaneRecord`, `ExcludesFalse`, `NonNullable` and more
 
 ## 4.8.2
 

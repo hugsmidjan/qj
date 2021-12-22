@@ -2,6 +2,7 @@ export type InferTypeFromArray<A> = A extends Array<infer Data> ? Data : never;
 
 export type Nullable<T> = T | null;
 export type Maybe<T> = Nullable<T> | undefined;
+export type NonNullable<T> = Exclude<T, undefined | null>;
 
 /** Deep/recursive variant of `Partial` */
 export type DeepPartial<T> = {
