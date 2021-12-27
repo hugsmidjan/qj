@@ -16,6 +16,7 @@ const {
 	polyfillsSrcFolder,
 	polyfillsDistFolder,
 } = require('./build-config');
+const { readdirSync, statSync, unlinkSync } = require('fs');
 
 // ===========================================================================
 
@@ -86,11 +87,21 @@ const makePackageJson = (done) => {
 
 const copyDocs = () => src(['README.md', 'CHANGELOG.md']).pipe(dest(distFolder));
 
+const removeTypesOnlyModules = (done) => {
+	readdirSync(distFolder).forEach((filename) => {
+		filename = distFolder + filename;
+		if (filename.endsWith('.js') && statSync(filename).size < 5) {
+			unlinkSync(filename);
+		}
+	});
+	done();
+};
+
 // ===========================================================================
 
 const build = parallel(scriptsBundle, polyfillsBundle, testsBundle);
 const watch = parallel(scriptsWatch, polyfillsWatch, testsWatch);
-const publishPrep = parallel(makePackageJson, copyDocs);
+const publishPrep = parallel(makePackageJson, copyDocs, removeTypesOnlyModules);
 
 // ---------------------------------------------------------------------------
 
