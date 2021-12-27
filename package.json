@@ -3,7 +3,7 @@
 	"version": "4.9.0",
 	"description": "Quick JavaScripts – Collection of mostly useful miniature JavaScript helper functions.",
 	"scripts": {
-		"publishdist": "yarn run build  &&  npm publish dist",
+		"publishdist": "yarn run build  &&  npm publish dist/",
 		"prepublishOnly": "echo \"\nRun 'yarn run publishdist' to publish this package\n\n\"  && exit 1",
 		"format": "eslint --fix  \"*.js\" \"src/**/*.{js,ts,tsx}\"  &&  prettier --write \"*.md\" \"*.json\"  \"src/**/*.json\"",
 		"build": "gulp build  &&  yarn run test",
