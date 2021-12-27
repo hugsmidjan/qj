@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.9.0
+
+_2021-12-27_
+
 - feat: Add new `types` module including `DeepPartial`, `SparseArray`,
   `ReadonlySparseArray`, `SaneRecord`, `ExcludesFalse`, `NonNullable` and more
 
