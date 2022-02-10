@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Expand typing on `classes()`'s input to tolerate `0` as falsy value
 
 ## 4.9.0
 

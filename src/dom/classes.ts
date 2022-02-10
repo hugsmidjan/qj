@@ -1,4 +1,4 @@
-export type ClassName = string | undefined | null | false | ReadonlyArray<ClassName>;
+export type ClassName = string | undefined | null | false | 0 | ReadonlyArray<ClassName>;
 
 /** Filters and concatenates any messy list of CSS classNames.
  *
