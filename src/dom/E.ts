@@ -10,7 +10,7 @@ type HTMLProp = 'id'; // to silence TypeScript
 type CSSStyleProp = 'all'; // to silence TypeScript
 
 type Attrs = {
-	[attrName: string]: any;
+	[attrName: string]: unknown;
 	style?: CSSStyleDeclaration;
 };
 type Child = Node | string | number | null | undefined | false;
@@ -40,24 +40,25 @@ const makeE: EMaker = (window) => {
 				const value = attrs[name];
 				if (value != null) {
 					if (name === 'style') {
-						for (const cssProp in value) {
+						const styleObj = value as CSSStyleDeclaration;
+						for (const cssProp in styleObj) {
 							if (cssProp in elm.style) {
-								elm.style[cssProp as CSSStyleProp] = value[cssProp];
+								elm.style[cssProp as CSSStyleProp] = styleObj[cssProp];
 							}
 						}
 					} else if (name in elm) {
 						// Note: This includes lowercased `onevent` attrs
-						elm[name as HTMLProp] = value;
+						elm[name as HTMLProp] = value as string;
 					} else if (/^on[A-Z]/.test(name)) {
 						// Camel-cased onEvent attrs
-						elm.addEventListener(name.substr(2).toLowerCase(), value);
+						elm.addEventListener(name.substr(2).toLowerCase(), value as () => void);
 					} else if (name.charAt(0) === '_') {
 						// Prefixing ambigious prop/attr names with an underscore
 						// signals they should be treated as properties
-						elm[name.substr(1) as HTMLProp] = value;
+						elm[name.substr(1) as HTMLProp] = value as string;
 					} else {
 						// Default to setAttribute()
-						elm.setAttribute(name, value);
+						elm.setAttribute(name, value as string);
 					}
 				}
 			}
