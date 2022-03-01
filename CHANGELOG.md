@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix: Make `E` more resilient in windowless (non-browser) situations
 
 ## 4.10.0
 

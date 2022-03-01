@@ -83,7 +83,22 @@ const makeE: EMaker = (window) => {
 	return E;
 };
 
+let _E: HyperScriptDOM;
+
 /** Hyperscript (JSX friendly) function that spits out DOM nodes. */
-const E = makeE(typeof window !== 'undefined' ? window : ({} as Window));
+const E =
+	typeof window !== 'undefined'
+		? makeE(window)
+		: ((function () {
+				if (!_E) {
+					_E = makeE(typeof window !== 'undefined' ? window : ({} as Window));
+				}
+				return _E.apply(
+					// eslint-disable-next-line prefer-rest-params
+					arguments
+				);
+		  } as unknown) as HyperScriptDOM);
+
+E.make = E.make || makeE;
 
 export default E;
