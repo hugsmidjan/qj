@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.10.0
+
+_2022-03-01_
+
 - feat: Expand typing on `classes()`'s input to tolerate `0` as falsy value
 - feat: Make `prettyNum` use `Number#toLocalsString` if lang is supported —
   expanding the number of supported languages
