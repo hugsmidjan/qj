@@ -93,10 +93,8 @@ const E =
 				if (!_E) {
 					_E = makeE(typeof window !== 'undefined' ? window : ({} as Window));
 				}
-				return _E.apply(
-					// eslint-disable-next-line prefer-rest-params
-					arguments
-				);
+				// eslint-disable-next-line prefer-spread, prefer-rest-params
+				return _E.apply(null, arguments);
 		  } as unknown) as HyperScriptDOM);
 
 E.make = E.make || makeE;
