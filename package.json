@@ -10,7 +10,7 @@
 		"dev": "gulp dev",
 		"__dev": "yarn && gulp dev",
 		"test": "ospec '__tests/**/*.js'",
-		"test:dev": "yarn run test  &&  onchange '__tests/**/*.js' -f add,change -- ospec {{changed}}"
+		"test:dev": "yarn run test  \n  onchange '__tests/**/*.js' -f add,change -- ospec {{changed}}"
 	},
 	"dist_package_json": {
 		"scripts": {}
