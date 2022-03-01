@@ -1,9 +1,24 @@
 // Chrome doesn't yet support icelandic for Number.toLocaleString (2.9.2020)
-const i18n = {
+
+const ensureNumber = (maybeNumber: string | number | undefined): number | undefined => {
+	const numFloat =
+		typeof maybeNumber !== 'number' ? parseFloat('' + maybeNumber) : maybeNumber;
+	if (isNaN(numFloat)) {
+		if (typeof process !== undefined && process.env.NODE_ENV !== 'production') {
+			console.error("prettyNum can't format:", maybeNumber);
+		}
+		return undefined;
+	}
+	return numFloat;
+};
+
+const i18n: Record<string, [string, string]> = {
 	is: [',', '.'],
-	en: ['.', ','],
-} as const;
-type SupportedLanguages = keyof typeof i18n;
+};
+
+if (process.env.NODE_ENV !== 'production') {
+	i18n.testing = i18n.is;
+}
 
 const reCache: Array<RegExp> = [];
 
@@ -18,34 +33,46 @@ export type PrettyNumOptions = {
 	 *
 	 * If your language isn't supported use the `splitters` option instead.
 	 */
-	lang?: SupportedLanguages;
+	lang?: string;
 	/** The tokens to use for a) decimals and b) thousands
 	 *
 	 * Examples Icelandic uses `[',', '.']` and English uses `['.', ',']`
 	 *
 	 * Default: `['.', '']`
 	 */
-	splitters?: [string, string] | [string];
-	// Supported by TS 4.0 https://devblogs.microsoft.com/typescript/announcing-typescript-4-0-rc/#labeled-tuple-elements
-	// splitters?: [decimal: string, thousands: string] | [decimal: string];
+	splitters?: [decimal: string, thousands: string] | [decimal: string];
 };
 
+// eslint-disable-next-line complexity
 export const prettyNum = (number?: string | number, opts: PrettyNumOptions = {}) => {
 	const {
 		decimals = 0, // is this the right default?
 		fixedDecimals,
 		leadingZero = true,
 		lang = 'en',
-		// NOTE: explicit `splitters` value always trumps the `lang` option
-		splitters = i18n[lang] || [],
 	} = opts;
-	const numFloat = typeof number !== 'number' ? parseFloat('' + number) : number;
-	if (isNaN(numFloat)) {
-		if (typeof process !== undefined && process.env.NODE_ENV !== 'production') {
-			console.error("prettyNum can't format:", number);
-		}
+
+	const numFloat = ensureNumber(number);
+	if (numFloat == null) {
 		return '';
 	}
+
+	if (!opts.splitters && Intl.Collator.supportedLocalesOf(lang).length === 1) {
+		let formatted = numFloat.toLocaleString(lang, {
+			maximumFractionDigits: decimals,
+			minimumFractionDigits: decimals,
+		});
+		if (decimals > 0 && !fixedDecimals && numFloat === Math.round(numFloat)) {
+			formatted = formatted.replace(/\D0+$/, '');
+		}
+		if (!leadingZero && Math.abs(numFloat) < 1) {
+			formatted = formatted.replace(/^(-?)0/, '$1');
+		}
+		return formatted;
+	}
+
+	// NOTE: explicit `splitters` value always trumps the `lang` option
+	const splitters = opts.splitters || i18n[lang] || [];
 
 	const dSep = splitters[0] || '.';
 	const tSep = splitters[1] || '';

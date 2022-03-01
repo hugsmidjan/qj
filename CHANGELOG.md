@@ -4,6 +4,8 @@
 
 - ... <!-- Add new lines here. Version number will be decided later -->
 - feat: Expand typing on `classes()`'s input to tolerate `0` as falsy value
+- feat: Make `prettyNum` use `Number#toLocalsString` if lang is supported —
+  expanding the number of supported languages
 
 ## 4.9.0
 
