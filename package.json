@@ -3,14 +3,14 @@
 	"version": "4.9.0",
 	"description": "Quick JavaScripts – Collection of mostly useful miniature JavaScript helper functions.",
 	"scripts": {
-		"publishdist": "yarn run build  &&  npm publish dist/",
+		"publishdist": "yarn run build  &&  cd dist  &&  npm publish",
 		"prepublishOnly": "echo \"\nRun 'yarn run publishdist' to publish this package\n\n\"  && exit 1",
 		"format": "eslint --fix  \"*.js\" \"src/**/*.{js,ts,tsx}\"  &&  prettier --write \"*.md\" \"*.json\"  \"src/**/*.json\"",
 		"build": "gulp build  &&  yarn run test",
 		"dev": "gulp dev",
 		"__dev": "yarn && gulp dev",
 		"test": "ospec '__tests/**/*.js'",
-		"test:dev": "yarn run test  &&  onchange '__tests/**/*.js' -f add,change -- ospec {{changed}}"
+		"test:dev": "yarn run test  \n  onchange '__tests/**/*.js' -f add,change -- ospec {{changed}}"
 	},
 	"dist_package_json": {
 		"scripts": {}
