@@ -49,7 +49,8 @@
 		"onchange": "^6.0.0",
 		"ospec": "^4",
 		"prettier": "^2.2.1",
-		"typescript": "^4"
+		"tslib": "^2.4.0",
+		"typescript": "^4.6.4"
 	},
 	"hxmstyle": {
 		"options": {
