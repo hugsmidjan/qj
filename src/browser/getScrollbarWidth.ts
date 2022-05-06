@@ -17,7 +17,14 @@ export default function getScrollbarWidth(): number {
 /**
  * Measures the scrollbar width and sets it as a CSS variable on the `<html/>` element
  */
-getScrollbarWidth.setCSSvar = (varName = 'browser-scrollbar-width') => {
+getScrollbarWidth.setCSSvar = (
+	/**
+	 * CSS variable name
+	 *
+	 * Default: `'browser-scrollbar-width'`
+	 */
+	varName = 'browser-scrollbar-width'
+) => {
 	document &&
 		document.documentElement.style.setProperty(
 			'--' + varName,
