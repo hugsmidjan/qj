@@ -26,7 +26,8 @@ export type Apply<A extends object, B> = A extends B
 type SameChecker = (valA: any, valB: any, key: string) => boolean;
 type AnyObj = Record<string | number, any>;
 
-const hasOwnProperty = Object.prototype.hasOwnProperty;
+const _hasOwnProperty = Object.prototype.hasOwnProperty;
+const hasOwn = (obj: {}, key: PropertyKey) => _hasOwnProperty.call(obj, key);
 
 const _createEmpty = <T extends object>(original: T): T =>
 	original.constructor
@@ -39,7 +40,7 @@ const _createEmpty = <T extends object>(original: T): T =>
 const _clone = <T extends object>(original: T): T => {
 	const clone: T = _createEmpty(original);
 	for (const originalKey in original) {
-		if (hasOwnProperty.call(original, originalKey)) {
+		if (hasOwn(original, originalKey)) {
 			clone[originalKey] = original[originalKey];
 		}
 	}
@@ -67,7 +68,7 @@ function objectUpdate(
 		const valB = newValues[key];
 		if (
 			valA !== valB &&
-			hasOwnProperty.call(newValues, key) &&
+			hasOwn(newValues, key) &&
 			!(customSameCheck && valA && valB && customSameCheck(valA, valB, key))
 		) {
 			// Fast IE11 compatible no-polyfill version
@@ -119,7 +120,7 @@ const objectClean = <T extends object, N extends boolean = false>(
 	let deleted;
 	const clone = _createEmpty(original);
 	for (const key in original) {
-		if (hasOwnProperty.call(original, key)) {
+		if (hasOwn(original, key)) {
 			const originalVal = original[key];
 			if (originalVal === undefined || (originalVal === null && alsoNull)) {
 				deleted = true;
@@ -134,36 +135,29 @@ const objectClean = <T extends object, N extends boolean = false>(
 /** Returns true if object as no properties of its own */
 const objectIsEmpty = (object: object): boolean => {
 	for (const key in object) {
-		if (hasOwnProperty.call(object, key)) {
+		if (hasOwn(object, key)) {
 			return false;
 		}
 	}
 	return true;
 };
 
-/** Returns true if objects a and b contain 100% the same values. */
-function objectIsSame(a: object, b: object, customSameCheck?: SameChecker): boolean;
+const defaultSame: SameChecker = (a, b, key) => a[key] === b[key];
 
-function objectIsSame(a: AnyObj, b: AnyObj, customSameCheck?: SameChecker): boolean {
-	if (typeof a.length === 'number' && a.length !== b.length) {
+/** Returns true if objects a and b contain 100% the same values. */
+function objectIsSame(a: object, b: object, isSame?: SameChecker): boolean;
+
+function objectIsSame(a: AnyObj, b: AnyObj, isSame: SameChecker = defaultSame): boolean {
+	if (a === b) {
+		return true;
+	}
+	const aKeys = Object.keys(a);
+	if (aKeys.length !== Object.keys(b).length) {
 		return false;
 	}
-	const encountered: Record<string, true> = {};
-
-	for (const key in b) {
-		const valA = a[key];
-		const valB = b[key];
-		if (
-			valA !== valB &&
-			hasOwnProperty.call(b, key) &&
-			!(customSameCheck && valA && valB && customSameCheck(valA, valB, key))
-		) {
-			return false;
-		}
-		encountered[key] = true;
-	}
-	for (const key in a) {
-		if (!encountered[key]) {
+	for (let i = 0; i < aKeys.length; i++) {
+		const key = aKeys[i];
+		if (!hasOwn(b, key) || !isSame(a, b, key)) {
 			return false;
 		}
 	}
@@ -181,7 +175,7 @@ const objectOnly = <T extends object, K extends keyof T>(
 	let extra;
 	const clone = _createEmpty(original);
 	for (const key in original) {
-		if (hasOwnProperty.call(original, key)) {
+		if (hasOwn(original, key)) {
 			if (keys.indexOf(key as any) > -1) {
 				clone[key] = original[key];
 			} else {
@@ -204,7 +198,7 @@ const objectWithout = <T extends object, K extends keyof T>(
 	const numKeys = keys.length;
 	for (let i = 0; i < numKeys; i++) {
 		const key = keys[i];
-		if (hasOwnProperty.call(original, key)) {
+		if (hasOwn(original, key)) {
 			// Fast IE11 compatible no-polyfill version
 			clone = clone || _clone(original);
 			// // Modern

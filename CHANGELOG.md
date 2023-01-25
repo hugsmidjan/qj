@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix: Better cover edgecases for `objectIsSame` (shallow equals)
 
 ## 4.10.0 — 4.10.2
 
