@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.11.0
+
+_2023-02-13_
+
 - feat: Add module `kennitala` with nice parser method and overall cleaner API
   than `validKennitala`
 - feat: Flag module `validKennitala` as deprecated in favor `kennitala`
