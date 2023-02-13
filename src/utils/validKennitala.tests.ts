@@ -12,9 +12,9 @@ o.spec('validKenntitala', () => {
 	const kt_Company = '500101 2880';
 	const kt_Company2 = '500101 - 2880';
 	const kt_Gervi = '010130 - 7789';
-	const kt_Invalid1 = ' 10-1275-52 39';
-	const kt_Invalid2 = ' 101275-52';
-	const kt_Invalid2EnDash = '101275–5239';
+	const kt_Malformed1 = ' 10-1275-52 39';
+	const kt_Malformed2 = ' 101275-52';
+	const kt_Malformed2_EmDash = '101275—5239';
 
 	o('Validates simple kennitalas', () => {
 		o(validKennitala(ktPerson)).equals(true);
@@ -40,8 +40,8 @@ o.spec('validKenntitala', () => {
 	});
 
 	o('Accepts malformed kennitals with aggressive clean option', () => {
-		o(validKennitala(kt_Invalid1)).equals(false);
-		o(validKennitala(kt_Invalid1, { clean: 'aggressive' })).equals(true);
+		o(validKennitala(kt_Malformed1)).equals(false);
+		o(validKennitala(kt_Malformed1, { clean: 'aggressive' })).equals(true);
 		o(validKennitala(`(kt. ${kt_Person1})`, { clean: 'aggressive' })).equals(true);
 		o(validKennitala(`(kt. ${kt_Person1} blöö)`, { clean: 'aggressive' })).equals(true);
 		o(
@@ -54,7 +54,7 @@ o.spec('validKenntitala', () => {
 				clean: 'aggressive',
 			})
 		).equals(false);
-		o(validKennitala(kt_Invalid2EnDash, { clean: 'aggressive' })).equals(false)(
+		o(validKennitala(kt_Malformed2_EmDash, { clean: 'aggressive' })).equals(false)(
 			'en-dash is not accepted'
 		);
 	});
@@ -92,7 +92,7 @@ o.spec('validKenntitala', () => {
 		o(validKennitala.clean('kt. 123456-7890')).equals('kt. 123456-7890');
 		o(validKennitala.clean(' 1234-567890')).equals('1234-567890');
 		o(validKennitala.clean('123 456-7890')).equals('123 456-7890');
-		o(validKennitala.clean(kt_Invalid2EnDash)).equals(kt_Invalid2EnDash);
+		o(validKennitala.clean(kt_Malformed2_EmDash)).equals(kt_Malformed2_EmDash);
 	});
 
 	o('Exposes aggressive clean function', () => {
@@ -111,7 +111,7 @@ o.spec('validKenntitala', () => {
 		o(validKennitala.cleanAggressive('(s. 765 4321) ')).equals('7654321')(
 			'does not check for length'
 		);
-		o(validKennitala.cleanAggressive(kt_Invalid2EnDash)).equals(kt_Invalid2EnDash)(
+		o(validKennitala.cleanAggressive(kt_Malformed2_EmDash)).equals(kt_Malformed2_EmDash)(
 			'en-dashes are not accepted'
 		);
 	});
@@ -122,9 +122,9 @@ o.spec('validKenntitala', () => {
 		o(validKennitala.format(' 5001012880 ')).equals('500101-2880');
 		o(validKennitala.format('500101 - 2880')).equals('500101-2880');
 		o(validKennitala.format(' 010130 7789')).equals('010130-7789');
-		o(validKennitala.format(kt_Invalid1)).equals(kt_Invalid1);
-		o(validKennitala.format(kt_Invalid2)).equals(kt_Invalid2);
-		o(validKennitala.format(kt_Invalid2EnDash)).equals(kt_Invalid2EnDash);
+		o(validKennitala.format(kt_Malformed1)).equals(kt_Malformed1);
+		o(validKennitala.format(kt_Malformed2)).equals(kt_Malformed2);
+		o(validKennitala.format(kt_Malformed2_EmDash)).equals(kt_Malformed2_EmDash);
 	});
 
 	o('Exposes a birthday function', () => {
@@ -138,7 +138,7 @@ o.spec('validKenntitala', () => {
 		o(iBDay?.toISOString().substr(0, 10)).equals('2065-12-12')(
 			'Kennitalas are not validated'
 		);
-		const i2BDay = validKennitala.getBirthday(kt_Invalid1);
+		const i2BDay = validKennitala.getBirthday(kt_Malformed1);
 		o(i2BDay).equals(undefined)('Malformed digit-strings return undefined');
 		const i3BDay = validKennitala.getBirthday('bogus');
 		o(i3BDay).equals(undefined)('Bogus strings return undefined');

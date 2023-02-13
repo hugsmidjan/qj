@@ -3,6 +3,9 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add module `kennitala` with nice parser method and overall cleaner API
+  than `validKennitala`
+- feat: Flag module `validKennitala` as deprecated in favor `kennitala`
 - fix: Better cover edgecases for `objectIsSame` (shallow equals)
 
 ## 4.10.0 — 4.10.2

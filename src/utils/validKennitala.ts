@@ -1,35 +1,64 @@
-declare const _KennitalaPerson__Brand: unique symbol;
-/** A valid 10-digit Kennitala string for a person */
-export type KennitalaPerson = string & { [_KennitalaPerson__Brand]: true };
+import {
+	cleanKennitalaAggressive,
+	cleanKennitalaCareful,
+	formatKennitala,
+	getKennitalaBirthDate,
+	isValidKennitala,
+	Kennitala,
+	KennitalaCompany,
+	KennitalaPerson,
+} from './kennitala';
 
-declare const _KennitalaCompany__Brand: unique symbol;
-/** A valid 10-digit Kennitala string for a person */
-export type KennitalaCompany = string & { [_KennitalaCompany__Brand]: true };
+export type {
+	/**
+	 * @deprecated Import `Kennitala` from `@hugsmidjan/qj/kennitala` instead.
+	 *
+	 * (Will be removed in v5)
+	 */
+	Kennitala,
+	/**
+	 * @deprecated Import `KennitalaPerson` from `@hugsmidjan/qj/kennitala` instead.
+	 *
+	 * (Will be removed in v5)
+	 */
+	KennitalaPerson,
+	/**
+	 * @deprecated Import `KennitalaCompany` from `@hugsmidjan/qj/kennitala` instead.
+	 *
+	 * (Will be removed in v5)
+	 */
+	KennitalaCompany,
+};
 
-/** A valid 10-digit Kennitala string for either a person or a compnay */
-export type KennitalaReal = KennitalaCompany | KennitalaPerson;
+/**
+ * A valid 10-digit Kennitala string for either a person or a compnay
+ *
+ * @deprecated Use `Kennitala` from `@hugsmidjan/qj/kennitala` instead.
+ *
+ * (Will be removed in v5)
+ */
+export type KennitalaReal = Kennitala;
 
 declare const _KennitalaRobot__Brand: unique symbol;
-/** A valid 10-digit Kennitala string for a "Gervimaður" */
-export type KennitalaRobot = string & { [_KennitalaRobot__Brand]: true };
-
-/** A valid 10-digit Kennitala string */
-export type Kennitala = KennitalaReal | KennitalaRobot;
+/**
+ * A valid 10-digit Kennitala string for a "Gervimaður"
+ *
+ * @deprecated Use `KennitalaPerson` from `@hugsmidjan/qj/kennitala` instead.
+ *
+ * (Will be removed in v5)
+ */
+export type KennitalaRobot = KennitalaPerson & { [_KennitalaRobot__Brand]: true };
 
 // ---------------------------------------------------------------------------
 
-type KtType = 'einst' | 'fyrirt';
-
-const carefulClean = (kt: string): string =>
-	kt.trim().replace(/^(\d{6})\s*-?\s*(\d{4})$/, '$1$2');
-
-const aggressiveClean = (kt: string): string =>
-	kt.replace(/^\D+/, '').replace(/\D+$/, '').replace(/[\s-]/g, '');
-
-const magic = [3, 2, 7, 6, 5, 4, 3, 2, 1];
-
+/**
+ * @deprecated Use `isValidKennitala` from `@hugsmidjan/qj/kennitala` instead.
+ *
+ * (Will be removed in v5)
+ */
 function validKennitala(
-	/** A reasonably kennitala-ish string
+	/**
+	 * A reasonably kennitala-ish string
 	 *
 	 * Automatically trims the string and strips away spaces and dashes.
 	 */
@@ -40,7 +69,7 @@ function validKennitala(
 		 *
 		 * Defaults to validating both types.
 		 */
-		type?: KtType;
+		type?: 'einst' | 'fyrirt';
 		/** Should the validation accept a "robot" kennitalas also
 		 *
 		 * Defaults to rejecting "robot"s.
@@ -54,101 +83,27 @@ function validKennitala(
 		clean?: 'aggressive' | 'careful';
 	} = {}
 ): boolean {
-	kt = kt && (opts.clean === 'aggressive' ? aggressiveClean(kt) : carefulClean(kt));
-	if (kt) {
-		if (
-			!/^[0-7]\d{8}[90]$/.test(kt) ||
-			(!opts.robot &&
-				/010130(2(12|20|39|47|55|63|71|98)|3(01|36)|4(33|92)|506|778)9/.test(kt)) // Robot check
-		) {
-			return false;
-		}
-		const checkSum = magic.reduce((acc, num, i) => acc + num * parseInt(kt[i]), 0);
-		if (checkSum % 11) {
-			return false;
-		}
-		if (opts.type) {
-			if (
-				(opts.type === 'einst' && kt[0] > '3') ||
-				(opts.type === 'fyrirt' && kt[0] < '4')
-			) {
-				return false;
-			}
-		}
+	const cleaner =
+		opts.clean === 'aggressive' ? cleanKennitalaAggressive : cleanKennitalaCareful;
+	kt = kt && cleaner(kt);
+	if (!kt) {
+		return true;
 	}
-	return true;
+	const typeMap = {
+		einst: 'person',
+		fyrirt: 'company',
+		'': undefined,
+	} as const;
+
+	return isValidKennitala(kt, {
+		...opts,
+		type: typeMap[opts.type || ''],
+	});
 }
 
-/** Trims the string and then carefully only removes spaces and/or a dash
- * before the last four digits of a 10-digit string.
- *
- * Defaults to returning the original string if the pattern doesn't match
- *
- * Cleaned:
- *  * `' 123456-7890'` ==> `'1234567890'`
- *  * `'123456 7890 '` ==> `'1234567890'`
- *  * `' 123456 - 7890'` ==> `'1234567890'`
- *  * `'123456 -7890'` ==> `'1234567890'`
- *
- * Only trimmed:
- * 	* `' abc '` ==> `'abc'`
- * 	* `'kt. 123456-7890'` ==> `'kt. 123456-7890'`
- * 	* `' 1234-567890'` ==> `'1234-567890'`
- * 	* `'123 456-7890'` ==> `'123 456-7890'`
- */
-validKennitala.clean = carefulClean;
-
-/** Aggressively strips away all spaces and dashes from the string,
- * as well as any trailing and leading non-digit gunk.
- *
- * Examples:
- *  * `'(kt. 123456-7890)'` ==> `'1234567890'`
- *  * `'(kt. 123456-7890, s. 765 4321) '` ==> `'1234567890,s.7654321'`
- *  * `'(s. 765 4321) '` ==> `'7654321'`
- *  * `' 12 34 56 - 78 90'` ==> `'1234567890'`
- *  * `'1-2-3 4-5 6-7-8 9-0'` ==> `'1234567890'`
- *  * `' abc '` ==> `''`
- */
-validKennitala.cleanAggressive = aggressiveClean;
-
-const cleanIfKtShaped = (str: string) => {
-	const kt = carefulClean(str);
-	return kt.length === 10 && !/\D/.test(kt) ? kt : undefined;
-};
-
-/** Runs careful cleanup on the input string and if it looks like a kennitala
- * then inserts a nice '-' before the last four digits.
- *
- * Defaults to returning the input untouched.
- */
-validKennitala.format = (ktShaped: string) => {
-	const kt = cleanIfKtShaped(ktShaped);
-	if (!kt) {
-		return ktShaped;
-	}
-	return kt.substr(0, 6) + '-' + kt.substr(6);
-};
-
-/** Returns an birthday (UTC) for a "kennitala-shaped" string
- * ...without checking if it is a valid kennitala.
- *
- * For out-shaped strings it returns undefined.
- */
-validKennitala.getBirthday = (ktShaped: string) => {
-	const kt = cleanIfKtShaped(ktShaped);
-	if (!kt) {
-		return undefined;
-	}
-	const MM = kt.substr(2, 2);
-	const CC = kt.substr(9, 1) === '9' ? '19' : '20';
-	const YY = kt.substr(4, 2);
-	const birthDate = new Date(`${CC}${YY}-${MM}-01`);
-	let date = parseInt(kt.substr(0, 2));
-	if (date > 31) {
-		date = date - 40;
-	}
-	birthDate.setUTCDate(date);
-	return birthDate;
-};
+validKennitala.clean = cleanKennitalaCareful;
+validKennitala.cleanAggressive = cleanKennitalaAggressive;
+validKennitala.format = formatKennitala;
+validKennitala.getBirthday = getKennitalaBirthDate;
 
 export default validKennitala;
