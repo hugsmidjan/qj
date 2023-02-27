@@ -1,4 +1,5 @@
 import o from 'ospec';
+import { Equals, Expect } from '../__testing/types';
 import {
 	parseKennitala,
 	isValidKennitala,
@@ -11,6 +12,8 @@ import {
 	KennitalaCompany,
 	KennitalaData,
 	KennitalaType,
+	KennitalaDataPerson,
+	KennitalaDataCompany,
 } from './kennitala';
 
 const ktPerson = '1012755239';
@@ -43,19 +46,21 @@ const satisfies = (
 
 o.spec('parseKennitala', () => {
 	const dataPerson = {
-		value: ktPerson as Kennitala,
+		value: ktPerson as KennitalaPerson,
 		type: 'person',
 		robot: false,
 		formatted: '101275-5239',
 	} as const;
+
 	const dataCompany = {
-		value: ktCompany as Kennitala,
+		value: ktCompany as KennitalaCompany,
 		type: 'company',
 		robot: false,
 		formatted: '500101-2880',
 	} as const;
+
 	const dataGervi = {
-		value: ktGervi as Kennitala,
+		value: ktGervi as KennitalaPerson,
 		type: 'person',
 		robot: true,
 		formatted: '010130-7789',
@@ -65,29 +70,44 @@ o.spec('parseKennitala', () => {
 		/* eslint-disable @typescript-eslint/no-unused-vars */
 		const either = parseKennitala(ktPerson);
 		if (either) {
-			const v: Kennitala = either.value;
-			const t: KennitalaType = either.type;
-			const r: false = either.robot;
+			type v = Expect<Equals<typeof either.value, Kennitala>>;
+			type t = Expect<Equals<typeof either.type, KennitalaType>>;
+			type r = Expect<Equals<typeof either.robot, false>>;
+			if (either.type === 'person') {
+				type v = Expect<Equals<typeof either.value, KennitalaPerson>>;
+			}
+			if (either.type === 'company') {
+				type v = Expect<Equals<typeof either.value, KennitalaCompany>>;
+			}
 		}
-		const eitherRobot = parseKennitala(ktPerson, { robot: false });
-		if (either) {
-			const v: Kennitala = either.value;
-			const t: KennitalaType = either.type;
-			// @ts-expect-error  (FIXME: Figure out how to get the robot gererics to work)
-			either.robot = Math.random() > 0.5;
+		const eitherRobot = parseKennitala(ktPerson, { robot: true });
+		if (eitherRobot) {
+			type v = Expect<Equals<typeof eitherRobot.value, Kennitala>>;
+			type t = Expect<Equals<typeof eitherRobot.type, KennitalaType>>;
+			type r = Expect<Equals<typeof eitherRobot.robot, boolean>>;
+			if (eitherRobot.type === 'company') {
+				type v = Expect<Equals<typeof eitherRobot.robot, false>>;
+			}
 		}
 		const person = parseKennitala(ktPerson, { type: 'person' });
 		if (person) {
-			const v: KennitalaPerson = person.value;
-			const t: 'person' = person.type;
-			const r: false = person.robot;
+			type v = Expect<Equals<typeof person.value, KennitalaPerson>>;
+			type t = Expect<Equals<typeof person.type, 'person'>>;
+			type r = Expect<Equals<typeof person.robot, false>>;
 		}
-		const company = parseKennitala(ktPerson, { type: 'company' });
+		const company = parseKennitala(ktPerson, { type: 'company', clean: 'careful' });
 		if (company) {
-			const v: KennitalaCompany = company.value;
-			const t: 'company' = company.type;
-			const r: false = company.robot;
+			type v = Expect<Equals<typeof company.value, KennitalaCompany>>;
+			type t = Expect<Equals<typeof company.type, 'company'>>;
+			type r = Expect<Equals<typeof company.robot, false>>;
 		}
+
+		const alwaysPerson = parseKennitala(ktPerson as KennitalaPerson);
+		type v = Expect<Equals<typeof alwaysPerson, KennitalaDataPerson | undefined>>;
+		const alwaysPerson2 = parseKennitala(ktPerson as KennitalaPerson, { robot: true });
+		type v2 = Expect<Equals<typeof alwaysPerson2, KennitalaDataPerson<boolean>>>;
+		const alwaysCompany = parseKennitala(ktCompany as KennitalaCompany);
+		type v3 = Expect<Equals<typeof alwaysCompany, KennitalaDataCompany>>;
 		/* eslint-enable @typescript-eslint/no-unused-vars */
 
 		satisfies(parseKennitala(ktPerson), dataPerson);
@@ -105,6 +125,14 @@ o.spec('parseKennitala', () => {
 		// @ts-expect-error  (testing invalid input)
 		const bogusInput2: string = false;
 		o(parseKennitala(bogusInput2)).equals(undefined);
+	});
+
+	o('Accepts kennitalas with predictable spaces and dashes', () => {
+		satisfies(parseKennitala(kt_Person1), dataPerson);
+		satisfies(parseKennitala(kt_Person1, { clean: 'careful' }), dataPerson);
+		satisfies(parseKennitala(kt_Person1_EnDash), dataPerson);
+		satisfies(parseKennitala(kt_Company), dataCompany);
+		satisfies(parseKennitala(kt_Company2), dataCompany);
 	});
 
 	o('Accepts kennitalas with predictable spaces and dashes', () => {
@@ -129,11 +157,7 @@ o.spec('parseKennitala', () => {
 	});
 
 	o('Optionally allows Gervimaður', () => {
-		satisfies(
-			parseKennitala(ktGervi, { robot: true }),
-			// @ts-expect-error  (FIXME: Figure out how to get the robot gererics to work)
-			dataGervi
-		);
+		satisfies(parseKennitala(ktGervi, { robot: true }), dataGervi);
 		o(parseKennitala(ktGervi, { robot: false })).equals(undefined);
 		// robot flag has no effect on other functions
 		satisfies(parseKennitala(ktPerson, { robot: true }), dataPerson);
@@ -161,11 +185,18 @@ o.spec('isValidKennitala', () => {
 		o(isValidKennitala(false)).equals(false);
 	});
 
-	o('Accepts kennitalas with predictable spaces and dashes', () => {
-		o(isValidKennitala(kt_Person1)).equals(true);
-		o(isValidKennitala(kt_Person1_EnDash)).equals(true);
-		o(isValidKennitala(kt_Company)).equals(true);
-		o(isValidKennitala(kt_Company2)).equals(true);
+	o('Performs no cleanup by default', () => {
+		o(isValidKennitala(kt_Person1)).equals(false);
+		o(isValidKennitala(kt_Person1_EnDash)).equals(false);
+		o(isValidKennitala(kt_Company)).equals(false);
+		o(isValidKennitala(kt_Company2)).equals(false);
+	});
+
+	o('Opionally performs careful cleanup', () => {
+		o(isValidKennitala(kt_Person1, { clean: 'careful' })).equals(true);
+		o(isValidKennitala(kt_Person1_EnDash, { clean: 'careful' })).equals(true);
+		o(isValidKennitala(kt_Company, { clean: 'careful' })).equals(true);
+		o(isValidKennitala(kt_Company2, { clean: 'careful' })).equals(true);
 	});
 
 	o('Accepts malformed kennitals with aggressive clean option', () => {

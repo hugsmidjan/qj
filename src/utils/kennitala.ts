@@ -7,11 +7,13 @@ declare const _KennitalaCompany__Brand: unique symbol;
 export type KennitalaCompany = string & { [_KennitalaCompany__Brand]: true };
 
 /** A valid 10-digit Kennitala string */
-export type Kennitala = KennitalaCompany | KennitalaPerson;
+export type Kennitala = KennitalaPerson | KennitalaCompany;
 
 // ---------------------------------------------------------------------------
 
 export type KennitalaType = 'person' | 'company';
+
+// ---------------------------------------------------------------------------
 
 /**
  * Trims the string and then only removes spaces and/or a dash (or en-dash)
@@ -35,6 +37,8 @@ export type KennitalaType = 'person' | 'company';
 export const cleanKennitalaCareful = (kt: string): string =>
 	kt.trim().replace(/^(\d{6})\s?[-–]?\s?(\d{4})$/, '$1$2');
 
+// ---------------------------------------------------------------------------
+
 /**
  * Aggressively strips away all spaces and dashes (or en-dashes) from the string,
  * as well as any trailing and leading non-digit gunk.
@@ -53,9 +57,32 @@ export const cleanKennitalaAggressive = (kt: string): string =>
 		.replace(/\D+$/, '')
 		.replace(/[\s-–]/g, '');
 
+// ---------------------------------------------------------------------------
+
+const cleanIfKtShaped = (str: string) => {
+	const kt = cleanKennitalaCareful(str);
+	return kt.length === 10 && !/\D/.test(kt) ? kt : undefined;
+};
+
+/**
+ * Runs minimal cleanup on the input string and if it looks like a kennitala
+ * then then inserts a nice '-' before the last four digits.
+ *
+ * Defaults to returning the input untouched.
+ */
+export const formatKennitala = (ktShaped: string) => {
+	const kt = cleanIfKtShaped(ktShaped);
+	if (!kt) {
+		return ktShaped;
+	}
+	return kt.substring(0, 6) + '-' + kt.substring(6);
+};
+
+// ---------------------------------------------------------------------------
+
 type KennitalaOptions<
-	KtType extends KennitalaType = KennitalaType,
-	Robot extends boolean = boolean
+	KtType extends KennitalaType | undefined = KennitalaType,
+	PossiblyRobot extends boolean = boolean
 > = {
 	/**
 	 * If the valdation should specifically check for a
@@ -70,40 +97,53 @@ type KennitalaOptions<
 	 *
 	 * Defaults to `false`.
 	 */
-	robot?: Robot;
+	robot?: PossiblyRobot;
 	/**
-	 * Aggressive mode strips away all spaces and dashes and throws away any
+	 * `"aggressive"` mode strips away all spaces and dashes and throws away any
 	 * leading/trailing gunk.
 	 *
-	 * Default is "Careful mode", which performs only minimal cleaning on the
+	 * `false`/`"none"` performs no cleanup whatsoever, not even trimming.
+	 *
+	 * Default is `"careful"` mode, which performs only minimal cleaning on the
 	 * incoming string ...trimming it and then removing a space and/or dash
 	 * right before the last four of the ten digits.
 	 */
-	clean?: 'aggressive' | 'careful';
+	clean?: 'aggressive' | 'careful' | 'none' | false;
 };
 
-export type KennitalaData<
-	KtType extends KennitalaType = KennitalaType,
-	Robot extends boolean = boolean
-> = {
+export type KennitalaDataPerson<PossiblyRobot extends boolean = false> = {
 	/** The plain, cleaned-up 10 digit kennitala string */
-	value: KtType extends undefined
-		? Kennitala
-		: KtType extends 'company'
-		? KennitalaCompany
-		: KennitalaPerson;
+	value: KennitalaPerson;
 	/** The type of kennitala  */
-	type: KtType extends undefined ? KennitalaType : KtType;
+	type: 'person';
 	/** Indicates if the kennitala is a "Gervimaður" — i.e. a fake/testing kennitala */
-	robot: [Robot] extends [true] ? boolean : false;
+	robot: PossiblyRobot extends false ? false : boolean;
 	/** Pretty-formatted version of the kennitala with a dash before the last four digits */
 	formatted: string;
 	toString(): string;
 };
 
+export type KennitalaDataCompany = {
+	/** The plain, cleaned-up 10 digit kennitala string */
+	value: KennitalaCompany;
+	/** The type of kennitala  */
+	type: 'company';
+	/** Indicates if the kennitala is a "Gervimaður" — i.e. a fake/testing kennitala */
+	robot: false;
+	/** Pretty-formatted version of the kennitala with a dash before the last four digits */
+	formatted: string;
+	toString(): string;
+};
+
+export type KennitalaData<
+	KtType extends KennitalaType = KennitalaType,
+	PossiblyRobot extends boolean = boolean
+> = (KennitalaDataPerson<PossiblyRobot> | KennitalaDataCompany) & { type: KtType };
+
 const magic = [3, 2, 7, 6, 5, 4, 3, 2, 1];
 const robotKtRe = /010130(2(12|20|39|47|55|63|71|98)|3(01|36)|4(33|92)|506|778)9/;
 const validTypes: Record<KennitalaType, 1> = { person: 1, company: 1 };
+
 /**
  * Parses a string value to see if may be a technically valid kennitala,
  * and if so, it returns a data object with the cleaned up value
@@ -111,15 +151,48 @@ const validTypes: Record<KennitalaType, 1> = { person: 1, company: 1 };
  *
  * If the parsing/validation fails, it simply returns `undefined`
  */
-export const parseKennitala = <KtType extends KennitalaType, Robot extends boolean>(
+export function parseKennitala(
+	// This is here just to trick TS into providing full IntelliSense
+	// auto-complete for `KennitalaOptions.type` values. Ack!
+	kt: '',
+	opt?: KennitalaOptions
+): undefined;
+
+export function parseKennitala(
+	kt: KennitalaCompany,
+	opt?: KennitalaOptions<'company'>
+): KennitalaDataCompany;
+
+export function parseKennitala<PossiblyRobot extends boolean = false>(
+	kt: KennitalaPerson,
+	opt?: KennitalaOptions<'person', PossiblyRobot>
+): PossiblyRobot extends false
+	? undefined | KennitalaDataPerson
+	: KennitalaDataPerson<boolean>;
+
+export function parseKennitala<
+	KtType extends KennitalaType,
+	PossiblyRobot extends boolean = false
+>(
 	value: string,
-	opts: KennitalaOptions<KtType, Robot> = {}
-) => {
+	opts?: KennitalaOptions<KtType, PossiblyRobot>
+): KennitalaData<KtType, PossiblyRobot> | undefined;
+
+export function parseKennitala<
+	KtType extends KennitalaType,
+	PossiblyRobot extends boolean = true
+>(
+	value: string,
+	opts?: KennitalaOptions<KtType, PossiblyRobot>
+): KennitalaData<KtType, PossiblyRobot> | undefined {
+	opts = opts || {};
 	if (!value) {
 		return;
 	}
 	value =
-		opts.clean === 'aggressive'
+		opts.clean === 'none' || opts.clean === false
+			? value
+			: opts.clean === 'aggressive'
 			? cleanKennitalaAggressive(value)
 			: cleanKennitalaCareful(value);
 
@@ -140,41 +213,30 @@ export const parseKennitala = <KtType extends KennitalaType, Robot extends boole
 		return;
 	}
 
-	const data: KennitalaData = {
-		value: value as Kennitala,
+	return {
+		value,
 		type,
-		// @ts-expect-error  (FIXME: Figure out how to get the robot gererics to work)
 		robot,
-
 		toString: () => value,
 		get formatted() {
 			return formatKennitala(value);
 		},
-	};
-	return data as KennitalaData<KtType, Robot>;
-};
+	} as KennitalaData<KtType, PossiblyRobot>;
+}
 
-export const isValidKennitala = (kt: string, opts?: KennitalaOptions) =>
-	!!parseKennitala(kt, opts);
-
-const cleanIfKtShaped = (str: string) => {
-	const kt = cleanKennitalaCareful(str);
-	return kt.length === 10 && !/\D/.test(kt) ? kt : undefined;
-};
+// ---------------------------------------------------------------------------
 
 /**
- * Runs minimal cleanup on the input string and if it looks like a kennitala
- * then then inserts a nice '-' before the last four digits.
- *
- * Defaults to returning the input untouched.
+ * Options are the same as for `parseKennitala` except that `clean` defaults to `"none"`
  */
-export const formatKennitala = (ktShaped: string) => {
-	const kt = cleanIfKtShaped(ktShaped);
-	if (!kt) {
-		return ktShaped;
-	}
-	return kt.substring(0, 6) + '-' + kt.substring(6);
-};
+export const isValidKennitala = (kt: string, opts?: KennitalaOptions): kt is Kennitala =>
+	!!parseKennitala(kt, {
+		...opts,
+		// make "clean: false" the default when validating
+		clean: opts?.clean || false,
+	});
+
+// ---------------------------------------------------------------------------
 
 /**
  * Returns the (UTC) birth- or founding-date of a "kennitala-shaped" string

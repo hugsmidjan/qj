@@ -3,6 +3,9 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add ability to opt-out of `parseKennitala`'s cleanup
+- feat: Perform no "cleanup" on `isValidKennitala` inputs by default
+- fix: Improve typing of `parseKennitala` and `isValidKennitala`
 
 ## 4.11.0
 
