@@ -2,13 +2,13 @@
 
 ## Upcoming...
 
-feat: Add helpers `isPersonKennitala`, `isCompanyKennitala`
+- ... <!-- Add new lines here. Version number will be decided later -->
 
-## 4.12.0
+## 4.12.0 – 4.13.0
 
 _2023-02-27_
 
-- ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add helpers `isPersonKennitala`, `isCompanyKennitala`
 - feat: Add ability to opt-out of `parseKennitala`'s cleanup
 - feat: Perform no "cleanup" on `isValidKennitala` inputs by default
 - fix: Improve typing of `parseKennitala` and `isValidKennitala`
