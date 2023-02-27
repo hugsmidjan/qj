@@ -14,6 +14,8 @@ import {
 	KennitalaType,
 	KennitalaDataPerson,
 	KennitalaDataCompany,
+	isPersonKennitala,
+	isCompanyKennitala,
 } from './kennitala';
 
 const ktPerson = '1012755239';
@@ -241,6 +243,50 @@ o.spec('isValidKennitala', () => {
 		o(isValidKennitala(ktPerson, { robot: true, type: 'person' })).equals(true);
 		o(isValidKennitala(ktPerson, { robot: true, type: 'company' })).equals(false);
 	});
+});
+
+// ---------------------------------------------------------------------------
+
+o.spec('isPersonKennitala and isCompanyKennitala', () => {
+	o('Correctly detects type of valid Kennitalas', () => {
+		o(isPersonKennitala(ktPerson as Kennitala)).equals(true);
+		o(isCompanyKennitala(ktCompany as Kennitala)).equals(true);
+		o(isPersonKennitala(ktCompany as Kennitala)).equals(false);
+		o(isCompanyKennitala(ktPerson as Kennitala)).equals(false);
+	});
+
+	o('Performs no trimming/parsing/validation on invalid strings', () => {
+		// @ts-expect-error  (testing invalid input)
+		const startsWith2: Kennitala = '2foobar';
+		// @ts-expect-error  (testing invalid input)
+		const startsWith9: Kennitala = '9foobar';
+		// @ts-expect-error  (testing invalid input)
+		const someWord: Kennitala = 'foobar';
+		// @ts-expect-error  (testing invalid input)
+		const spacedKtPerson: Kennitala = ' ' + ktPerson;
+		// @ts-expect-error  (testing invalid input)
+		const spacedKtCompany: Kennitala = ' ' + ktCompany;
+
+		o(isPersonKennitala(startsWith2)).equals(true)('isPerson `startsWith2`');
+		o(isPersonKennitala(startsWith9)).equals(false)('isPerson `startsWith9`');
+		o(isPersonKennitala(someWord)).equals(false)('isPerson `someWord`');
+		o(isPersonKennitala(spacedKtPerson)).equals(false)('isPerson `spacedKtPerson`');
+
+		o(isCompanyKennitala(startsWith9)).equals(true)('isCompany `startsWith9`');
+		o(isCompanyKennitala(startsWith2)).equals(false)('isCompany `startsWith2`');
+		o(isCompanyKennitala(someWord)).equals(false)('isCompany `someWord`');
+		o(isCompanyKennitala(spacedKtCompany)).equals(false)('isCompany `spacedKtPerson`');
+	});
+
+	if (false as boolean) {
+		const ktTest = '' as Kennitala;
+		if (isPersonKennitala(ktTest)) {
+			type v = Expect<Equals<typeof ktTest, KennitalaPerson>>;
+		}
+		if (isCompanyKennitala(ktTest)) {
+			type v = Expect<Equals<typeof ktTest, KennitalaCompany>>;
+		}
+	}
 });
 
 // ---------------------------------------------------------------------------

@@ -260,3 +260,13 @@ export const getKennitalaBirthDate = (ktShaped: string) => {
 	birthDate.setUTCDate(date);
 	return birthDate;
 };
+
+// ---------------------------------------------------------------------------
+
+/** Detects if an input Kennitala is KennitalaPerson */
+export const isPersonKennitala = (kt: Kennitala): kt is KennitalaPerson =>
+	parseInt(kt[0]) <= 3;
+
+/** Detects if an input Kennitala is KennitalaCompany */
+export const isCompanyKennitala = (kt: Kennitala): kt is KennitalaCompany =>
+	parseInt(kt[0]) >= 4;

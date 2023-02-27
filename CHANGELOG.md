@@ -2,6 +2,8 @@
 
 ## Upcoming...
 
+feat: Add helpers `isPersonKennitala`, `isCompanyKennitala`
+
 ## 4.12.0
 
 _2023-02-27_
