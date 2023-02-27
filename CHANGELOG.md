@@ -2,6 +2,10 @@
 
 ## Upcoming...
 
+## 4.12.0
+
+_2023-02-27_
+
 - ... <!-- Add new lines here. Version number will be decided later -->
 - feat: Add ability to opt-out of `parseKennitala`'s cleanup
 - feat: Perform no "cleanup" on `isValidKennitala` inputs by default
