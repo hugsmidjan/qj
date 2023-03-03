@@ -46,6 +46,7 @@ export const cleanKennitalaCareful = (kt: string): string =>
  * Examples:
  *  * `'(kt. 123456-7890)'` ==> `'1234567890'`
  *  * `'(kt. 123456-7890, s. 765 4321) '` ==> `'1234567890,s.7654321'`
+ *  * `'(tel. 123-4567, 765-4321)'` ==> `'1234567,7654321'`
  *  * `'(s. 765 4321) '` ==> `'7654321'`
  *  * `' 12 34 56 - 78 90'` ==> `'1234567890'`
  *  * `'1-2-3 4-5 6-7-8 9-0'` ==> `'1234567890'`
@@ -239,7 +240,7 @@ export const isValidKennitala = (kt: string, opts?: KennitalaOptions): kt is Ken
 // ---------------------------------------------------------------------------
 
 /**
- * Returns the (UTC) birth- or founding-date of a "kennitala-shaped" string
+ * Returns the (UTC) birth-date (or founding-date) of a "kennitala-shaped" string
  * ...without checking if it is a valid kennitala.
  *
  * For malformed (non-kennitala shaped) strings it returns undefined.
@@ -263,10 +264,22 @@ export const getKennitalaBirthDate = (ktShaped: string) => {
 
 // ---------------------------------------------------------------------------
 
-/** Detects if an input Kennitala is KennitalaPerson */
+/**
+ * Detects if an input `Kennitala` is `KennitalaPerson`.
+ *
+ * Assumes that the input `kt` is already validated as `Kennitala`
+ * and performs no internal validation, and is thus unreliable
+ * for random strings.
+ */
 export const isPersonKennitala = (kt: Kennitala): kt is KennitalaPerson =>
 	parseInt(kt[0]) <= 3;
 
-/** Detects if an input Kennitala is KennitalaCompany */
+/**
+ * Detects if an input `Kennitala` is `KennitalaCompany`
+ *
+ * Assumes that the input `kt` is already validated as `Kennitala`
+ * and performs no internal validation, and is thus unreliable
+ * for random strings.
+ */
 export const isCompanyKennitala = (kt: Kennitala): kt is KennitalaCompany =>
 	parseInt(kt[0]) >= 4;
