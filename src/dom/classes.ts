@@ -5,9 +5,9 @@ export type ClassName = string | undefined | null | false | 0 | ReadonlyArray<Cl
  * All falsy values are neatly skipped.
  */
 const classes = (...classNames: ReadonlyArray<ClassName>): string =>
-	classNames
-		.filter((name): name is string | ReadonlyArray<ClassName> => !!name)
-		.map((name) => (Array.isArray(name) ? classes(...name) : name))
-		.join(' ');
+  classNames
+    .filter((name): name is string | ReadonlyArray<ClassName> => !!name)
+    .map((name) => (Array.isArray(name) ? classes(...name) : name))
+    .join(' ');
 
 export default classes;

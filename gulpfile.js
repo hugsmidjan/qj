@@ -7,14 +7,14 @@ const writeFile = require('fs').writeFileSync;
 // ===========================================================================
 
 const {
-	srcFolder,
-	distFolder,
-	testingFolder,
-	scriptsBundleMap,
-	testGlobs,
-	polyfillsGlobs,
-	polyfillsSrcFolder,
-	polyfillsDistFolder,
+  srcFolder,
+  distFolder,
+  testingFolder,
+  scriptsBundleMap,
+  testGlobs,
+  polyfillsGlobs,
+  polyfillsSrcFolder,
+  polyfillsDistFolder,
 } = require('./build-config');
 const { readdirSync, statSync, unlinkSync } = require('fs');
 
@@ -24,47 +24,47 @@ const { readdirSync, statSync, unlinkSync } = require('fs');
 const isNonLocalModule = (id) => !/^(?:\0|\.|\/|tslib)/.test(id);
 
 const baseOpts = {
-	src: srcFolder,
-	format: 'cjs',
-	minify: false,
-	sourcemaps: false,
-	inputOpts: { external: isNonLocalModule },
-	outputOpts: { strict: false, exports: 'auto' },
+  src: srcFolder,
+  format: 'cjs',
+  minify: false,
+  sourcemaps: false,
+  inputOpts: { external: isNonLocalModule },
+  outputOpts: { strict: false, exports: 'auto' },
 };
 
 // ===========================================================================
 
 const [scriptsBundle, scriptsWatch] = rollupTaskFactory({
-	...baseOpts,
-	name: 'scripts',
-	entryPoints: scriptsBundleMap,
-	dist: distFolder,
-	typescriptOpts: { declaration: true },
+  ...baseOpts,
+  name: 'scripts',
+  entryPoints: scriptsBundleMap,
+  dist: distFolder,
+  typescriptOpts: { declaration: true },
 });
 
 const [polyfillsBundle, polyfillsWatch] = rollupTaskFactory({
-	...baseOpts,
-	name: 'polyfills',
-	src: polyfillsSrcFolder,
-	glob: polyfillsGlobs,
-	dist: polyfillsDistFolder,
+  ...baseOpts,
+  name: 'polyfills',
+  src: polyfillsSrcFolder,
+  glob: polyfillsGlobs,
+  dist: polyfillsDistFolder,
 });
 
 const [testsBundle, testsWatch] = rollupTaskFactory({
-	...baseOpts,
-	name: 'build_tests',
-	glob: testGlobs,
-	dist: testingFolder,
-	codeSplit: false, // prevents false-positives in onchange
-	// TODO: Create a ospec gulp plugin
-	// onWatchEvent: (e) => {
-	// 	if (e.code === 'BUNDLE_END') {
-	// 		console.info('ospec __tests/' + Object.keys(e.input)[0] + '.js');
-	// 		require('child_process').execSync(
-	// 			'ospec __tests/' + Object.keys(e.input)[0] + '.js'
-	// 		);
-	// 	}
-	// },
+  ...baseOpts,
+  name: 'build_tests',
+  glob: testGlobs,
+  dist: testingFolder,
+  codeSplit: false, // prevents false-positives in onchange
+  // TODO: Create a ospec gulp plugin
+  // onWatchEvent: (e) => {
+  // 	if (e.code === 'BUNDLE_END') {
+  // 		console.info('ospec __tests/' + Object.keys(e.input)[0] + '.js');
+  // 		require('child_process').execSync(
+  // 			'ospec __tests/' + Object.keys(e.input)[0] + '.js'
+  // 		);
+  // 	}
+  // },
 });
 
 // ---------------------------------------------------------------------------
@@ -72,29 +72,29 @@ const [testsBundle, testsWatch] = rollupTaskFactory({
 const cleanup = () => del([distFolder, testingFolder]);
 
 const makePackageJson = (done) => {
-	const pkg = require('./package.json');
-	const { dist_package_json } = pkg;
-	delete pkg.scripts;
-	delete pkg.engines;
-	delete pkg.private;
-	delete pkg.devDependencies;
-	delete pkg.hxmstyle;
-	delete pkg.dist_package_json;
-	Object.assign(pkg, dist_package_json);
-	writeFile(distFolder + 'package.json', JSON.stringify(pkg, null, '\t'));
-	done();
+  const pkg = require('./package.json');
+  const { dist_package_json } = pkg;
+  delete pkg.scripts;
+  delete pkg.engines;
+  delete pkg.private;
+  delete pkg.devDependencies;
+  delete pkg.hxmstyle;
+  delete pkg.dist_package_json;
+  Object.assign(pkg, dist_package_json);
+  writeFile(distFolder + 'package.json', JSON.stringify(pkg, null, '\t'));
+  done();
 };
 
 const copyDocs = () => src(['README.md', 'CHANGELOG.md']).pipe(dest(distFolder));
 
 const removeTypesOnlyModules = (done) => {
-	readdirSync(distFolder).forEach((filename) => {
-		filename = distFolder + filename;
-		if (filename.endsWith('.js') && statSync(filename).size < 5) {
-			unlinkSync(filename);
-		}
-	});
-	done();
+  readdirSync(distFolder).forEach((filename) => {
+    filename = distFolder + filename;
+    if (filename.endsWith('.js') && statSync(filename).size < 5) {
+      unlinkSync(filename);
+    }
+  });
+  done();
 };
 
 // ===========================================================================

@@ -6,7 +6,7 @@ export type NonNullable<T> = Exclude<T, undefined | null>;
 
 /** Deep/recursive variant of `Partial` */
 export type DeepPartial<T> = {
-	[P in keyof T]?: DeepPartial<T[P]>;
+  [P in keyof T]?: DeepPartial<T[P]>;
 };
 
 /**
@@ -29,12 +29,12 @@ export type ReadonlySparseArray<V> = ReadonlyArray<V | undefined>;
  * may be `undefined`, and the type system should warn about that.
  */
 export type SaneRecord<K extends string | number | symbol, V> = string extends K
-	? Record<K, V | undefined>
-	: number extends K
-	? Record<K, V | undefined>
-	: symbol extends K
-	? Record<K, V | undefined>
-	: Record<K, V>;
+  ? Record<K, V | undefined>
+  : number extends K
+  ? Record<K, V | undefined>
+  : symbol extends K
+  ? Record<K, V | undefined>
+  : Record<K, V>;
 
 /**
  * Type predicate function for filtering out falsy values

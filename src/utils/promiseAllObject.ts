@@ -4,7 +4,7 @@
 type PlainObj = Record<string, unknown>;
 
 export type PromisesMap<T extends PlainObj> = {
-	[P in keyof T]: Promise<T[P]> | T[P];
+  [P in keyof T]: Promise<T[P]> | T[P];
 };
 
 /**
@@ -14,30 +14,30 @@ export type PromisesMap<T extends PlainObj> = {
  * @return {Promise<T>}  a promise that resolved to an object with the same properties containing the resolved values
  */
 export default function promiseAllProperties<T extends PlainObj>(
-	promisesMap: PromisesMap<T>
+  promisesMap: PromisesMap<T>
 ): Promise<T> {
-	if (
-		!(typeof process !== undefined && process.env.NODE_ENV === 'production') &&
-		(promisesMap === null ||
-			typeof promisesMap !== 'object' ||
-			Array.isArray(promisesMap))
-	) {
-		return Promise.reject(new TypeError('The input argument must be a plain object'));
-	}
+  if (
+    !(typeof process !== undefined && process.env.NODE_ENV === 'production') &&
+    (promisesMap === null ||
+      typeof promisesMap !== 'object' ||
+      Array.isArray(promisesMap))
+  ) {
+    return Promise.reject(new TypeError('The input argument must be a plain object'));
+  }
 
-	try {
-		const keys = Object.keys(promisesMap);
-		const promises = keys.map((key) => {
-			return (promisesMap as any)[key];
-		});
+  try {
+    const keys = Object.keys(promisesMap);
+    const promises = keys.map((key) => {
+      return (promisesMap as any)[key];
+    });
 
-		return Promise.all(promises).then((results) => {
-			return results.reduce((resolved, result, index) => {
-				resolved[keys[index]] = result;
-				return resolved;
-			}, {});
-		});
-	} catch (error) {
-		return Promise.reject(error);
-	}
+    return Promise.all(promises).then((results) => {
+      return results.reduce((resolved, result, index) => {
+        resolved[keys[index]] = result;
+        return resolved;
+      }, {});
+    });
+  } catch (error) {
+    return Promise.reject(error);
+  }
 }

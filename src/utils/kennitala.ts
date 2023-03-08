@@ -35,7 +35,7 @@ export type KennitalaType = 'person' | 'company';
  * 	* `'123 456-7890'` ==> `'123 456-7890'`
  */
 export const cleanKennitalaCareful = (kt: string): string =>
-	kt.trim().replace(/^(\d{6})\s?[-–]?\s?(\d{4})$/, '$1$2');
+  kt.trim().replace(/^(\d{6})\s?[-–]?\s?(\d{4})$/, '$1$2');
 
 // ---------------------------------------------------------------------------
 
@@ -53,16 +53,16 @@ export const cleanKennitalaCareful = (kt: string): string =>
  *  * `' abc '` ==> `''`
  */
 export const cleanKennitalaAggressive = (kt: string): string =>
-	kt
-		.replace(/^\D+/, '')
-		.replace(/\D+$/, '')
-		.replace(/[\s-–]/g, '');
+  kt
+    .replace(/^\D+/, '')
+    .replace(/\D+$/, '')
+    .replace(/[\s-–]/g, '');
 
 // ---------------------------------------------------------------------------
 
 const cleanIfKtShaped = (str: string) => {
-	const kt = cleanKennitalaCareful(str);
-	return kt.length === 10 && !/\D/.test(kt) ? kt : undefined;
+  const kt = cleanKennitalaCareful(str);
+  return kt.length === 10 && !/\D/.test(kt) ? kt : undefined;
 };
 
 /**
@@ -72,73 +72,73 @@ const cleanIfKtShaped = (str: string) => {
  * Defaults to returning the input untouched.
  */
 export const formatKennitala = (ktShaped: string) => {
-	const kt = cleanIfKtShaped(ktShaped);
-	if (!kt) {
-		return ktShaped;
-	}
-	return kt.substring(0, 6) + '-' + kt.substring(6);
+  const kt = cleanIfKtShaped(ktShaped);
+  if (!kt) {
+    return ktShaped;
+  }
+  return kt.substring(0, 6) + '-' + kt.substring(6);
 };
 
 // ---------------------------------------------------------------------------
 
 type KennitalaOptions<
-	KtType extends KennitalaType | undefined = KennitalaType,
-	PossiblyRobot extends boolean = boolean
+  KtType extends KennitalaType | undefined = KennitalaType,
+  PossiblyRobot extends boolean = boolean
 > = {
-	/**
-	 * If the valdation should specifically check for a
-	 * private person, or a legal entity ("company") kennitala.
-	 *
-	 * Defaults to accepting both types.
-	 */
-	type?: KtType;
-	/**
-	 * Set this flag to `true` if the parser should accept known
-	 * "Gervimaður" kennitalas (commonly used for mocking or systems-testing).
-	 *
-	 * Defaults to `false`.
-	 */
-	robot?: PossiblyRobot;
-	/**
-	 * `"aggressive"` mode strips away all spaces and dashes and throws away any
-	 * leading/trailing gunk.
-	 *
-	 * `false`/`"none"` performs no cleanup whatsoever, not even trimming.
-	 *
-	 * Default is `"careful"` mode, which performs only minimal cleaning on the
-	 * incoming string ...trimming it and then removing a space and/or dash
-	 * right before the last four of the ten digits.
-	 */
-	clean?: 'aggressive' | 'careful' | 'none' | false;
+  /**
+   * If the valdation should specifically check for a
+   * private person, or a legal entity ("company") kennitala.
+   *
+   * Defaults to accepting both types.
+   */
+  type?: KtType;
+  /**
+   * Set this flag to `true` if the parser should accept known
+   * "Gervimaður" kennitalas (commonly used for mocking or systems-testing).
+   *
+   * Defaults to `false`.
+   */
+  robot?: PossiblyRobot;
+  /**
+   * `"aggressive"` mode strips away all spaces and dashes and throws away any
+   * leading/trailing gunk.
+   *
+   * `false`/`"none"` performs no cleanup whatsoever, not even trimming.
+   *
+   * Default is `"careful"` mode, which performs only minimal cleaning on the
+   * incoming string ...trimming it and then removing a space and/or dash
+   * right before the last four of the ten digits.
+   */
+  clean?: 'aggressive' | 'careful' | 'none' | false;
 };
 
 export type KennitalaDataPerson<PossiblyRobot extends boolean = false> = {
-	/** The plain, cleaned-up 10 digit kennitala string */
-	value: KennitalaPerson;
-	/** The type of kennitala  */
-	type: 'person';
-	/** Indicates if the kennitala is a "Gervimaður" — i.e. a fake/testing kennitala */
-	robot: PossiblyRobot extends false ? false : boolean;
-	/** Pretty-formatted version of the kennitala with a dash before the last four digits */
-	formatted: string;
-	toString(): string;
+  /** The plain, cleaned-up 10 digit kennitala string */
+  value: KennitalaPerson;
+  /** The type of kennitala  */
+  type: 'person';
+  /** Indicates if the kennitala is a "Gervimaður" — i.e. a fake/testing kennitala */
+  robot: PossiblyRobot extends false ? false : boolean;
+  /** Pretty-formatted version of the kennitala with a dash before the last four digits */
+  formatted: string;
+  toString(): string;
 };
 
 export type KennitalaDataCompany = {
-	/** The plain, cleaned-up 10 digit kennitala string */
-	value: KennitalaCompany;
-	/** The type of kennitala  */
-	type: 'company';
-	/** Indicates if the kennitala is a "Gervimaður" — i.e. a fake/testing kennitala */
-	robot: false;
-	/** Pretty-formatted version of the kennitala with a dash before the last four digits */
-	formatted: string;
-	toString(): string;
+  /** The plain, cleaned-up 10 digit kennitala string */
+  value: KennitalaCompany;
+  /** The type of kennitala  */
+  type: 'company';
+  /** Indicates if the kennitala is a "Gervimaður" — i.e. a fake/testing kennitala */
+  robot: false;
+  /** Pretty-formatted version of the kennitala with a dash before the last four digits */
+  formatted: string;
+  toString(): string;
 };
 
 export type KennitalaData<
-	KtType extends KennitalaType = KennitalaType,
-	PossiblyRobot extends boolean = boolean
+  KtType extends KennitalaType = KennitalaType,
+  PossiblyRobot extends boolean = boolean
 > = (KennitalaDataPerson<PossiblyRobot> | KennitalaDataCompany) & { type: KtType };
 
 const magic = [3, 2, 7, 6, 5, 4, 3, 2, 1];
@@ -153,76 +153,76 @@ const validTypes: Record<KennitalaType, 1> = { person: 1, company: 1 };
  * If the parsing/validation fails, it simply returns `undefined`
  */
 export function parseKennitala(
-	// This is here just to trick TS into providing full IntelliSense
-	// auto-complete for `KennitalaOptions.type` values. Ack!
-	kt: '',
-	opt?: KennitalaOptions
+  // This is here just to trick TS into providing full IntelliSense
+  // auto-complete for `KennitalaOptions.type` values. Ack!
+  kt: '',
+  opt?: KennitalaOptions
 ): undefined;
 
 export function parseKennitala(
-	kt: KennitalaCompany,
-	opt?: KennitalaOptions<'company'>
+  kt: KennitalaCompany,
+  opt?: KennitalaOptions<'company'>
 ): KennitalaDataCompany;
 
 export function parseKennitala<PossiblyRobot extends boolean = false>(
-	kt: KennitalaPerson,
-	opt?: KennitalaOptions<'person', PossiblyRobot>
+  kt: KennitalaPerson,
+  opt?: KennitalaOptions<'person', PossiblyRobot>
 ): PossiblyRobot extends false
-	? undefined | KennitalaDataPerson
-	: KennitalaDataPerson<boolean>;
+  ? undefined | KennitalaDataPerson
+  : KennitalaDataPerson<boolean>;
 
 export function parseKennitala<
-	KtType extends KennitalaType,
-	PossiblyRobot extends boolean = false
+  KtType extends KennitalaType,
+  PossiblyRobot extends boolean = false
 >(
-	value: string,
-	opts?: KennitalaOptions<KtType, PossiblyRobot>
+  value: string,
+  opts?: KennitalaOptions<KtType, PossiblyRobot>
 ): KennitalaData<KtType, PossiblyRobot> | undefined;
 
 export function parseKennitala<
-	KtType extends KennitalaType,
-	PossiblyRobot extends boolean = true
+  KtType extends KennitalaType,
+  PossiblyRobot extends boolean = true
 >(
-	value: string,
-	opts?: KennitalaOptions<KtType, PossiblyRobot>
+  value: string,
+  opts?: KennitalaOptions<KtType, PossiblyRobot>
 ): KennitalaData<KtType, PossiblyRobot> | undefined {
-	opts = opts || {};
-	if (!value) {
-		return;
-	}
-	value =
-		opts.clean === 'none' || opts.clean === false
-			? value
-			: opts.clean === 'aggressive'
-			? cleanKennitalaAggressive(value)
-			: cleanKennitalaCareful(value);
+  opts = opts || {};
+  if (!value) {
+    return;
+  }
+  value =
+    opts.clean === 'none' || opts.clean === false
+      ? value
+      : opts.clean === 'aggressive'
+      ? cleanKennitalaAggressive(value)
+      : cleanKennitalaCareful(value);
 
-	if (value.length !== 10 || !/^[0-7]\d{8}[90]$/.test(value)) {
-		return;
-	}
-	const robot = robotKtRe.test(value);
-	if (robot && !opts.robot) {
-		return;
-	}
-	const checkSum = magic.reduce((acc, num, i) => acc + num * parseInt(value[i]), 0);
-	if (checkSum % 11) {
-		return;
-	}
-	const type: KennitalaType = value[0] > '3' ? 'company' : 'person';
-	const optType = opts.type;
-	if (optType && optType in validTypes && optType !== type) {
-		return;
-	}
+  if (value.length !== 10 || !/^[0-7]\d{8}[90]$/.test(value)) {
+    return;
+  }
+  const robot = robotKtRe.test(value);
+  if (robot && !opts.robot) {
+    return;
+  }
+  const checkSum = magic.reduce((acc, num, i) => acc + num * parseInt(value[i]), 0);
+  if (checkSum % 11) {
+    return;
+  }
+  const type: KennitalaType = value[0] > '3' ? 'company' : 'person';
+  const optType = opts.type;
+  if (optType && optType in validTypes && optType !== type) {
+    return;
+  }
 
-	return {
-		value,
-		type,
-		robot,
-		toString: () => value,
-		get formatted() {
-			return formatKennitala(value);
-		},
-	} as KennitalaData<KtType, PossiblyRobot>;
+  return {
+    value,
+    type,
+    robot,
+    toString: () => value,
+    get formatted() {
+      return formatKennitala(value);
+    },
+  } as KennitalaData<KtType, PossiblyRobot>;
 }
 
 // ---------------------------------------------------------------------------
@@ -231,11 +231,11 @@ export function parseKennitala<
  * Options are the same as for `parseKennitala` except that `clean` defaults to `"none"`
  */
 export const isValidKennitala = (kt: string, opts?: KennitalaOptions): kt is Kennitala =>
-	!!parseKennitala(kt, {
-		...opts,
-		// make "clean: false" the default when validating
-		clean: opts?.clean || false,
-	});
+  !!parseKennitala(kt, {
+    ...opts,
+    // make "clean: false" the default when validating
+    clean: opts?.clean || false,
+  });
 
 // ---------------------------------------------------------------------------
 
@@ -246,20 +246,20 @@ export const isValidKennitala = (kt: string, opts?: KennitalaOptions): kt is Ken
  * For malformed (non-kennitala shaped) strings it returns undefined.
  */
 export const getKennitalaBirthDate = (ktShaped: string) => {
-	const kt = cleanIfKtShaped(ktShaped);
-	if (!kt) {
-		return;
-	}
-	const MM = kt.substring(2, 4);
-	const CC = kt.substring(9, 10) === '9' ? '19' : '20';
-	const YY = kt.substring(4, 6);
-	const birthDate = new Date(`${CC + YY}-${MM}-01`);
-	let date = parseInt(kt.substring(0, 2));
-	if (date > 31) {
-		date = date - 40;
-	}
-	birthDate.setUTCDate(date);
-	return birthDate;
+  const kt = cleanIfKtShaped(ktShaped);
+  if (!kt) {
+    return;
+  }
+  const MM = kt.substring(2, 4);
+  const CC = kt.substring(9, 10) === '9' ? '19' : '20';
+  const YY = kt.substring(4, 6);
+  const birthDate = new Date(`${CC + YY}-${MM}-01`);
+  let date = parseInt(kt.substring(0, 2));
+  if (date > 31) {
+    date = date - 40;
+  }
+  birthDate.setUTCDate(date);
+  return birthDate;
 };
 
 // ---------------------------------------------------------------------------
@@ -272,7 +272,7 @@ export const getKennitalaBirthDate = (ktShaped: string) => {
  * for random strings.
  */
 export const isPersonKennitala = (kt: Kennitala): kt is KennitalaPerson =>
-	parseInt(kt[0]) <= 3;
+  parseInt(kt[0]) <= 3;
 
 /**
  * Detects if an input `Kennitala` is `KennitalaCompany`
@@ -282,4 +282,4 @@ export const isPersonKennitala = (kt: Kennitala): kt is KennitalaPerson =>
  * for random strings.
  */
 export const isCompanyKennitala = (kt: Kennitala): kt is KennitalaCompany =>
-	parseInt(kt[0]) >= 4;
+  parseInt(kt[0]) >= 4;

@@ -1,9 +1,9 @@
 if (
-	typeof window !== 'undefined' &&
-	(!window.Promise || !window.Promise.prototype.finally)
+  typeof window !== 'undefined' &&
+  (!window.Promise || !window.Promise.prototype.finally)
 ) {
-	// https://github.com/lhorie/mithril.js/blob/next/promise/promise.js
-	/* eslint-disable */
+  // https://github.com/lhorie/mithril.js/blob/next/promise/promise.js
+  /* eslint-disable */
 
   var PromisePolyfill = function(executor) {
     if (!(this instanceof PromisePolyfill)) throw new Error("Promise must be called with `new`")
@@ -116,9 +116,9 @@ if (
 
   /* eslint-enable */
 
-	if (!window.Promise) {
-		window.Promise = PromisePolyfill;
-	} else if (!window.Promise.prototype.finally) {
-		window.Promise.prototype.finally = PromisePolyfill.prototype.finally;
-	}
+  if (!window.Promise) {
+    window.Promise = PromisePolyfill;
+  } else if (!window.Promise.prototype.finally) {
+    window.Promise.prototype.finally = PromisePolyfill.prototype.finally;
+  }
 }

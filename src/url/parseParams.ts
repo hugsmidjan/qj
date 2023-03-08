@@ -13,28 +13,27 @@ type Params<P extends string> = Record<P, Array<string> | undefined>;
  *
  */
 export default function parseParams<P extends string>(
-	queryString?: string | undefined
+  queryString?: string | undefined
 ): Params<P> {
-	const map: Record<string, Array<string> | undefined> = {};
-	const paramString = (arguments.length === 0
-		? document.location.search
-		: queryString || ''
-	)
-		.trim()
-		.replace(/^[?&]/, '')
-		.replace(/&$/, '');
+  const map: Record<string, Array<string> | undefined> = {};
+  const paramString = (
+    arguments.length === 0 ? document.location.search : queryString || ''
+  )
+    .trim()
+    .replace(/^[?&]/, '')
+    .replace(/&$/, '');
 
-	if (paramString) {
-		paramString
-			.replace(/\+/g, ' ')
-			.split('&')
-			.forEach((paramBit) => {
-				// eslint-disable-next-line prefer-const
-				let [name, value] = paramBit.split('=');
-				name = decodeURIComponent(name);
-				const values = map[name] || (map[name] = []);
-				values.push(decodeURIComponent(value || ''));
-			});
-	}
-	return map as Params<P>;
+  if (paramString) {
+    paramString
+      .replace(/\+/g, ' ')
+      .split('&')
+      .forEach((paramBit) => {
+        // eslint-disable-next-line prefer-const
+        let [name, value] = paramBit.split('=');
+        name = decodeURIComponent(name);
+        const values = map[name] || (map[name] = []);
+        values.push(decodeURIComponent(value || ''));
+      });
+  }
+  return map as Params<P>;
 }

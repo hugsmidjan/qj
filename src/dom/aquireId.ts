@@ -17,38 +17,38 @@ import domid from './domid';
  */
 
 export default function aquireId(
-	el?: string | Element | Array<Element> | NodeListOf<Element> | null,
-	prefDefaultId?: string
+  el?: string | Element | Array<Element> | NodeListOf<Element> | null,
+  prefDefaultId?: string
 ) {
-	// el is an optional parameter.
-	if (typeof el === 'string') {
-		prefDefaultId = el;
-		el = undefined;
-	}
-	if (el) {
-		el = 'nodeType' in el ? el : el[0];
-	}
-	if (!el || !el.id) {
-		let id = prefDefaultId || 'tmp_' + domid();
-		if (prefDefaultId) {
-			let count;
-			let idPrefix = prefDefaultId;
-			while (document.getElementById(id)) {
-				if (count === undefined) {
-					const m = prefDefaultId.match(/\d+$/);
-					count = m ? parseInt(m[0]) : 1;
-					idPrefix = m ? prefDefaultId.replace(/\d+$/, '') : prefDefaultId;
-				}
-				count++;
-				id = idPrefix + count;
-			}
-		}
-		if (!el) {
-			return id;
-		}
-		if (!el.id) {
-			el.id = id;
-		}
-	}
-	return el.id;
+  // el is an optional parameter.
+  if (typeof el === 'string') {
+    prefDefaultId = el;
+    el = undefined;
+  }
+  if (el) {
+    el = 'nodeType' in el ? el : el[0];
+  }
+  if (!el || !el.id) {
+    let id = prefDefaultId || 'tmp_' + domid();
+    if (prefDefaultId) {
+      let count;
+      let idPrefix = prefDefaultId;
+      while (document.getElementById(id)) {
+        if (count === undefined) {
+          const m = prefDefaultId.match(/\d+$/);
+          count = m ? parseInt(m[0]) : 1;
+          idPrefix = m ? prefDefaultId.replace(/\d+$/, '') : prefDefaultId;
+        }
+        count++;
+        id = idPrefix + count;
+      }
+    }
+    if (!el) {
+      return id;
+    }
+    if (!el.id) {
+      el.id = id;
+    }
+  }
+  return el.id;
 }

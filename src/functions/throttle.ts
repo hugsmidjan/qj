@@ -1,7 +1,7 @@
 type TimerId = ReturnType<typeof setTimeout>; // Ack this sidesteps that window.setTimeout and Node's setTimeout return different types
 
 type Finishable<A extends Array<any>> = ((...args: A) => void) & {
-	finish(cancel?: boolean): void;
+  finish(cancel?: boolean): void;
 };
 
 /** returns a throttled function that never runs more often than
@@ -9,34 +9,34 @@ type Finishable<A extends Array<any>> = ((...args: A) => void) & {
  * The returned function also has a nice `.finish()` method.
  */
 const throttle = <A extends Array<any>>(
-	func: (...args: A) => void,
-	delay: number,
-	skipFirst?: boolean
+  func: (...args: A) => void,
+  delay: number,
+  skipFirst?: boolean
 ): Finishable<A> => {
-	let timeout: TimerId | undefined;
-	let throttled = 0;
-	let _args: A;
-	let _this: unknown;
+  let timeout: TimerId | undefined;
+  let throttled = 0;
+  let _args: A;
+  let _this: unknown;
 
-	const throttledFn = function (...args) {
-		_args = args;
-		_this = this;
+  const throttledFn = function (...args) {
+    _args = args;
+    _this = this;
 
-		if (!throttled) {
-			skipFirst ? throttled++ : func.apply(_this, _args);
-			timeout = (setTimeout(throttledFn.finish, delay) as unknown) as TimerId; // Go home TypeScript, you're drunk!
-		}
+    if (!throttled) {
+      skipFirst ? throttled++ : func.apply(_this, _args);
+      timeout = setTimeout(throttledFn.finish, delay) as unknown as TimerId; // Go home TypeScript, you're drunk!
+    }
 
-		throttled++;
-	} as Finishable<A>;
+    throttled++;
+  } as Finishable<A>;
 
-	throttledFn.finish = (cancel?: boolean) => {
-		timeout && clearTimeout(timeout);
-		!cancel && throttled > 1 && func.apply(_this, _args);
-		throttled = 0;
-	};
+  throttledFn.finish = (cancel?: boolean) => {
+    timeout && clearTimeout(timeout);
+    !cancel && throttled > 1 && func.apply(_this, _args);
+    throttled = 0;
+  };
 
-	return throttledFn;
+  return throttledFn;
 };
 
 /** Sugar to produce a dynamic debounced function that accepts its contents/behavior at call time.
@@ -49,13 +49,13 @@ const throttle = <A extends Array<any>>(
  *      myThrottler((name) => { alert('Wazzap ' + name); }, 'world');
  */
 throttle.d = (delay: number, skipFirst?: boolean) =>
-	throttle(
-		function <A extends Array<any>>(fn: (...args: A) => void, ...args: A) {
-			fn.apply(this, args);
-		},
-		delay,
-		skipFirst
-	);
+  throttle(
+    function <A extends Array<any>>(fn: (...args: A) => void, ...args: A) {
+      fn.apply(this, args);
+    },
+    delay,
+    skipFirst
+  );
 
 /** /
 const throttler = throttle.d(20, true);

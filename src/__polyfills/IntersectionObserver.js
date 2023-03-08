@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // https://github.com/w3c/IntersectionObserver/tree/master/polyfill
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.

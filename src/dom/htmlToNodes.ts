@@ -1,11 +1,10 @@
 import A from '../list/A';
-import htmlToDiv from './htmlToDiv';
 
-import { HtmlToDivOpts } from './htmlToDiv';
+import htmlToDiv, { HtmlToDivOpts } from './htmlToDiv';
 
 export default function htmlToNodes(
-	html: string,
-	opts?: HtmlToDivOpts
+  html: string,
+  opts?: HtmlToDivOpts
 ): Array<ChildNode> {
-	return A(htmlToDiv(html, opts).childNodes);
+  return A(htmlToDiv(html, opts).childNodes);
 }

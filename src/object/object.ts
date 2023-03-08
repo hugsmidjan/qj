@@ -13,15 +13,14 @@
 //   (https://github.com/lodash/lodash/blob/f71a7a04b51bd761683e4a774c5b1d38bdaa7b20/_baseIsEqual.js)
 
 export type Apply<A extends object, B> = A extends B
-	? A
-	: B extends object
-	? {
-			[K in Exclude<keyof A, keyof B>]: A[K];
-	  } &
-			{
-				[K in (keyof A & keyof B) | Exclude<keyof B, keyof A>]: B[K];
-			}
-	: A;
+  ? A
+  : B extends object
+  ? {
+      [K in Exclude<keyof A, keyof B>]: A[K];
+    } & {
+      [K in (keyof A & keyof B) | Exclude<keyof B, keyof A>]: B[K];
+    }
+  : A;
 
 type SameChecker = (valA: any, valB: any, key: string) => boolean;
 type AnyObj = Record<string | number, any>;
@@ -30,21 +29,21 @@ const _hasOwnProperty = Object.prototype.hasOwnProperty;
 const hasOwn = (obj: {}, key: PropertyKey) => _hasOwnProperty.call(obj, key);
 
 const _createEmpty = <T extends object>(original: T): T =>
-	original.constructor
-		? //
-		  // @ts-ignore  (TODO: Figure out how to express this safely)
-		  new original.constructor()
-		: Object.create(null);
+  original.constructor
+    ? //
+      // @ts-ignore  (TODO: Figure out how to express this safely)
+      new original.constructor()
+    : Object.create(null);
 
 // IE11 compatible no-polyfill object cloner
 const _clone = <T extends object>(original: T): T => {
-	const clone: T = _createEmpty(original);
-	for (const originalKey in original) {
-		if (hasOwn(original, originalKey)) {
-			clone[originalKey] = original[originalKey];
-		}
-	}
-	return clone;
+  const clone: T = _createEmpty(original);
+  for (const originalKey in original) {
+    if (hasOwn(original, originalKey)) {
+      clone[originalKey] = original[originalKey];
+    }
+  }
+  return clone;
 };
 
 /**
@@ -52,49 +51,49 @@ const _clone = <T extends object>(original: T): T => {
  * Returns the original if nothing changed.
  */
 function objectUpdate<O extends object, N extends object>(
-	original: O,
-	newValues: N,
-	customSameCheck?: SameChecker
+  original: O,
+  newValues: N,
+  customSameCheck?: SameChecker
 ): Apply<O, N>;
 
 function objectUpdate(
-	original: AnyObj,
-	newValues: AnyObj,
-	customSameCheck?: SameChecker
+  original: AnyObj,
+  newValues: AnyObj,
+  customSameCheck?: SameChecker
 ): object {
-	let clone;
-	for (const key in newValues) {
-		const valA = original[key];
-		const valB = newValues[key];
-		if (
-			valA !== valB &&
-			hasOwn(newValues, key) &&
-			!(customSameCheck && valA && valB && customSameCheck(valA, valB, key))
-		) {
-			// Fast IE11 compatible no-polyfill version
-			if (!clone) {
-				clone = _clone(original);
-			}
-			clone[key] = newValues[key];
-			// // Modern
-			// clone = Object.assign({}, original, newValues);
-			// break;
-			// // Ultra modern
-			// clone = { ...original, ...newValues };
-			// break;
-		}
-	}
-	return clone || original;
+  let clone;
+  for (const key in newValues) {
+    const valA = original[key];
+    const valB = newValues[key];
+    if (
+      valA !== valB &&
+      hasOwn(newValues, key) &&
+      !(customSameCheck && valA && valB && customSameCheck(valA, valB, key))
+    ) {
+      // Fast IE11 compatible no-polyfill version
+      if (!clone) {
+        clone = _clone(original);
+      }
+      clone[key] = newValues[key];
+      // // Modern
+      // clone = Object.assign({}, original, newValues);
+      // break;
+      // // Ultra modern
+      // clone = { ...original, ...newValues };
+      // break;
+    }
+  }
+  return clone || original;
 }
 
 type FilterFlags<Base, Cond> = {
-	[Key in keyof Base]: Cond extends Base[Key] ? Key : never;
+  [Key in keyof Base]: Cond extends Base[Key] ? Key : never;
 };
 type AllowedNames<Base, Cond> = FilterFlags<Base, Cond>[keyof Base];
 type SubType<Base, Cond> = Pick<Base, AllowedNames<Base, Cond>>;
 
 type NotNull<T> = {
-	[Key in keyof T]: Exclude<T[Key], null>;
+  [Key in keyof T]: Exclude<T[Key], null>;
 };
 
 /**
@@ -102,11 +101,11 @@ type NotNull<T> = {
  * (and/or optionally `null`) values are made optional (allowed to be missing).
  */
 type Optionaled<
-	T,
-	AndNull,
-	U = AndNull extends true ? undefined | null : undefined
+  T,
+  AndNull,
+  U = AndNull extends true ? undefined | null : undefined
 > = Omit<T, AllowedNames<T, U>> &
-	Partial<Pick<AndNull extends true ? NotNull<T> : T, AllowedNames<T, U>>>;
+  Partial<Pick<AndNull extends true ? NotNull<T> : T, AllowedNames<T, U>>>;
 
 /**
  * Returns a clone of original object with all keys that have undefined values deleted
@@ -114,32 +113,32 @@ type Optionaled<
  * Returns the original if nothing changed.
  */
 const objectClean = <T extends object, N extends boolean = false>(
-	original: T,
-	alsoNull?: N
+  original: T,
+  alsoNull?: N
 ): Optionaled<T, N> => {
-	let deleted;
-	const clone = _createEmpty(original);
-	for (const key in original) {
-		if (hasOwn(original, key)) {
-			const originalVal = original[key];
-			if (originalVal === undefined || (originalVal === null && alsoNull)) {
-				deleted = true;
-			} else {
-				clone[key] = originalVal;
-			}
-		}
-	}
-	return deleted ? clone : original;
+  let deleted;
+  const clone = _createEmpty(original);
+  for (const key in original) {
+    if (hasOwn(original, key)) {
+      const originalVal = original[key];
+      if (originalVal === undefined || (originalVal === null && alsoNull)) {
+        deleted = true;
+      } else {
+        clone[key] = originalVal;
+      }
+    }
+  }
+  return deleted ? clone : original;
 };
 
 /** Returns true if object as no properties of its own */
 const objectIsEmpty = (object: object): boolean => {
-	for (const key in object) {
-		if (hasOwn(object, key)) {
-			return false;
-		}
-	}
-	return true;
+  for (const key in object) {
+    if (hasOwn(object, key)) {
+      return false;
+    }
+  }
+  return true;
 };
 
 const defaultSame: SameChecker = (a, b, key) => a[key] === b[key];
@@ -148,20 +147,20 @@ const defaultSame: SameChecker = (a, b, key) => a[key] === b[key];
 function objectIsSame(a: object, b: object, isSame?: SameChecker): boolean;
 
 function objectIsSame(a: AnyObj, b: AnyObj, isSame: SameChecker = defaultSame): boolean {
-	if (a === b) {
-		return true;
-	}
-	const aKeys = Object.keys(a);
-	if (aKeys.length !== Object.keys(b).length) {
-		return false;
-	}
-	for (let i = 0; i < aKeys.length; i++) {
-		const key = aKeys[i];
-		if (!hasOwn(b, key) || !isSame(a, b, key)) {
-			return false;
-		}
-	}
-	return true;
+  if (a === b) {
+    return true;
+  }
+  const aKeys = Object.keys(a);
+  if (aKeys.length !== Object.keys(b).length) {
+    return false;
+  }
+  for (let i = 0; i < aKeys.length; i++) {
+    const key = aKeys[i];
+    if (!hasOwn(b, key) || !isSame(a, b, key)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -169,21 +168,21 @@ function objectIsSame(a: AnyObj, b: AnyObj, isSame: SameChecker = defaultSame): 
  * Returns the original if nothing changed.
  */
 const objectOnly = <T extends object, K extends keyof T>(
-	original: T,
-	keys: Array<K>
+  original: T,
+  keys: Array<K>
 ): Pick<T, K> => {
-	let extra;
-	const clone = _createEmpty(original);
-	for (const key in original) {
-		if (hasOwn(original, key)) {
-			if (keys.indexOf(key as any) > -1) {
-				clone[key] = original[key];
-			} else {
-				extra = true;
-			}
-		}
-	}
-	return extra ? clone : original;
+  let extra;
+  const clone = _createEmpty(original);
+  for (const key in original) {
+    if (hasOwn(original, key)) {
+      if (keys.indexOf(key as any) > -1) {
+        clone[key] = original[key];
+      } else {
+        extra = true;
+      }
+    }
+  }
+  return extra ? clone : original;
 };
 
 /**
@@ -191,24 +190,24 @@ const objectOnly = <T extends object, K extends keyof T>(
  * Returns the original if nothing changed.
  */
 const objectWithout = <T extends object, K extends keyof T>(
-	original: T,
-	keys: Array<K>
+  original: T,
+  keys: Array<K>
 ): Omit<T, K> => {
-	let clone;
-	const numKeys = keys.length;
-	for (let i = 0; i < numKeys; i++) {
-		const key = keys[i];
-		if (hasOwn(original, key)) {
-			// Fast IE11 compatible no-polyfill version
-			clone = clone || _clone(original);
-			// // Modern
-			// clone = clone || Object.assign({}, original);
-			// // Ultra modern
-			// clone = clone || { ...original };
-			delete clone[key];
-		}
-	}
-	return clone || original;
+  let clone;
+  const numKeys = keys.length;
+  for (let i = 0; i < numKeys; i++) {
+    const key = keys[i];
+    if (hasOwn(original, key)) {
+      // Fast IE11 compatible no-polyfill version
+      clone = clone || _clone(original);
+      // // Modern
+      // clone = clone || Object.assign({}, original);
+      // // Ultra modern
+      // clone = clone || { ...original };
+      delete clone[key];
+    }
+  }
+  return clone || original;
 };
 
 /**
@@ -216,19 +215,19 @@ const objectWithout = <T extends object, K extends keyof T>(
  * Otherwise returns replacement as is.
  */
 const objectReplace = (
-	original: object,
-	replacement: object,
-	customSameCheck?: SameChecker
+  original: object,
+  replacement: object,
+  customSameCheck?: SameChecker
 ) => (objectIsSame(original, replacement, customSameCheck) ? original : replacement);
 
 // ---------------------------------------------------------------------------
 
 export {
-	objectClean,
-	objectIsEmpty,
-	objectIsSame,
-	objectOnly,
-	objectReplace,
-	objectUpdate,
-	objectWithout,
+  objectClean,
+  objectIsEmpty,
+  objectIsSame,
+  objectOnly,
+  objectReplace,
+  objectUpdate,
+  objectWithout,
 };

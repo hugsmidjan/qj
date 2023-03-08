@@ -5,7 +5,7 @@ import getPageScrollElm from '../dom/getPageScrollElm';
  * format (compatible with .get())
  */
 const encodeFrag = (_fragment: string) => {
-	return encodeURI(_fragment).replace(/#/g, '%23').replace(/%7C/g, '|');
+  return encodeURI(_fragment).replace(/#/g, '%23').replace(/%7C/g, '|');
 };
 
 /**
@@ -23,32 +23,32 @@ const encodeFrag = (_fragment: string) => {
  * ```
  */
 const setFrag = (_fragment?: string, _isEncoded?: boolean): void => {
-	_fragment = (_fragment || '').replace(/^#/, '');
-	// check if there exists an element with .id same as _fragment
+  _fragment = (_fragment || '').replace(/^#/, '');
+  // check if there exists an element with .id same as _fragment
 
-	const scrollElm = getPageScrollElm();
+  const scrollElm = getPageScrollElm();
 
-	const _elm =
-		_fragment &&
-		document.getElementById(_isEncoded ? decodeURIComponent(_fragment) : _fragment);
+  const _elm =
+    _fragment &&
+    document.getElementById(_isEncoded ? decodeURIComponent(_fragment) : _fragment);
 
-	const _prePos = scrollElm.scrollTop;
-	const _tmpId = _elm && _elm.id;
+  const _prePos = scrollElm.scrollTop;
+  const _tmpId = _elm && _elm.id;
 
-	// temporaily defuse the element's id
-	_elm && (_elm.id = '');
+  // temporaily defuse the element's id
+  _elm && (_elm.id = '');
 
-	// set the damn hash... (Note: Safari 3 & Chrome barf if frag === '#'.)
-	document.location.hash = _isEncoded ? _fragment : encodeFrag(_fragment);
+  // set the damn hash... (Note: Safari 3 & Chrome barf if frag === '#'.)
+  document.location.hash = _isEncoded ? _fragment : encodeFrag(_fragment);
 
-	// Always reset scrollpos
-	// (because Chrome ~v34 seems to scroll to the element which had -
-	// that ID on page load regardless of wheter its id has changed
-	// or if another element has now received that id. weird.)
-	scrollElm.scrollTo(0, _prePos);
+  // Always reset scrollpos
+  // (because Chrome ~v34 seems to scroll to the element which had -
+  // that ID on page load regardless of wheter its id has changed
+  // or if another element has now received that id. weird.)
+  scrollElm.scrollTo(0, _prePos);
 
-	// put the old DOM id back in it's place
-	_elm && (_elm.id = _tmpId || '');
+  // put the old DOM id back in it's place
+  _elm && (_elm.id = _tmpId || '');
 };
 
 /**
@@ -56,14 +56,14 @@ const setFrag = (_fragment?: string, _isEncoded?: boolean): void => {
  * returns a plaintext (decodeURIComponent) version of the fragment - unless a `_returnRaw` argument is passed.
  */
 const getFrag = (url?: string, _returnRaw?: boolean): string => {
-	const _fragment = (url || document.location.href).split('#')[1] || '';
-	return _returnRaw ? _fragment : decodeURIComponent(_fragment);
+  const _fragment = (url || document.location.href).split('#')[1] || '';
+  return _returnRaw ? _fragment : decodeURIComponent(_fragment);
 };
 
 const frag = {
-	get: getFrag,
-	set: setFrag,
-	encode: encodeFrag,
+  get: getFrag,
+  set: setFrag,
+  encode: encodeFrag,
 };
 
-export { setFrag, getFrag, encodeFrag, frag as default };
+export { frag as default, encodeFrag, getFrag, setFrag };

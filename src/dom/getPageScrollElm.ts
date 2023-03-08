@@ -3,16 +3,16 @@
  * responsible for "scrolling the page". Prefers `<html />`.
  */
 const getPageScrollElm = (customWindow: Window = window) => {
-	const document = customWindow.document;
-	const bodyElm = document.body;
-	let pageScrollElm = document.documentElement;
-	if (
-		pageScrollElm.clientHeight === pageScrollElm.scrollHeight &&
-		bodyElm.clientHeight !== bodyElm.scrollHeight
-	) {
-		pageScrollElm = bodyElm;
-	}
-	return pageScrollElm;
+  const document = customWindow.document;
+  const bodyElm = document.body;
+  let pageScrollElm = document.documentElement;
+  if (
+    pageScrollElm.clientHeight === pageScrollElm.scrollHeight &&
+    bodyElm.clientHeight !== bodyElm.scrollHeight
+  ) {
+    pageScrollElm = bodyElm;
+  }
+  return pageScrollElm;
 };
 
 export default getPageScrollElm;
