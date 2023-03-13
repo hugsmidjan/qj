@@ -34,8 +34,8 @@ export type KennitalaType = 'person' | 'company';
  * 	* `' 1234-567890'` ==> `'1234-567890'`
  * 	* `'123 456-7890'` ==> `'123 456-7890'`
  */
-export const cleanKennitalaCareful = (kt: string): string =>
-  kt.trim().replace(/^(\d{6})\s?[-–]?\s?(\d{4})$/, '$1$2');
+export const cleanKennitalaCareful = (value: string): string =>
+  value.trim().replace(/^(\d{6})\s?[-–]?\s?(\d{4})$/, '$1$2');
 
 // ---------------------------------------------------------------------------
 
@@ -52,17 +52,17 @@ export const cleanKennitalaCareful = (kt: string): string =>
  *  * `'1-2-3 4-5 6-7-8 9-0'` ==> `'1234567890'`
  *  * `' abc '` ==> `''`
  */
-export const cleanKennitalaAggressive = (kt: string): string =>
-  kt
+export const cleanKennitalaAggressive = (value: string): string =>
+  value
     .replace(/^\D+/, '')
     .replace(/\D+$/, '')
     .replace(/[\s-–]/g, '');
 
 // ---------------------------------------------------------------------------
 
-const cleanIfKtShaped = (str: string) => {
-  const kt = cleanKennitalaCareful(str);
-  return kt.length === 10 && !/\D/.test(kt) ? kt : undefined;
+const cleanIfKtShaped = (value: string) => {
+  const cleaned = cleanKennitalaCareful(value);
+  return cleaned.length === 10 && !/\D/.test(cleaned) ? cleaned : undefined;
 };
 
 /**
@@ -71,12 +71,12 @@ const cleanIfKtShaped = (str: string) => {
  *
  * Defaults to returning the input untouched.
  */
-export const formatKennitala = (ktShaped: string) => {
-  const kt = cleanIfKtShaped(ktShaped);
-  if (!kt) {
-    return ktShaped;
+export const formatKennitala = (value: string) => {
+  const cleaned = cleanIfKtShaped(value);
+  if (!cleaned) {
+    return value;
   }
-  return kt.substring(0, 6) + '-' + kt.substring(6);
+  return cleaned.substring(0, 6) + '-' + cleaned.substring(6);
 };
 
 // ---------------------------------------------------------------------------
@@ -155,7 +155,7 @@ const validTypes: Record<KennitalaType, 1> = { person: 1, company: 1 };
 export function parseKennitala(
   // This is here just to trick TS into providing full IntelliSense
   // auto-complete for `KennitalaOptions.type` values. Ack!
-  kt: '',
+  value: '',
   opt?: KennitalaOptions
 ): undefined;
 
@@ -228,10 +228,17 @@ export function parseKennitala<
 // ---------------------------------------------------------------------------
 
 /**
- * Options are the same as for `parseKennitala` except that `clean` defaults to `"none"`
+ * Runs the input through `parseKennitala` and returns `true` if the parsing
+ * was successful.
+ *
+ * Options are the same as for `parseKennitala` except that `clean` option
+ * defaults to `"none"`.
  */
-export const isValidKennitala = (kt: string, opts?: KennitalaOptions): kt is Kennitala =>
-  !!parseKennitala(kt, {
+export const isValidKennitala = (
+  value: string,
+  opts?: KennitalaOptions
+): value is Kennitala =>
+  !!parseKennitala(value, {
     ...opts,
     // make "clean: false" the default when validating
     clean: opts?.clean || false,
@@ -245,16 +252,16 @@ export const isValidKennitala = (kt: string, opts?: KennitalaOptions): kt is Ken
  *
  * For malformed (non-kennitala shaped) strings it returns undefined.
  */
-export const getKennitalaBirthDate = (ktShaped: string) => {
-  const kt = cleanIfKtShaped(ktShaped);
-  if (!kt) {
+export const getKennitalaBirthDate = (value: string) => {
+  const cleaned = cleanIfKtShaped(value);
+  if (!cleaned) {
     return;
   }
-  const MM = kt.substring(2, 4);
-  const CC = kt.substring(9, 10) === '9' ? '19' : '20';
-  const YY = kt.substring(4, 6);
+  const MM = cleaned.substring(2, 4);
+  const CC = cleaned.substring(9, 10) === '9' ? '19' : '20';
+  const YY = cleaned.substring(4, 6);
   const birthDate = new Date(`${CC + YY}-${MM}-01`);
-  let date = parseInt(kt.substring(0, 2));
+  let date = parseInt(cleaned.substring(0, 2));
   if (date > 31) {
     date = date - 40;
   }
@@ -270,9 +277,18 @@ export const getKennitalaBirthDate = (ktShaped: string) => {
  * Assumes that the input `kt` is already validated as `Kennitala`
  * and performs no internal validation, and is thus unreliable
  * for random strings.
+ *
+ * To safely check the type of a plain, non-validated `string` input,
+ * use `parseKennitala` and check the `.type` of the retured data object.
+ * Example:
+ *
+ * ```js
+ * const kt = parseKennitala(myInputString);
+ * const isPerson = kt?.type === 'person';
+ * ```
  */
-export const isPersonKennitala = (kt: Kennitala): kt is KennitalaPerson =>
-  parseInt(kt[0]) <= 3;
+export const isPersonKennitala = (kennitala: Kennitala): kennitala is KennitalaPerson =>
+  parseInt(kennitala[0]) <= 3;
 
 /**
  * Detects if an input `Kennitala` is `KennitalaCompany`
@@ -280,6 +296,15 @@ export const isPersonKennitala = (kt: Kennitala): kt is KennitalaPerson =>
  * Assumes that the input `kt` is already validated as `Kennitala`
  * and performs no internal validation, and is thus unreliable
  * for random strings.
+ *
+ * To safely check the type of a plain, non-validated `string` input,
+ * use `parseKennitala` and check the `.type` of the retured data object.
+ * Example:
+ *
+ * ```js
+ * const kt = parseKennitala(myInputString);
+ * const isPerson = kt?.type === 'person';
+ * ```
  */
-export const isCompanyKennitala = (kt: Kennitala): kt is KennitalaCompany =>
-  parseInt(kt[0]) >= 4;
+export const isCompanyKennitala = (kennitala: Kennitala): kennitala is KennitalaCompany =>
+  parseInt(kennitala[0]) >= 4;
