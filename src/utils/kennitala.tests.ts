@@ -9,6 +9,7 @@ import {
   getKennitalaBirthDate,
   isCompanyKennitala,
   isPersonKennitala,
+  isTempKennitala,
   isValidKennitala,
   Kennitala,
   KennitalaCompany,
@@ -270,7 +271,7 @@ o.spec('isValidKennitala', () => {
 
 // ---------------------------------------------------------------------------
 
-o.spec('isPersonKennitala and isCompanyKennitala', () => {
+o.spec('isPersonKennitala, isCompanyKennitala, isTemporaryKennitala', () => {
   o('Correctly detects type of valid Kennitalas', () => {
     o(isPersonKennitala(ktPerson as Kennitala)).equals(true)('person is person');
     o(isPersonKennitala(ktCompany as Kennitala)).equals(false)('company is not person');
@@ -278,6 +279,9 @@ o.spec('isPersonKennitala and isCompanyKennitala', () => {
     o(isCompanyKennitala(ktCompany as Kennitala)).equals(true)('company is company');
     o(isCompanyKennitala(ktPerson as Kennitala)).equals(false)('person is not company');
     o(isCompanyKennitala(ktKerfis as Kennitala)).equals(false)('kerfis is not company');
+    o(isTempKennitala(ktCompany as Kennitala)).equals(false)('company is not kerfis');
+    o(isTempKennitala(ktPerson as Kennitala)).equals(false)('person is not kerfis');
+    o(isTempKennitala(ktKerfis as Kennitala)).equals(true)('kerfis is kerfis');
   });
 
   o('Performs no trimming/parsing/validation on invalid strings', () => {
@@ -286,11 +290,15 @@ o.spec('isPersonKennitala and isCompanyKennitala', () => {
     // @ts-expect-error  (testing invalid input)
     const startsWith5: Kennitala = '5foobar';
     // @ts-expect-error  (testing invalid input)
+    const startsWith8: Kennitala = '8foobar';
+    // @ts-expect-error  (testing invalid input)
     const someWord: Kennitala = 'foobar';
     // @ts-expect-error  (testing invalid input)
     const spacedKtPerson: Kennitala = ' ' + ktPerson;
     // @ts-expect-error  (testing invalid input)
     const spacedKtCompany: Kennitala = ' ' + ktCompany;
+    // @ts-expect-error  (testing invalid input)
+    const spacedKtKerfis: Kennitala = ' ' + ktKerfis;
 
     o(isPersonKennitala(startsWith2)).equals(true)('isPerson `startsWith2`');
     o(isPersonKennitala(startsWith5)).equals(false)('isPerson `startsWith5`');
@@ -301,6 +309,9 @@ o.spec('isPersonKennitala and isCompanyKennitala', () => {
     o(isCompanyKennitala(startsWith2)).equals(false)('isCompany `startsWith2`');
     o(isCompanyKennitala(someWord)).equals(false)('isCompany `someWord`');
     o(isCompanyKennitala(spacedKtCompany)).equals(false)('isCompany `spacedKtPerson`');
+
+    o(isTempKennitala(startsWith8)).equals(true)('isTemp `startsWith8`');
+    o(isTempKennitala(spacedKtKerfis)).equals(false)('isTemp `spacedKtKerfis`');
   });
 
   if (false as boolean) {

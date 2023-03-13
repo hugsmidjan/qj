@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Add `isTempKennitala` helper to `kennitala`
 
 ## 4.14.0 – 4.14.2
 

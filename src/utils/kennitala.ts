@@ -354,3 +354,24 @@ export const isPersonKennitala = (kennitala: Kennitala): kennitala is KennitalaP
  */
 export const isCompanyKennitala = (kennitala: Kennitala): kennitala is KennitalaCompany =>
   /^[4567]/.test(kennitala);
+
+/**
+ * Detects if an input `Kennitala` is a (temporary) "kerfiskennitala"
+ * (a subset of valid `KennitalaPerson`s).
+ *
+ * Assumes that the input `kt` is already validated as `Kennitala`
+ * and performs no internal validation, and is thus unreliable
+ * for random strings.
+ *
+ * To safely check the type of a plain, non-validated `string` input,
+ * use `parseKennitala` and check the `.temporary` status of the
+ * retured data object.
+ * Example:
+ *
+ * ```js
+ * const kt = parseKennitala(myInputString);
+ * const isPerson = !!kt?.temporary;
+ * ```
+ */
+export const isTempKennitala = (kennitala: Kennitala): kennitala is KennitalaPerson =>
+  /^[89]/.test(kennitala);
