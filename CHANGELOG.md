@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.14.0
+
+_2023-03-13_
+
 - fix: Accept valid kennitalas of (mostly deceased) 19th-century entities
 
 ## 4.12.0 – 4.13.0
