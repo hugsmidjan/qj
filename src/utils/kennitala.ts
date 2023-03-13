@@ -197,7 +197,7 @@ export function parseKennitala<
       ? cleanKennitalaAggressive(value)
       : cleanKennitalaCareful(value);
 
-  if (value.length !== 10 || !/^[0-7]\d{8}[90]$/.test(value)) {
+  if (value.length !== 10 || !/^[0-7]\d{8}[890]$/.test(value)) {
     return;
   }
   const robot = robotKtRe.test(value);

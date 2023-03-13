@@ -28,6 +28,7 @@ const ktInvalid2 = '10127552';
 
 const kt_Person1 = '101275-5239';
 const kt_Person1_EnDash = '101275– 5239';
+const ktPersonAncient = '1012755238'; // ends with 8
 const kt_Company = '500101 2880';
 const kt_Company2 = '500101 - 2880';
 
@@ -175,6 +176,7 @@ o.spec('parseKennitala', () => {
 o.spec('isValidKennitala', () => {
   o('Validates simple kennitalas', () => {
     o(isValidKennitala(ktPerson)).equals(true);
+    o(isValidKennitala(ktPersonAncient)).equals(true)('accepts 19th century kennitalas');
     o(isValidKennitala(ktCompany)).equals(true);
     o(isValidKennitala(ktGervi)).equals(false);
     o(isValidKennitala(ktInvalid1)).equals(false);
