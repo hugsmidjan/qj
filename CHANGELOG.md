@@ -3,15 +3,15 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
-- feat: Add `isTempKennitala` helper to `kennitala`
 
-## 4.14.0 – 4.14.2
+## 4.14.0 – 4.14.3
 
 _2023-03-13_
 
 - feat: Parse/validate temporary Kerfiskennitalas for people
   - feat: Add option `rejectTemporary` to `KennitalaOptions`
   - feat: Add optional flag `temporary` to `KennitalaDataPerson` returns
+  - feat: Add `isTempKennitala` helper
 - docs: Improve inline documentation of `kennitala` methods
 - fix: correctly handle kennitalas of (mostly deceased) 19th-century entities
 
