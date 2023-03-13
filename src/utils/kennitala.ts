@@ -258,7 +258,7 @@ export const getKennitalaBirthDate = (value: string) => {
     return;
   }
   const MM = cleaned.substring(2, 4);
-  const CC = cleaned.substring(9, 10) === '9' ? '19' : '20';
+  const CC = ((parseInt(cleaned.substring(9, 10)) + 2) % 10) + 18;
   const YY = cleaned.substring(4, 6);
   const birthDate = new Date(`${CC + YY}-${MM}-01`);
   let date = parseInt(cleaned.substring(0, 2));

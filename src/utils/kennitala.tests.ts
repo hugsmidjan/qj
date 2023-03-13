@@ -358,6 +358,8 @@ o.spec('getKennitalaBirthDate', () => {
   o('Exposes a birthdate function', () => {
     const p1BDay = getKennitalaBirthDate(ktPerson);
     o(p1BDay?.toISOString().substring(0, 10)).equals('1975-12-10');
+    const pABDay = getKennitalaBirthDate(ktPersonAncient);
+    o(pABDay?.toISOString().substring(0, 10)).equals('1875-12-10');
     const p2BDay = getKennitalaBirthDate(kt_Person1);
     o(p2BDay?.toISOString().substring(0, 10)).equals('1975-12-10');
     const cBDay = getKennitalaBirthDate(kt_Company);
