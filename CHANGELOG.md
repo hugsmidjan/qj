@@ -3,14 +3,14 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
-- feat: Parse/validate temporary Kerfiskennitalas for people
-  - feat: Add option `rejectTemporary` to `KennitalaOptions`
-  - feat: Add optional flag `temporary` to `KennitalaDataPerson` returns
 
-## 4.14.0 – 4.14.1
+## 4.14.0 – 4.14.2
 
 _2023-03-13_
 
+- feat: Parse/validate temporary Kerfiskennitalas for people
+  - feat: Add option `rejectTemporary` to `KennitalaOptions`
+  - feat: Add optional flag `temporary` to `KennitalaDataPerson` returns
 - docs: Improve inline documentation of `kennitala` methods
 - fix: correctly handle kennitalas of (mostly deceased) 19th-century entities
 
