@@ -19,7 +19,8 @@ export type KennitalaType = 'person' | 'company';
  * Trims the string and then only removes spaces and/or a dash (or en-dash)
  * before the last four of the ten digits.
  *
- * Defaults to returning the original string if the pattern doesn't match
+ * Defaults to returning the (trimmed) original string, if the pattern
+ * doesn't match.
  *
  * Cleaned:
  *  * `' 123456-7890'` ==> `'1234567890'`
@@ -43,14 +44,16 @@ export const cleanKennitalaCareful = (value: string): string =>
  * Aggressively strips away all spaces and dashes (or en-dashes) from the string,
  * as well as any trailing and leading non-digit gunk.
  *
+ * Returns whatever is left.
+ *
  * Examples:
+ *  * `' abc '` ==> `''`
  *  * `'(kt. 123456-7890)'` ==> `'1234567890'`
  *  * `'(kt. 123456-7890, s. 765 4321) '` ==> `'1234567890,s.7654321'`
  *  * `'(tel. 123-4567, 765-4321)'` ==> `'1234567,7654321'`
  *  * `'(s. 765 4321) '` ==> `'7654321'`
  *  * `' 12 34 56 - 78 90'` ==> `'1234567890'`
  *  * `'1-2-3 4-5 6-7-8 9-0'` ==> `'1234567890'`
- *  * `' abc '` ==> `''`
  */
 export const cleanKennitalaAggressive = (value: string): string =>
   value
