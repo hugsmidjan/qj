@@ -8,7 +8,8 @@
 
 _2023-03-13_
 
-- fix: Accept valid kennitalas of (mostly deceased) 19th-century entities
+- docs: Improve inline documentation of `kennitala` methods
+- fix: correctly handle kennitalas of (mostly deceased) 19th-century entities
 
 ## 4.12.0 – 4.13.0
 
