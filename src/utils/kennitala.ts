@@ -100,6 +100,13 @@ type KennitalaOptions<
    */
   robot?: PossiblyRobot;
   /**
+   * Set this flag to `true` to reject short-term temporary kennitalas
+   * (Kerfiskennitala) given to short-stay (or no-stay) individuals/workers.
+   *
+   * Defaults to `false`
+   */
+  rejectTemporary?: boolean;
+  /**
    * `"aggressive"` mode strips away all spaces and dashes and throws away any
    * leading/trailing gunk.
    *
@@ -119,6 +126,8 @@ export type KennitalaDataPerson<PossiblyRobot extends boolean = false> = {
   type: 'person';
   /** Indicates if the kennitala is a "Gervimaður" — i.e. a fake/testing kennitala */
   robot: PossiblyRobot extends false ? false : boolean;
+  /** Indicates if the kennitala is a temporary "Kerfiskennitala" */
+  temporary?: true;
   /** Pretty-formatted version of the kennitala with a dash before the last four digits */
   formatted: string;
   toString(): string;
@@ -131,6 +140,8 @@ export type KennitalaDataCompany = {
   type: 'company';
   /** Indicates if the kennitala is a "Gervimaður" — i.e. a fake/testing kennitala */
   robot: false;
+  /** Indicates if the kennitala is a temporary "Kerfiskennitala" */
+  temporary?: never;
   /** Pretty-formatted version of the kennitala with a dash before the last four digits */
   formatted: string;
   toString(): string;
@@ -144,6 +155,25 @@ export type KennitalaData<
 const magic = [3, 2, 7, 6, 5, 4, 3, 2, 1];
 const robotKtRe = /010130(2(12|20|39|47|55|63|71|98)|3(01|36)|4(33|92)|506|778)9/;
 const validTypes: Record<KennitalaType, 1> = { person: 1, company: 1 };
+
+const toKtData = (data: {
+  value: string;
+  type: KennitalaType;
+  robot: boolean;
+  temporary?: true;
+}) => {
+  const { value, type, robot, temporary } = data;
+  return {
+    value,
+    type,
+    robot,
+    temporary,
+    toString: () => value,
+    get formatted() {
+      return formatKennitala(value);
+    },
+  };
+};
 
 /**
  * Parses a string value to see if may be a technically valid kennitala,
@@ -179,6 +209,7 @@ export function parseKennitala<
   opts?: KennitalaOptions<KtType, PossiblyRobot>
 ): KennitalaData<KtType, PossiblyRobot> | undefined;
 
+// eslint-disable-next-line complexity
 export function parseKennitala<
   KtType extends KennitalaType,
   PossiblyRobot extends boolean = true
@@ -197,7 +228,26 @@ export function parseKennitala<
       ? cleanKennitalaAggressive(value)
       : cleanKennitalaCareful(value);
 
-  if (value.length !== 10 || !/^[0-7]\d{8}[890]$/.test(value)) {
+  if (value.length !== 10 || /\D/.test(value)) {
+    return;
+  }
+  if (!opts.rejectTemporary && opts.type !== 'company' && /^[89]/.test(value)) {
+    /*
+      Skráning á kerfiskennitöluskrá er eingöngu fyrir einstaklinga sem
+      dvelja skemur en 3-6 mánuði á Íslandi eða munu ekki dvelja hér á landi.
+      [Þær] samanstanda af tíu tölustöfum og byrja ávallt á 8 eða 9
+      og hinar tölurnar verða tilviljanakenndar.
+      https://www.skra.is/folk/eg-i-thjodskra/um-kennitolur/um-kerfiskennitolur/
+    */
+    return toKtData({
+      value,
+      type: 'person',
+      robot: false,
+      temporary: true,
+    }) as KennitalaData<KtType, PossiblyRobot>;
+  }
+
+  if (!/^[0-7].+[890]$/.test(value)) {
     return;
   }
   const robot = robotKtRe.test(value);
@@ -214,15 +264,7 @@ export function parseKennitala<
     return;
   }
 
-  return {
-    value,
-    type,
-    robot,
-    toString: () => value,
-    get formatted() {
-      return formatKennitala(value);
-    },
-  } as KennitalaData<KtType, PossiblyRobot>;
+  return toKtData({ value, type, robot }) as KennitalaData<KtType, PossiblyRobot>;
 }
 
 // ---------------------------------------------------------------------------
@@ -288,7 +330,8 @@ export const getKennitalaBirthDate = (value: string) => {
  * ```
  */
 export const isPersonKennitala = (kennitala: Kennitala): kennitala is KennitalaPerson =>
-  parseInt(kennitala[0]) <= 3;
+  // Temporary "kerfiskenntala"s for people start with 8 or 9
+  /^[012389]/.test(kennitala);
 
 /**
  * Detects if an input `Kennitala` is `KennitalaCompany`
@@ -307,4 +350,4 @@ export const isPersonKennitala = (kennitala: Kennitala): kennitala is KennitalaP
  * ```
  */
 export const isCompanyKennitala = (kennitala: Kennitala): kennitala is KennitalaCompany =>
-  parseInt(kennitala[0]) >= 4;
+  /^[4567]/.test(kennitala);

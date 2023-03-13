@@ -23,6 +23,7 @@ import {
 const ktPerson = '1012755239';
 const ktCompany = '5001012880';
 const ktGervi = '0101307789';
+const ktKerfis = '8123456793';
 const ktInvalid1 = '1212657890';
 const ktInvalid2 = '10127552';
 
@@ -31,6 +32,7 @@ const kt_Person1_EnDash = '101275– 5239';
 const ktPersonAncient = '1012755238'; // ends with 8
 const kt_Company = '500101 2880';
 const kt_Company2 = '500101 - 2880';
+const kt_Kerfis = '812345- 6793 ';
 
 const kt_Malformed1 = ' 10-1275-52 39';
 const kt_Malformed2 = ' 101275-52';
@@ -44,12 +46,20 @@ const satisfies = (
   o(actual).notEquals(undefined);
   if (actual) {
     Object.entries(satisfy).forEach(([key, expected]) => {
-      o(actual[key as keyof KennitalaData]).equals(expected);
+      o(actual[key as keyof KennitalaData]).equals(expected)(key);
     });
   }
 };
 
 o.spec('parseKennitala', () => {
+  const dataKerfis = {
+    value: ktKerfis as KennitalaPerson,
+    type: 'person',
+    robot: false,
+    temporary: true,
+    formatted: '812345-6793',
+  } as const;
+
   const dataPerson = {
     value: ktPerson as KennitalaPerson,
     type: 'person',
@@ -116,6 +126,7 @@ o.spec('parseKennitala', () => {
     /* eslint-enable @typescript-eslint/no-unused-vars */
 
     satisfies(parseKennitala(ktPerson), dataPerson);
+    satisfies(parseKennitala(ktKerfis), dataKerfis);
     satisfies(parseKennitala(ktCompany), dataCompany);
     o(parseKennitala(ktGervi)).equals(undefined);
     o(parseKennitala(ktInvalid1)).equals(undefined);
@@ -136,22 +147,22 @@ o.spec('parseKennitala', () => {
     satisfies(parseKennitala(kt_Person1), dataPerson);
     satisfies(parseKennitala(kt_Person1, { clean: 'careful' }), dataPerson);
     satisfies(parseKennitala(kt_Person1_EnDash), dataPerson);
+    satisfies(parseKennitala(kt_Kerfis), dataKerfis);
     satisfies(parseKennitala(kt_Company), dataCompany);
     satisfies(parseKennitala(kt_Company2), dataCompany);
   });
 
-  o('Accepts kennitalas with predictable spaces and dashes', () => {
-    satisfies(parseKennitala(kt_Person1), dataPerson);
-    satisfies(parseKennitala(kt_Person1_EnDash), dataPerson);
-    satisfies(parseKennitala(kt_Company), dataCompany);
-    satisfies(parseKennitala(kt_Company2), dataCompany);
+  o('Optionally rejects Kerfiskennitalas', () => {
+    o(parseKennitala(ktKerfis, { rejectTemporary: true })).equals(undefined);
   });
 
   o('Optionally distinguishes between persons and companies', () => {
     satisfies(parseKennitala(ktPerson, { type: 'person' }), dataPerson);
-    o(parseKennitala(ktPerson, { type: 'company' })).equals(undefined);
-    satisfies(parseKennitala(ktCompany, { type: 'company' }), dataCompany);
+    satisfies(parseKennitala(ktKerfis, { type: 'person' }), dataKerfis);
     o(parseKennitala(ktCompany, { type: 'person' })).equals(undefined);
+    o(parseKennitala(ktPerson, { type: 'company' })).equals(undefined);
+    o(parseKennitala(ktKerfis, { type: 'company' })).equals(undefined);
+    satisfies(parseKennitala(ktCompany, { type: 'company' }), dataCompany);
   });
 
   o('Invalid `type` flags are ignored', () => {
@@ -167,6 +178,7 @@ o.spec('parseKennitala', () => {
     // robot flag has no effect on other functions
     satisfies(parseKennitala(ktPerson, { robot: true }), dataPerson);
     satisfies(parseKennitala(ktPerson, { robot: true, type: 'person' }), dataPerson);
+    satisfies(parseKennitala(ktKerfis, { robot: true }), dataKerfis);
     o(parseKennitala(ktPerson, { robot: true, type: 'company' })).equals(undefined);
   });
 });
@@ -176,6 +188,7 @@ o.spec('parseKennitala', () => {
 o.spec('isValidKennitala', () => {
   o('Validates simple kennitalas', () => {
     o(isValidKennitala(ktPerson)).equals(true);
+    o(isValidKennitala(ktKerfis)).equals(true);
     o(isValidKennitala(ktPersonAncient)).equals(true)('accepts 19th century kennitalas');
     o(isValidKennitala(ktCompany)).equals(true);
     o(isValidKennitala(ktGervi)).equals(false);
@@ -225,10 +238,16 @@ o.spec('isValidKennitala', () => {
     );
   });
 
+  o('Optionally rejects Kerfiskennitalas', () => {
+    o(isValidKennitala(ktKerfis, { rejectTemporary: true })).equals(false);
+  });
+
   o('Optionally distinguishes between persons and companies', () => {
     o(isValidKennitala(ktPerson, { type: 'person' })).equals(true);
-    o(isValidKennitala(ktPerson, { type: 'company' })).equals(false);
+    o(isValidKennitala(ktKerfis, { type: 'person' })).equals(true);
     o(isValidKennitala(ktCompany, { type: 'person' })).equals(false);
+    o(isValidKennitala(ktPerson, { type: 'company' })).equals(false);
+    o(isValidKennitala(ktKerfis, { type: 'company' })).equals(false);
     o(isValidKennitala(ktCompany, { type: 'company' })).equals(true);
   });
 
@@ -253,17 +272,19 @@ o.spec('isValidKennitala', () => {
 
 o.spec('isPersonKennitala and isCompanyKennitala', () => {
   o('Correctly detects type of valid Kennitalas', () => {
-    o(isPersonKennitala(ktPerson as Kennitala)).equals(true);
-    o(isCompanyKennitala(ktCompany as Kennitala)).equals(true);
-    o(isPersonKennitala(ktCompany as Kennitala)).equals(false);
-    o(isCompanyKennitala(ktPerson as Kennitala)).equals(false);
+    o(isPersonKennitala(ktPerson as Kennitala)).equals(true)('person is person');
+    o(isPersonKennitala(ktCompany as Kennitala)).equals(false)('company is not person');
+    o(isPersonKennitala(ktKerfis as Kennitala)).equals(true)('kerfis is person');
+    o(isCompanyKennitala(ktCompany as Kennitala)).equals(true)('company is company');
+    o(isCompanyKennitala(ktPerson as Kennitala)).equals(false)('person is not company');
+    o(isCompanyKennitala(ktKerfis as Kennitala)).equals(false)('kerfis is not company');
   });
 
   o('Performs no trimming/parsing/validation on invalid strings', () => {
     // @ts-expect-error  (testing invalid input)
     const startsWith2: Kennitala = '2foobar';
     // @ts-expect-error  (testing invalid input)
-    const startsWith9: Kennitala = '9foobar';
+    const startsWith5: Kennitala = '5foobar';
     // @ts-expect-error  (testing invalid input)
     const someWord: Kennitala = 'foobar';
     // @ts-expect-error  (testing invalid input)
@@ -272,11 +293,11 @@ o.spec('isPersonKennitala and isCompanyKennitala', () => {
     const spacedKtCompany: Kennitala = ' ' + ktCompany;
 
     o(isPersonKennitala(startsWith2)).equals(true)('isPerson `startsWith2`');
-    o(isPersonKennitala(startsWith9)).equals(false)('isPerson `startsWith9`');
+    o(isPersonKennitala(startsWith5)).equals(false)('isPerson `startsWith5`');
     o(isPersonKennitala(someWord)).equals(false)('isPerson `someWord`');
     o(isPersonKennitala(spacedKtPerson)).equals(false)('isPerson `spacedKtPerson`');
 
-    o(isCompanyKennitala(startsWith9)).equals(true)('isCompany `startsWith9`');
+    o(isCompanyKennitala(startsWith5)).equals(true)('isCompany `startsWith5`');
     o(isCompanyKennitala(startsWith2)).equals(false)('isCompany `startsWith2`');
     o(isCompanyKennitala(someWord)).equals(false)('isCompany `someWord`');
     o(isCompanyKennitala(spacedKtCompany)).equals(false)('isCompany `spacedKtPerson`');

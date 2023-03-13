@@ -3,6 +3,9 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Parse/validate temporary Kerfiskennitalas for people
+  - feat: Add option `rejectTemporary` to `KennitalaOptions`
+  - feat: Add optional flag `temporary` to `KennitalaDataPerson` returns
 
 ## 4.14.0 – 4.14.1
 
