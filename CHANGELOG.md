@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.16.0
+
+_2023-03-14_
+
 - feat: Reject impossible kennitalas with obviously non-sensical date part
 - feat: Add option `strictDate` to `KennitalaOptions` for slower, more
   rigorous date parsing
