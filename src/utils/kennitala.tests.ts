@@ -449,7 +449,7 @@ o.spec('getKennitalaBirthDate', () => {
 import * as kennitalaModule from './kennitala';
 
 if (false as boolean) {
-  const exports: Record<keyof typeof kennitalaModule, true> = {
+  const expectedExports: Record<keyof typeof kennitalaModule, true> = {
     parseKennitala: true,
     isValidKennitala: true,
 
