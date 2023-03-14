@@ -1,6 +1,6 @@
 import o from 'ospec';
 
-import { Equals, Expect } from '../__testing/types';
+import { Equals, Expect, Extends, NotExtends } from '../__testing/types';
 
 import {
   cleanKennitalaAggressive,
@@ -39,6 +39,65 @@ const kt_Malformed1 = ' 10-1275-52 39';
 const kt_Malformed2 = ' 101275-52';
 const kt_Malformed3 = '101275   - 5239';
 const kt_Malformed2_EmDash = '101275—5239';
+
+// ---------------------------------------------------------------------------
+// Type Signature Tests
+
+if (false as boolean) {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const either = parseKennitala(ktPerson);
+  if (either) {
+    type v = Expect<Equals<typeof either.value, Kennitala>>;
+    type t = Expect<Equals<typeof either.type, KennitalaType>>;
+    type r = Expect<Equals<typeof either.robot, false>>;
+    if (either.type === 'person') {
+      type v = Expect<Equals<typeof either.value, KennitalaPerson>>;
+    }
+    if (either.type === 'company') {
+      type v = Expect<Equals<typeof either.value, KennitalaCompany>>;
+    }
+  }
+  const eitherRobot = parseKennitala(ktPerson, { robot: true });
+  if (eitherRobot) {
+    type v = Expect<Equals<typeof eitherRobot.value, Kennitala>>;
+    type t = Expect<Equals<typeof eitherRobot.type, KennitalaType>>;
+    type r = Expect<Equals<typeof eitherRobot.robot, boolean>>;
+    if (eitherRobot.type === 'company') {
+      type v = Expect<Equals<typeof eitherRobot.robot, false>>;
+    }
+  }
+  const person = parseKennitala(ktPerson, { type: 'person' });
+  if (person) {
+    type v = Expect<Equals<typeof person.value, KennitalaPerson>>;
+    type t = Expect<Equals<typeof person.type, 'person'>>;
+    type r = Expect<Equals<typeof person.robot, false>>;
+  }
+  const company = parseKennitala(ktPerson, { type: 'company', clean: 'careful' });
+  if (company) {
+    type v = Expect<Equals<typeof company.value, KennitalaCompany>>;
+    type t = Expect<Equals<typeof company.type, 'company'>>;
+    type r = Expect<Equals<typeof company.robot, false>>;
+  }
+
+  const str = '';
+  if (isValidKennitala(str)) {
+    const kt: Kennitala = str;
+  }
+  const kts: Array<Kennitala> = [];
+  const persons: Array<KennitalaPerson> = kts.filter(isPersonKennitala);
+  const companies: Array<KennitalaCompany> = kts.filter(isCompanyKennitala);
+  const kerfises: Array<KennitalaPerson> = kts.filter(isTempKennitala);
+
+  const alwaysPerson = parseKennitala(ktPerson as KennitalaPerson);
+  type v = Expect<Equals<typeof alwaysPerson, KennitalaDataPerson | undefined>>;
+  const alwaysPerson2 = parseKennitala(ktPerson as KennitalaPerson, { robot: true });
+  type v2 = Expect<Equals<typeof alwaysPerson2, KennitalaDataPerson<boolean>>>;
+  const alwaysCompany = parseKennitala(ktCompany as KennitalaCompany);
+  type v3 = Expect<Equals<typeof alwaysCompany, KennitalaDataCompany>>;
+  /* eslint-enable */
+}
+
+// ---------------------------------------------------------------------------
 
 const satisfies = (
   actual: KennitalaData | undefined,
@@ -83,49 +142,6 @@ o.spec('parseKennitala', () => {
   } as const;
 
   o('parses simple kennitala', () => {
-    /* eslint-disable @typescript-eslint/no-unused-vars */
-    const either = parseKennitala(ktPerson);
-    if (either) {
-      type v = Expect<Equals<typeof either.value, Kennitala>>;
-      type t = Expect<Equals<typeof either.type, KennitalaType>>;
-      type r = Expect<Equals<typeof either.robot, false>>;
-      if (either.type === 'person') {
-        type v = Expect<Equals<typeof either.value, KennitalaPerson>>;
-      }
-      if (either.type === 'company') {
-        type v = Expect<Equals<typeof either.value, KennitalaCompany>>;
-      }
-    }
-    const eitherRobot = parseKennitala(ktPerson, { robot: true });
-    if (eitherRobot) {
-      type v = Expect<Equals<typeof eitherRobot.value, Kennitala>>;
-      type t = Expect<Equals<typeof eitherRobot.type, KennitalaType>>;
-      type r = Expect<Equals<typeof eitherRobot.robot, boolean>>;
-      if (eitherRobot.type === 'company') {
-        type v = Expect<Equals<typeof eitherRobot.robot, false>>;
-      }
-    }
-    const person = parseKennitala(ktPerson, { type: 'person' });
-    if (person) {
-      type v = Expect<Equals<typeof person.value, KennitalaPerson>>;
-      type t = Expect<Equals<typeof person.type, 'person'>>;
-      type r = Expect<Equals<typeof person.robot, false>>;
-    }
-    const company = parseKennitala(ktPerson, { type: 'company', clean: 'careful' });
-    if (company) {
-      type v = Expect<Equals<typeof company.value, KennitalaCompany>>;
-      type t = Expect<Equals<typeof company.type, 'company'>>;
-      type r = Expect<Equals<typeof company.robot, false>>;
-    }
-
-    const alwaysPerson = parseKennitala(ktPerson as KennitalaPerson);
-    type v = Expect<Equals<typeof alwaysPerson, KennitalaDataPerson | undefined>>;
-    const alwaysPerson2 = parseKennitala(ktPerson as KennitalaPerson, { robot: true });
-    type v2 = Expect<Equals<typeof alwaysPerson2, KennitalaDataPerson<boolean>>>;
-    const alwaysCompany = parseKennitala(ktCompany as KennitalaCompany);
-    type v3 = Expect<Equals<typeof alwaysCompany, KennitalaDataCompany>>;
-    /* eslint-enable @typescript-eslint/no-unused-vars */
-
     satisfies(parseKennitala(ktPerson), dataPerson);
     satisfies(parseKennitala(ktKerfis), dataKerfis);
     satisfies(parseKennitala(ktCompany), dataCompany);
@@ -406,3 +422,35 @@ o.spec('getKennitalaBirthDate', () => {
     o(i3BDay).equals(undefined)('Bogus strings return undefined');
   });
 });
+
+// ---------------------------------------------------------------------------
+// Testing exports
+
+/* eslint-disable @typescript-eslint/no-unused-vars, unused-imports/no-unused-imports-ts, import/first, simple-import-sort/imports */
+import * as kennitalaModule from './kennitala';
+
+if (false as boolean) {
+  const exports: Record<keyof typeof kennitalaModule, true> = {
+    parseKennitala: true,
+    isValidKennitala: true,
+
+    isCompanyKennitala: true,
+    isPersonKennitala: true,
+
+    cleanKennitalaCareful: true,
+    cleanKennitalaAggressive: true,
+
+    formatKennitala: true,
+    getKennitalaBirthDate: true,
+  };
+}
+import type {
+  Kennitala as T1,
+  KennitalaData as T2,
+  KennitalaType as T3,
+  KennitalaPerson as T4,
+  KennitalaCompany as T5,
+  KennitalaDataPerson as T7,
+  KennitalaDataCompany as T8,
+} from './kennitala';
+/* eslint-enable */
