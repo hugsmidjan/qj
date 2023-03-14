@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.15.0
+
+_2023-03-14_
+
 - feat: Add type `KennitalaTemporary`, subtype of `KennitalaPerson`
 - fix: Over-confident type guarding of `isValidKennitala`
 
