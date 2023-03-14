@@ -80,10 +80,26 @@ if (false as boolean) {
     type r = Expect<Equals<typeof company.robot, false>>;
   }
 
-  const str = '';
+  const str = '' as string;
   if (isValidKennitala(str)) {
-    const kt: Kennitala = str;
+    type k = Expect<Equals<typeof str, Kennitala>>;
   }
+  if (isValidKennitala(str, { type: 'person' })) {
+    type k = Expect<Equals<typeof str, KennitalaPerson>>;
+  }
+  if (isValidKennitala(str, { type: 'company' })) {
+    type k = Expect<Equals<typeof str, KennitalaCompany>>;
+  }
+  if (isValidKennitala(str, { clean: 'none' })) {
+    type k = Expect<Equals<typeof str, Kennitala>>;
+  }
+  if (isValidKennitala(str, { clean: 'careful' })) {
+    type k = Expect<Equals<typeof str, string>>;
+  }
+  if (isValidKennitala(str, { clean: 'aggressive' })) {
+    type k = Expect<Equals<typeof str, string>>;
+  }
+
   const kts: Array<Kennitala> = [];
   const persons: Array<KennitalaPerson> = kts.filter(isPersonKennitala);
   const companies: Array<KennitalaCompany> = kts.filter(isCompanyKennitala);
