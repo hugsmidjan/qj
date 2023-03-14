@@ -9,6 +9,10 @@ export type KennitalaCompany = string & { [_KennitalaCompany__Brand]: true };
 /** A valid 10-digit Kennitala string */
 export type Kennitala = KennitalaPerson | KennitalaCompany;
 
+declare const _KennitalaTemporary__Brand: unique symbol;
+/** A valid 10-digit Kennitala string for a person with a temporary "Kerfiskennitala" */
+export type KennitalaTemporary = KennitalaPerson & { [_KennitalaTemporary__Brand]: true };
+
 // ---------------------------------------------------------------------------
 
 export type KennitalaType = 'person' | 'company';
@@ -381,5 +385,5 @@ export const isCompanyKennitala = (kennitala: Kennitala): kennitala is Kennitala
  * const isPerson = !!kt?.temporary;
  * ```
  */
-export const isTempKennitala = (kennitala: Kennitala): kennitala is KennitalaPerson =>
+export const isTempKennitala = (kennitala: Kennitala): kennitala is KennitalaTemporary =>
   /^[89]/.test(kennitala);

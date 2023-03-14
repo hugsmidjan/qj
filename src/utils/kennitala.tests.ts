@@ -17,6 +17,7 @@ import {
   KennitalaDataCompany,
   KennitalaDataPerson,
   KennitalaPerson,
+  KennitalaTemporary,
   KennitalaType,
   parseKennitala,
 } from './kennitala';
@@ -86,7 +87,9 @@ if (false as boolean) {
   const kts: Array<Kennitala> = [];
   const persons: Array<KennitalaPerson> = kts.filter(isPersonKennitala);
   const companies: Array<KennitalaCompany> = kts.filter(isCompanyKennitala);
-  const kerfises: Array<KennitalaPerson> = kts.filter(isTempKennitala);
+  const kerfises: Array<KennitalaTemporary> = kts.filter(isTempKennitala);
+  type tp = Expect<Extends<KennitalaTemporary, KennitalaPerson>>;
+  type pt = Expect<NotExtends<KennitalaPerson, KennitalaTemporary>>;
 
   const alwaysPerson = parseKennitala(ktPerson as KennitalaPerson);
   type v = Expect<Equals<typeof alwaysPerson, KennitalaDataPerson | undefined>>;
@@ -436,6 +439,7 @@ if (false as boolean) {
 
     isCompanyKennitala: true,
     isPersonKennitala: true,
+    isTempKennitala: true,
 
     cleanKennitalaCareful: true,
     cleanKennitalaAggressive: true,
@@ -450,6 +454,7 @@ import type {
   KennitalaType as T3,
   KennitalaPerson as T4,
   KennitalaCompany as T5,
+  KennitalaTemporary as T6,
   KennitalaDataPerson as T7,
   KennitalaDataCompany as T8,
 } from './kennitala';
