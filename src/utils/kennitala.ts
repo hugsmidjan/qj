@@ -203,19 +203,16 @@ export function parseKennitala(
   value: '',
   opt?: KennitalaOptions
 ): undefined;
-
 export function parseKennitala(
   kt: KennitalaCompany,
   opt?: KennitalaOptions<'company'>
 ): KennitalaDataCompany;
-
 export function parseKennitala<PossiblyRobot extends boolean = false>(
   kt: KennitalaPerson,
   opt?: KennitalaOptions<'person', PossiblyRobot>
 ): PossiblyRobot extends false
   ? undefined | KennitalaDataPerson
   : KennitalaDataPerson<boolean>;
-
 export function parseKennitala<
   KtType extends KennitalaType,
   PossiblyRobot extends boolean = false
@@ -291,15 +288,36 @@ export function parseKennitala<
  * Options are the same as for `parseKennitala` except that `clean` option
  * defaults to `"none"`.
  */
-export const isValidKennitala = (
+export function isValidKennitala(
+  // This is here just to trick TS into providing full IntelliSense
+  // auto-complete for `KennitalaOptions` values. Ack!
+  value: '',
+  opts: KennitalaOptions
+): false;
+export function isValidKennitala(
+  value: string,
+  opts: KennitalaOptions & { type: 'person'; clean?: 'none' | false }
+): value is KennitalaPerson;
+export function isValidKennitala(
+  value: string,
+  opts: KennitalaOptions & { type: 'company'; clean?: 'none' | false }
+): value is KennitalaCompany;
+export function isValidKennitala<O extends { clean?: 'none' | false }>(
+  value: string,
+  opts?: KennitalaOptions & { clean?: 'none' | false }
+): value is Kennitala;
+export function isValidKennitala(value: string, opts?: KennitalaOptions): boolean;
+
+export function isValidKennitala(
   value: string,
   opts?: KennitalaOptions
-): value is Kennitala =>
-  !!parseKennitala(value, {
+): value is Kennitala {
+  return !!parseKennitala(value, {
     ...opts,
     // make "clean: false" the default when validating
     clean: opts?.clean || false,
   });
+}
 
 // ---------------------------------------------------------------------------
 

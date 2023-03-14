@@ -4,6 +4,7 @@
 
 - ... <!-- Add new lines here. Version number will be decided later -->
 - feat: Add type `KennitalaTemporary`, subtype of `KennitalaPerson`
+- fix: Over-confident type guarding of `isValidKennitala`
 
 ## 4.14.0 – 4.14.3
 
