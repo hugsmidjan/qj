@@ -107,6 +107,14 @@ type KennitalaOptions<
    * (Kerfiskennitala) given to short-stay (or no-stay) individuals/workers.
    *
    * Defaults to `false`
+   *
+   * BTW, Rationale for the "on by default" behavior:
+   * - These are kennitalas of actual people, not some fake "Gervimaður".
+   * - "Kerfiskennitala"s are, by definition, perfectly **valid** kennitalas.
+   * - This is a simple helper library, whose purpose is only to catch obvious
+   *   mistakes and show error messages fast.
+   * - Any real stakes filtering (including for age) should/must occur
+   *   in the next step anyway.
    */
   rejectTemporary?: boolean;
   /**
