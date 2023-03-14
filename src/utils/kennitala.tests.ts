@@ -30,9 +30,9 @@ const ktInvalid1 = '1212657890';
 const ktInvalid2 = '10127552';
 
 const ktPersonImpossible = '3368492689'; // technically valid, but impossible
-const ktPersonImpossibleSneaky = '3002909499'; // technically valid, but impossible
+const ktPersonImpossibleSneaky = '2902904499'; // technically valid, but impossible (1990 wasn't a leap year)
 const ktCompanyImpossible = '7368492689'; // technically valid, but impossible
-const ktCompanyImpossibleSneaky = '7002905499'; // technically valid, but impossible
+const ktCompanyImpossibleSneaky = '6902900499'; // technically valid, but impossible (1990 wasn't a leap year)
 
 const kt_Person1 = '101275-5239';
 const kt_Person1_EnDash = '101275– 5239';
@@ -212,6 +212,7 @@ o.spec('parseKennitala', () => {
       'strictDate false positive company'
     );
 
+    // strictDate causes no false negatives
     o(!!parseKennitala(ktPerson, { strictDate: true })).equals(true)('strictDate person');
     o(!!parseKennitala(ktCompany, { strictDate: true })).equals(true)(
       'strictDate company'
