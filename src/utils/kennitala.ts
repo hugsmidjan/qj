@@ -88,6 +88,46 @@ export const formatKennitala = (value: string) => {
 
 // ---------------------------------------------------------------------------
 
+/**
+ * Returns the (UTC) birth-date (or founding-date) of a "kennitala-shaped" string
+ * ...without checking if it is a valid kennitala.
+ *
+ * For malformed (non-kennitala shaped) strings it returns undefined.
+ */
+export const getKennitalaBirthDate = (value: string) => {
+  const cleaned = cleanIfKtShaped(value);
+  if (!cleaned) {
+    return;
+  }
+  const MM = cleaned.substring(2, 4);
+  const CC = ((parseInt(cleaned.substring(9, 10)) + 2) % 10) + 18;
+  const YY = cleaned.substring(4, 6);
+  const birthDate = new Date(`${CC + YY}-${MM}-01`);
+  let date = parseInt(cleaned.substring(0, 2));
+  if (date > 31) {
+    date = date - 40;
+  }
+  birthDate.setUTCDate(date);
+  return birthDate;
+};
+
+// ---------------------------------------------------------------------------
+
+const hasValidDatePart = (value: string) => {
+  const bDay = getKennitalaBirthDate(value);
+  const dateModifier = parseInt(value[0]) > 3 ? 40 : 0;
+  return (
+    !!bDay &&
+    value.startsWith(
+      String(bDay.getUTCDate() + dateModifier).padStart(2, '0') +
+        String(bDay.getUTCMonth() + 1).padStart(2, '0') +
+        String(bDay.getUTCFullYear() % 100).padStart(2, '0')
+    )
+  );
+};
+
+// ---------------------------------------------------------------------------
+
 type KennitalaOptions<
   KtType extends KennitalaType | undefined = KennitalaType,
   PossiblyRobot extends boolean = boolean
@@ -132,6 +172,14 @@ type KennitalaOptions<
    * right before the last four of the ten digits.
    */
   clean?: 'aggressive' | 'careful' | 'none' | false;
+  /**
+   * Set this flag to `true` to opt into a slower, more perfect
+   * check for valid dates in permanent (non-"Kerfiskennitala") kennitalas.
+   *
+   * Defaults to `false` — which may result in the occational false-positive
+   * on values starting with something impossible like "3102" (Feb. 31st)
+   */
+  strictDate?: boolean;
 };
 
 export type KennitalaDataPerson<PossiblyRobot extends boolean = false> = {
@@ -259,9 +307,18 @@ export function parseKennitala<
     }) as KennitalaData<KtType, PossiblyRobot>;
   }
 
-  if (!/^[0-7].+[890]$/.test(value)) {
+  // Quickly weed out obviously non-date kennitalas
+  // (Example of one such checkSum-valid but nonsensical kennitala: "3368492689")
+  // Here we trade a few false positives for speed:
+  // A value starting with "310290..." (Feb. 31st) might pass
+  if (!/^(?:[012456]\d|[37][01])(?:0\d|1[012]).+[890]$/.test(value)) {
     return;
   }
+  // optionally perform slower, more rigorous date parsing
+  if (opts.strictDate && !hasValidDatePart(value)) {
+    return;
+  }
+
   const robot = robotKtRe.test(value);
   if (robot && !opts.robot) {
     return;
@@ -318,31 +375,6 @@ export function isValidKennitala(
     clean: opts?.clean || false,
   });
 }
-
-// ---------------------------------------------------------------------------
-
-/**
- * Returns the (UTC) birth-date (or founding-date) of a "kennitala-shaped" string
- * ...without checking if it is a valid kennitala.
- *
- * For malformed (non-kennitala shaped) strings it returns undefined.
- */
-export const getKennitalaBirthDate = (value: string) => {
-  const cleaned = cleanIfKtShaped(value);
-  if (!cleaned) {
-    return;
-  }
-  const MM = cleaned.substring(2, 4);
-  const CC = ((parseInt(cleaned.substring(9, 10)) + 2) % 10) + 18;
-  const YY = cleaned.substring(4, 6);
-  const birthDate = new Date(`${CC + YY}-${MM}-01`);
-  let date = parseInt(cleaned.substring(0, 2));
-  if (date > 31) {
-    date = date - 40;
-  }
-  birthDate.setUTCDate(date);
-  return birthDate;
-};
 
 // ---------------------------------------------------------------------------
 

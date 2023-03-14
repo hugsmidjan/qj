@@ -29,6 +29,11 @@ const ktKerfis = '8123456793';
 const ktInvalid1 = '1212657890';
 const ktInvalid2 = '10127552';
 
+const ktPersonImpossible = '3368492689'; // technically valid, but impossible
+const ktPersonImpossibleSneaky = '3002909499'; // technically valid, but impossible
+const ktCompanyImpossible = '7368492689'; // technically valid, but impossible
+const ktCompanyImpossibleSneaky = '7002905499'; // technically valid, but impossible
+
 const kt_Person1 = '101275-5239';
 const kt_Person1_EnDash = '101275– 5239';
 const ktPersonAncient = '1012755238'; // ends with 8
@@ -186,6 +191,31 @@ o.spec('parseKennitala', () => {
     satisfies(parseKennitala(kt_Kerfis), dataKerfis);
     satisfies(parseKennitala(kt_Company), dataCompany);
     satisfies(parseKennitala(kt_Company2), dataCompany);
+  });
+
+  o('Rejects kennitalas with nonsensical dates', () => {
+    o(parseKennitala(ktPersonImpossible)).equals(undefined)('impossible person');
+    o(parseKennitala(ktPersonImpossible, { strictDate: true })).equals(undefined)(
+      'impossible person'
+    );
+    o(!!parseKennitala(ktPersonImpossibleSneaky)).equals(true)('false positive person');
+    o(parseKennitala(ktPersonImpossibleSneaky, { strictDate: true })).equals(undefined)(
+      'strict date parsing person'
+    );
+
+    o(parseKennitala(ktCompanyImpossible)).equals(undefined)('impossible company');
+    o(parseKennitala(ktCompanyImpossible, { strictDate: true })).equals(undefined)(
+      'strictDate impossible company'
+    );
+    o(!!parseKennitala(ktCompanyImpossibleSneaky)).equals(true)('false positive company');
+    o(parseKennitala(ktCompanyImpossibleSneaky, { strictDate: true })).equals(undefined)(
+      'strictDate false positive company'
+    );
+
+    o(!!parseKennitala(ktPerson, { strictDate: true })).equals(true)('strictDate person');
+    o(!!parseKennitala(ktCompany, { strictDate: true })).equals(true)(
+      'strictDate company'
+    );
   });
 
   o('Optionally rejects Kerfiskennitalas', () => {

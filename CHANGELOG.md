@@ -3,6 +3,9 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Reject impossible kennitalas with obviously non-sensical date part
+- feat: Add option `strictDate` to `KennitalaOptions` for slower, more
+  rigorous date parsing
 
 ## 4.15.0
 
