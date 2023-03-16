@@ -226,16 +226,17 @@ const toKtData = (data: {
   temporary?: true;
 }) => {
   const { value, type, robot, temporary } = data;
-  return {
+  const ktData = {
     value,
     type,
     robot,
-    temporary,
     toString: () => value,
     get formatted() {
       return formatKennitala(value);
     },
   };
+  temporary != null && ((ktData as KennitalaData).temporary = temporary);
+  return ktData;
 };
 
 /**

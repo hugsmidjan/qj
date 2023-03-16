@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix: Remove undefined `tempoarary` key from returned `KennitalaData` objects
 
 ## 4.16.0
 
