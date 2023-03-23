@@ -394,7 +394,7 @@ o.spec('isPersonKennitala, isCompanyKennitala, isTemporaryKennitala', () => {
 // ---------------------------------------------------------------------------
 
 o.spec('cleanKennitalaCareful', () => {
-  o('Exposes (careful) clean function', () => {
+  o('carefully cleans input', () => {
     o(cleanKennitalaCareful(' 123456-7890')).equals('1234567890');
     o(cleanKennitalaCareful('123456 7890 ')).equals('1234567890');
     o(cleanKennitalaCareful(' 123456 - 7890')).equals('1234567890');
@@ -413,7 +413,7 @@ o.spec('cleanKennitalaCareful', () => {
 // ---------------------------------------------------------------------------
 
 o.spec('cleanKennitalaAggressive', () => {
-  o('Exposes aggressive clean function', () => {
+  o('aggressively cleans input', () => {
     o(cleanKennitalaAggressive(' 123456-7890')).equals('1234567890');
     o(cleanKennitalaAggressive('123456 7890 ')).equals('1234567890');
     o(cleanKennitalaAggressive(' 123456 - 7890')).equals('1234567890');
@@ -438,7 +438,7 @@ o.spec('cleanKennitalaAggressive', () => {
 // ---------------------------------------------------------------------------
 
 o.spec('formatKennitala', () => {
-  o('Exposes a simple formatter', () => {
+  o('formats a kennitala', () => {
     o(formatKennitala('101275-5239 ')).equals('101275-5239');
     o(formatKennitala('1012755239')).equals('101275-5239');
     o(formatKennitala(' 5001012880 ')).equals('500101-2880');
@@ -447,6 +447,10 @@ o.spec('formatKennitala', () => {
     o(formatKennitala(kt_Malformed1)).equals(kt_Malformed1);
     o(formatKennitala(kt_Malformed2)).equals(kt_Malformed2);
     o(formatKennitala(kt_Malformed2_EmDash)).equals(kt_Malformed2_EmDash);
+  });
+  o('accepts a custom separator', () => {
+    o(formatKennitala('1012755239', '–')).equals('101275–5239');
+    o(formatKennitala('1012755239', ' ')).equals('101275 5239');
   });
 });
 

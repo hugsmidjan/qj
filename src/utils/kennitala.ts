@@ -74,16 +74,17 @@ const cleanIfKtShaped = (value: string) => {
 
 /**
  * Runs minimal cleanup on the input string and if it looks like a kennitala
- * then then inserts a nice '-' before the last four digits.
+ * then then inserts a nice separator (default `'-'`) before the last four
+ * digits.
  *
  * Defaults to returning the input untouched.
  */
-export const formatKennitala = (value: string) => {
+export const formatKennitala = (value: string, separator = '-') => {
   const cleaned = cleanIfKtShaped(value);
   if (!cleaned) {
     return value;
   }
-  return cleaned.substring(0, 6) + '-' + cleaned.substring(6);
+  return cleaned.substring(0, 6) + separator + cleaned.substring(6);
 };
 
 // ---------------------------------------------------------------------------
