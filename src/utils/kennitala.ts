@@ -217,7 +217,17 @@ export type KennitalaData<
 > = (KennitalaDataPerson<PossiblyRobot> | KennitalaDataCompany) & { type: KtType };
 
 const magic = [3, 2, 7, 6, 5, 4, 3, 2, 1];
-const robotKtRe = /010130(2(12|20|39|47|55|63|71|98)|3(01|36)|4(33|92)|506|778)9/;
+const robotKtNums = [
+  212, 220, 239, 247, 255, 263, 271, 298, 301, 336, 433, 492, 506, 778,
+];
+let _robotKtRe: RegExp | undefined;
+const isRobotKt = (value: string) => {
+  if (!_robotKtRe) {
+    _robotKtRe = new RegExp('010130(' + robotKtNums.join('|') + ')9');
+  }
+  return _robotKtRe.test(value);
+};
+
 const validTypes: Record<KennitalaType, 1> = { person: 1, company: 1 };
 
 const toKtData = (data: {
@@ -321,7 +331,7 @@ export function parseKennitala<
     return;
   }
 
-  const robot = robotKtRe.test(value);
+  const robot = isRobotKt(value);
   if (robot && !opts.robot) {
     return;
   }
@@ -439,3 +449,88 @@ export const isCompanyKennitala = (kennitala: Kennitala): kennitala is Kennitala
  */
 export const isTempKennitala = (kennitala: Kennitala): kennitala is KennitalaTemporary =>
   /^[89]/.test(kennitala);
+
+// ---------------------------------------------------------------------------
+
+type GeneratePersonOptions = {
+  type?: 'person';
+  birthDate?: Date;
+  robot?: boolean;
+  temporary?: boolean;
+};
+type GenerateCompanyOptions = {
+  type: 'company';
+  birthDate?: Date;
+  robot?: false;
+  temporary?: false;
+};
+
+/**
+ * Generates a technically valid Kennitala. (Possibly a real one!)
+ *
+ * Defaults to making a KennitalaPerson, unless `opts.type` is set to `"company"`.
+ *
+ * Picks a birth date at random, unless `opts.birthDate` is provided
+ */
+export function generateKennitala(opts: GenerateCompanyOptions): KennitalaCompany;
+export function generateKennitala(opts?: GeneratePersonOptions): KennitalaPerson;
+export function generateKennitala(
+  opts?: GeneratePersonOptions | GenerateCompanyOptions
+): Kennitala;
+
+export function generateKennitala(
+  opts: GeneratePersonOptions | GenerateCompanyOptions = {}
+): Kennitala {
+  const isCompany = opts.type === 'company';
+  if (!isCompany) {
+    if (opts.temporary) {
+      const Head = String(8 + (Math.random() > 0.5 ? 1 : 0));
+      const Tail = String(Math.floor(Math.random() * 1000000000)).padStart(9, '0');
+      return (Head + Tail) as Kennitala;
+    }
+    if (opts.robot) {
+      const RRR = robotKtNums[Math.floor(Math.random() * robotKtNums.length)];
+      return `010130${RRR}9` as Kennitala;
+    }
+  }
+
+  let bDay = opts.birthDate;
+  if (
+    !bDay ||
+    isNaN(bDay.getTime()) ||
+    // Treat dates outside of the 1800-2099 range as invalid
+    bDay < new Date('1800-01-01') ||
+    bDay >= new Date('2100-01-01')
+  ) {
+    const YEAR_MS = 365 * 24 * 60 * 60 * 1000;
+    bDay = new Date(Date.now() - Math.floor(Math.random() * 100 * YEAR_MS));
+  }
+
+  const dateModifier = isCompany ? 40 : 0;
+  // Build the predictable segments of the kennitala
+  const DDMMYY =
+    String(bDay.getUTCDate() + dateModifier).padStart(2, '0') +
+    String(bDay.getUTCMonth() + 1).padStart(2, '0') +
+    String(bDay.getUTCFullYear() % 100).padStart(2, '0');
+  const C = String(bDay.getUTCFullYear())[1];
+
+  let kt = '';
+
+  // Brute-force search for the checksum digit that validates.
+  // (NOTE: This is slow, but `generateKennitala` is generally not used
+  // in performance-critical code-paths.)
+  while (true as boolean) {
+    let x = 0; // Checksum digit
+    const RR = isCompany
+      ? String(Math.floor(100 * Math.random()))
+      : String(Math.floor(20 + 80 * Math.random()));
+    while (x < 10) {
+      kt = DDMMYY + RR + x + C;
+      if (isValidKennitala(kt, { type: opts.type })) {
+        return kt as Kennitala;
+      }
+      x++;
+    }
+  }
+  return kt as Kennitala;
+}

@@ -6,6 +6,7 @@ import {
   cleanKennitalaAggressive,
   cleanKennitalaCareful,
   formatKennitala,
+  generateKennitala,
   getKennitalaBirthDate,
   isCompanyKennitala,
   isPersonKennitala,
@@ -478,6 +479,88 @@ o.spec('getKennitalaBirthDate', () => {
 });
 
 // ---------------------------------------------------------------------------
+
+// test generateKennitala
+o.spec('generateKennitala', () => {
+  o('generates a valid kennitala', () => {
+    const ktPers: KennitalaPerson = generateKennitala();
+    o(isValidKennitala(ktPers, { type: 'person', rejectTemporary: true })).equals(true)(
+      'basic person'
+    );
+    o(ktPers !== generateKennitala()).equals(true)(
+      'generates a different kennitala each time'
+    );
+    const ktComp: KennitalaCompany = generateKennitala({ type: 'company' });
+    o(isValidKennitala(ktComp, { type: 'company' })).equals(true)('company');
+    const ktRobot: KennitalaPerson = generateKennitala({ robot: true });
+    o(parseKennitala(ktRobot, { robot: true }).robot).equals(true)('robot');
+    o(
+      ktRobot !== generateKennitala({ robot: true }) ||
+        ktRobot !== generateKennitala({ robot: true })
+    ).equals(true)('generates a different robot each time');
+    const ktTemp: KennitalaPerson = generateKennitala({ temporary: true });
+    o(parseKennitala(ktTemp)?.temporary).equals(true)('temporary');
+  });
+
+  o('opts.type overrides other flags', () => {
+    type CompOpts = Parameters<typeof generateKennitala>[0] & { type: 'company' };
+
+    const conflictingOpts1: CompOpts = {
+      type: 'company',
+      // @ts-ignore  (Testing invalid input)
+      robot: true,
+    };
+    const ktComp1: KennitalaCompany = generateKennitala(conflictingOpts1);
+    o(isValidKennitala(ktComp1, { type: 'company' })).equals(true)('not a robot');
+
+    const conflictingOpts2: CompOpts = {
+      type: 'company',
+      // @ts-ignore  (Testing invalid input)
+      temporary: true,
+    };
+    const ktComp2: KennitalaCompany = generateKennitala(conflictingOpts2);
+    o(isValidKennitala(ktComp2, { type: 'company' })).equals(true)('not temporary');
+  });
+
+  o('accepts a custom birthdate', () => {
+    const kt1: KennitalaPerson = generateKennitala({ birthDate: new Date('2001-07-10') });
+    o(kt1.slice(0, 6) + '___' + kt1.slice(-1)).equals('100701___0');
+    const kt2: KennitalaPerson = generateKennitala({ birthDate: new Date('1870-02-23') });
+    o(kt2.slice(0, 6) + '___' + kt2.slice(-1)).equals('230270___8');
+    const kt3: KennitalaCompany = generateKennitala({
+      birthDate: new Date('1999-02-23'),
+      type: 'company',
+    });
+    o(kt3.slice(0, 6) + '___' + kt3.slice(-1)).equals('630299___9');
+  });
+
+  o('ignores birthdates for robots and temps', () => {
+    const kt1: KennitalaPerson = generateKennitala({
+      birthDate: new Date('2001-07-10'),
+      robot: true,
+    });
+    o(kt1.slice(0, 6) + '___' + kt1.slice(-1)).equals('010130___9');
+    const kt2: KennitalaPerson = generateKennitala({
+      birthDate: new Date('2001-07-10'),
+      temporary: true,
+    });
+    o(/^[89]/.test(kt2)).equals(true);
+  });
+
+  o('ignores invalid birthDates', () => {
+    const birthDate = new Date('bogus');
+    o(isValidKennitala(generateKennitala({ birthDate }))).equals(true);
+  });
+
+  o('ignores far-future birthDates as invalid', () => {
+    const kt1 = generateKennitala({ birthDate: new Date('2100-01-01') });
+    o(kt1.slice(0, 6) + '___' + kt1.slice(-1)).notEquals('010100___1');
+    const kt2 = generateKennitala({ birthDate: new Date('1799-12-31') });
+    o(kt2.slice(0, 6) + '___' + kt2.slice(-1)).notEquals('311299___8');
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Testing exports
 
 /* eslint-disable @typescript-eslint/no-unused-vars, unused-imports/no-unused-imports-ts, import/first, simple-import-sort/imports */
@@ -497,6 +580,8 @@ if (false as boolean) {
 
     formatKennitala: true,
     getKennitalaBirthDate: true,
+
+    generateKennitala: true,
   };
 }
 import type {
