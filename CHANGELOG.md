@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.17.0
+
+_2023-03-24_
+
 - feat: Add `generateKennitala` method
 - feat: Add optional `separator` parameter to `formatKennitala`
 - fix: Remove undefined `temporary` key from returned `KennitalaData` objects
