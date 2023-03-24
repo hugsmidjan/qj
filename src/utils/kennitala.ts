@@ -394,16 +394,19 @@ export function isValidKennitala(
  * Detects if an input `Kennitala` is `KennitalaPerson`.
  *
  * Assumes that the input `kt` is already validated as `Kennitala`
- * and performs no internal validation, and is thus unreliable
- * for random strings.
+ * and performs no internal validation, and is thus insanely fast, but
+ * unreliable for random strings.
  *
  * To safely check the type of a plain, non-validated `string` input,
  * use `parseKennitala` and check the `.type` of the retured data object.
  * Example:
  *
  * ```js
- * const kt = parseKennitala(myInputString);
- * const isPerson = kt?.type === 'person';
+ * const isPerson = parseKennitala(someString)?.type === 'person';
+ * ```
+ * ...or...
+ * ```js
+ * const isPerson = !!parseKennitala(someString, { type: 'person' });
  * ```
  */
 export const isPersonKennitala = (kennitala: Kennitala): kennitala is KennitalaPerson =>
@@ -411,19 +414,22 @@ export const isPersonKennitala = (kennitala: Kennitala): kennitala is KennitalaP
   /^[012389]/.test(kennitala);
 
 /**
- * Detects if an input `Kennitala` is `KennitalaCompany`
+ * Detects if an input `Kennitala` is `KennitalaCompany`.
  *
  * Assumes that the input `kt` is already validated as `Kennitala`
- * and performs no internal validation, and is thus unreliable
- * for random strings.
+ * and performs no internal validation, and is thus insanely fast, but
+ * unreliable for random strings.
  *
  * To safely check the type of a plain, non-validated `string` input,
  * use `parseKennitala` and check the `.type` of the retured data object.
  * Example:
  *
  * ```js
- * const kt = parseKennitala(myInputString);
- * const isPerson = kt?.type === 'person';
+ * const isCompany = parseKennitala(someString)?.type === 'company';
+ * ```
+ * ...or...
+ * ```js
+ * const isCompany = !!parseKennitala(someString, { type: 'company' });
  * ```
  */
 export const isCompanyKennitala = (kennitala: Kennitala): kennitala is KennitalaCompany =>
@@ -434,8 +440,8 @@ export const isCompanyKennitala = (kennitala: Kennitala): kennitala is Kennitala
  * (a subset of valid `KennitalaPerson`s).
  *
  * Assumes that the input `kt` is already validated as `Kennitala`
- * and performs no internal validation, and is thus unreliable
- * for random strings.
+ * and performs no internal validation, and is thus insanely fast, but
+ * unreliable for random strings.
  *
  * To safely check the type of a plain, non-validated `string` input,
  * use `parseKennitala` and check the `.temporary` status of the
@@ -443,8 +449,7 @@ export const isCompanyKennitala = (kennitala: Kennitala): kennitala is Kennitala
  * Example:
  *
  * ```js
- * const kt = parseKennitala(myInputString);
- * const isPerson = !!kt?.temporary;
+ * const isTemp = !!parseKennitala(someString)?.temporary;
  * ```
  */
 export const isTempKennitala = (kennitala: Kennitala): kennitala is KennitalaTemporary =>
@@ -470,7 +475,7 @@ type GenerateCompanyOptions = {
  *
  * Defaults to making a KennitalaPerson, unless `opts.type` is set to `"company"`.
  *
- * Picks a birth date at random, unless `opts.birthDate` is provided
+ * Picks a birth date at random, unless `opts.birthDate` is provided.
  */
 export function generateKennitala(opts: GenerateCompanyOptions): KennitalaCompany;
 export function generateKennitala(opts?: GeneratePersonOptions): KennitalaPerson;
