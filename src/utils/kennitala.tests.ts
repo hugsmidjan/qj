@@ -507,7 +507,7 @@ o.spec('generateKennitala', () => {
 
     const conflictingOpts1: CompOpts = {
       type: 'company',
-      // @ts-ignore  (Testing invalid input)
+      // @ts-expect-error  (Testing invalid input)
       robot: true,
     };
     const ktComp1: KennitalaCompany = generateKennitala(conflictingOpts1);
@@ -515,7 +515,7 @@ o.spec('generateKennitala', () => {
 
     const conflictingOpts2: CompOpts = {
       type: 'company',
-      // @ts-ignore  (Testing invalid input)
+      // @ts-expect-error  (Testing invalid input)
       temporary: true,
     };
     const ktComp2: KennitalaCompany = generateKennitala(conflictingOpts2);
