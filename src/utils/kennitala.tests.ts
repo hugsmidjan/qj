@@ -475,6 +475,12 @@ o.spec('getKennitalaBirthDate', () => {
     o(i2BDay).equals(undefined)('Malformed digit-strings return undefined');
     const i3BDay = getKennitalaBirthDate('bogus');
     o(i3BDay).equals(undefined)('Bogus strings return undefined');
+    const tBDay = getKennitalaBirthDate(ktKerfis);
+    o(tBDay).equals(undefined)('Kerfiskenntala has no birthdate');
+    const n1BDay = getKennitalaBirthDate(ktPersonImpossible);
+    o(n1BDay).equals(undefined)('Impossible dates are rejected');
+    const n2BDay = getKennitalaBirthDate(ktPersonImpossibleSneaky);
+    o(n2BDay).equals(undefined)('Subtly impossible dates are rejected');
   });
 });
 

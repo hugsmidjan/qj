@@ -93,11 +93,13 @@ export const formatKennitala = (value: string, separator = '-') => {
  * Returns the (UTC) birth-date (or founding-date) of a "kennitala-shaped" string
  * ...without checking if it is a valid kennitala.
  *
- * For malformed (non-kennitala shaped) strings it returns undefined.
+ * It returns undefined for malformed (non-kennitala shaped) strings, and
+ * temporary "kerfiskennitalas" and numerically valid kennitalas with
+ * nonsensical dates.
  */
 export const getKennitalaBirthDate = (value: string) => {
   const cleaned = cleanIfKtShaped(value);
-  if (!cleaned) {
+  if (!cleaned || /^[89]/.test(cleaned)) {
     return;
   }
   const DD = String(parseInt(cleaned.substring(0, 2)) % 40).padStart(2, '0');
@@ -106,22 +108,10 @@ export const getKennitalaBirthDate = (value: string) => {
   const YY = cleaned.substring(4, 6);
   const ISODate = `${CC + YY}-${MM}-${DD}`;
   const birthDate = new Date(ISODate);
+  if (isNaN(birthDate.getTime()) || !birthDate.toISOString().startsWith(ISODate)) {
+    return;
+  }
   return birthDate;
-};
-
-// ---------------------------------------------------------------------------
-
-const hasValidDatePart = (value: string) => {
-  const bDay = getKennitalaBirthDate(value);
-  const dateModifier = parseInt(value[0]) > 3 ? 40 : 0;
-  return (
-    !!bDay &&
-    value.startsWith(
-      String(bDay.getUTCDate() + dateModifier).padStart(2, '0') +
-        String(bDay.getUTCMonth() + 1).padStart(2, '0') +
-        String(bDay.getUTCFullYear() % 100).padStart(2, '0')
-    )
-  );
 };
 
 // ---------------------------------------------------------------------------
@@ -324,7 +314,7 @@ export function parseKennitala<
     return;
   }
   // optionally perform slower, more rigorous date parsing
-  if (opts.strictDate && !hasValidDatePart(value)) {
+  if (opts.strictDate && !getKennitalaBirthDate(value)) {
     return;
   }
 

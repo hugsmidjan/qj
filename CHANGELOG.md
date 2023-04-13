@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix: `getKennitalaBirthday` should return `undefined` for "Invalid Date"s
 
 ## 4.17.0
 
