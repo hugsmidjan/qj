@@ -100,15 +100,12 @@ export const getKennitalaBirthDate = (value: string) => {
   if (!cleaned) {
     return;
   }
+  const DD = String(parseInt(cleaned.substring(0, 2)) % 40).padStart(2, '0');
   const MM = cleaned.substring(2, 4);
   const CC = ((parseInt(cleaned.substring(9, 10)) + 2) % 10) + 18;
   const YY = cleaned.substring(4, 6);
-  const birthDate = new Date(`${CC + YY}-${MM}-01`);
-  let date = parseInt(cleaned.substring(0, 2));
-  if (date > 31) {
-    date = date - 40;
-  }
-  birthDate.setUTCDate(date);
+  const ISODate = `${CC + YY}-${MM}-${DD}`;
+  const birthDate = new Date(ISODate);
   return birthDate;
 };
 
