@@ -146,13 +146,13 @@ type KennitalaOptions<
   robot?: PossiblyRobot;
   /**
    * Set this flag to `true` to reject short-term temporary kennitalas
-   * (Kerfiskennitala) given to short-stay (or no-stay) individuals/workers.
+   * ("kerfiskennitala") given to short-stay (or no-stay) individuals/workers.
    *
    * Defaults to `false`
    *
    * BTW, Rationale for the "on by default" behavior:
    * - These are kennitalas of actual people, not some fake "Gervimaður".
-   * - "Kerfiskennitala"s are, by definition, perfectly **valid** kennitalas.
+   * - "Kerfiskennitalas" are, by definition, perfectly **valid** kennitalas.
    * - This is a simple helper library, whose purpose is only to catch obvious
    *   mistakes and show error messages fast.
    * - Any real stakes filtering (including for age) should/must occur
@@ -302,7 +302,7 @@ export function parseKennitala<
   }
   if (/^[89]/.test(value) && !opts.rejectTemporary && opts.type !== 'company') {
     /*
-      Skráning á kerfiskennitöluskrá er eingöngu fyrir einstaklinga sem
+      Skráning í kerfiskennitöluskrá er eingöngu fyrir einstaklinga sem
       dvelja skemur en 3-6 mánuði á Íslandi eða munu ekki dvelja hér á landi.
       [Þær] samanstanda af tíu tölustöfum og byrja ávallt á 8 eða 9
       og hinar tölurnar verða tilviljanakenndar.
@@ -407,7 +407,7 @@ export function isValidKennitala(
  * ```
  */
 export const isPersonKennitala = (kennitala: Kennitala): kennitala is KennitalaPerson =>
-  // Temporary "kerfiskenntala"s for people start with 8 or 9
+  // Temporary "kerfiskenntalas" for people start with 8 or 9
   /^[012389]/.test(kennitala);
 
 /**

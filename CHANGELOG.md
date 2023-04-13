@@ -31,7 +31,7 @@ _2023-03-14_
 
 _2023-03-13_
 
-- feat: Parse/validate temporary Kerfiskennitalas for people
+- feat: Parse/validate temporary "kerfiskennitalas" for people
   - feat: Add option `rejectTemporary` to `KennitalaOptions`
   - feat: Add optional flag `temporary` to `KennitalaDataPerson` returns
   - feat: Add `isTempKennitala` helper
