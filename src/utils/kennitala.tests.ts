@@ -504,7 +504,7 @@ o.spec('generateKennitala', () => {
       ktRobot !== generateKennitala({ robot: true }) ||
         ktRobot !== generateKennitala({ robot: true })
     ).equals(true)('generates a different robot each time');
-    const ktTemp: KennitalaPerson = generateKennitala({ temporary: true });
+    const ktTemp: KennitalaTemporary = generateKennitala({ temporary: true });
     o(parseKennitala(ktTemp)?.temporary).equals(true)('temporary');
   });
 
@@ -546,7 +546,7 @@ o.spec('generateKennitala', () => {
       robot: true,
     });
     o(kt1.slice(0, 6) + '___' + kt1.slice(-1)).equals('010130___9');
-    const kt2: KennitalaPerson = generateKennitala({
+    const kt2: KennitalaTemporary = generateKennitala({
       birthDate: new Date('2001-07-10'),
       temporary: true,
     });

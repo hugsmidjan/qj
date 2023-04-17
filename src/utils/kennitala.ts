@@ -468,6 +468,9 @@ type GenerateCompanyOptions = {
  * Picks a birth date at random, unless `opts.birthDate` is provided.
  */
 export function generateKennitala(opts: GenerateCompanyOptions): KennitalaCompany;
+export function generateKennitala(
+  opts: GenerateCompanyOptions & { temporary: true }
+): KennitalaTemporary;
 export function generateKennitala(opts?: GeneratePersonOptions): KennitalaPerson;
 export function generateKennitala(
   opts?: GeneratePersonOptions | GenerateCompanyOptions
