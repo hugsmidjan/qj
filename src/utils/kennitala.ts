@@ -67,7 +67,7 @@ export const cleanKennitalaAggressive = (value: string): string =>
 
 // ---------------------------------------------------------------------------
 
-const cleanIfKtShaped = (value: string) => {
+const cleanIfKtShaped = (value: string): string | undefined => {
   const cleaned = cleanKennitalaCareful(value);
   return cleaned.length === 10 && !/\D/.test(cleaned) ? cleaned : undefined;
 };
@@ -93,9 +93,9 @@ export const formatKennitala = (value: string, separator = '-') => {
  * Returns the (UTC) birth-date (or founding-date) of a "kennitala-shaped" string
  * ...without checking if it is a valid kennitala.
  *
- * It returns undefined for malformed (non-kennitala shaped) strings, and
- * temporary "kerfiskennitalas" and numerically valid kennitalas with
- * nonsensical dates.
+ * It returns `undefined` for malformed (non-kennitala shaped) strings,
+ * temporary "kerfiskennitalas" and kennitalas with nonsensical dates, even if
+ * they're numerically valid.
  */
 export const getKennitalaBirthDate = (value: string) => {
   const cleaned = cleanIfKtShaped(value);
@@ -116,7 +116,7 @@ export const getKennitalaBirthDate = (value: string) => {
 
 // ---------------------------------------------------------------------------
 
-type KennitalaOptions<
+type KennitalaParsingOptions<
   KtType extends KennitalaType | undefined = KennitalaType,
   PossiblyRobot extends boolean = boolean
 > = {
@@ -248,15 +248,15 @@ export function parseKennitala(
   // This is here just to trick TS into providing full IntelliSense
   // auto-complete for `KennitalaOptions.type` values. Ack!
   value: '',
-  opt?: KennitalaOptions
+  opt?: KennitalaParsingOptions
 ): undefined;
 export function parseKennitala(
   kt: KennitalaCompany,
-  opt?: KennitalaOptions<'company'>
+  opt?: KennitalaParsingOptions<'company'>
 ): KennitalaDataCompany;
 export function parseKennitala<PossiblyRobot extends boolean = false>(
   kt: KennitalaPerson,
-  opt?: KennitalaOptions<'person', PossiblyRobot>
+  opt?: KennitalaParsingOptions<'person', PossiblyRobot>
 ): PossiblyRobot extends false
   ? undefined | KennitalaDataPerson
   : KennitalaDataPerson<boolean>;
@@ -265,7 +265,7 @@ export function parseKennitala<
   PossiblyRobot extends boolean = false
 >(
   value: string,
-  opts?: KennitalaOptions<KtType, PossiblyRobot>
+  opts?: KennitalaParsingOptions<KtType, PossiblyRobot>
 ): KennitalaData<KtType, PossiblyRobot> | undefined;
 
 // eslint-disable-next-line complexity
@@ -274,7 +274,7 @@ export function parseKennitala<
   PossiblyRobot extends boolean = true
 >(
   value: string,
-  opts?: KennitalaOptions<KtType, PossiblyRobot>
+  opts?: KennitalaParsingOptions<KtType, PossiblyRobot>
 ): KennitalaData<KtType, PossiblyRobot> | undefined {
   opts = opts || {};
   if (!value) {
@@ -348,25 +348,25 @@ export function isValidKennitala(
   // This is here just to trick TS into providing full IntelliSense
   // auto-complete for `KennitalaOptions` values. Ack!
   value: '',
-  opts: KennitalaOptions
+  opts: KennitalaParsingOptions
 ): false;
 export function isValidKennitala(
   value: string,
-  opts: KennitalaOptions & { type: 'person'; clean?: 'none' | false }
+  opts: KennitalaParsingOptions & { type: 'person'; clean?: 'none' | false }
 ): value is KennitalaPerson;
 export function isValidKennitala(
   value: string,
-  opts: KennitalaOptions & { type: 'company'; clean?: 'none' | false }
+  opts: KennitalaParsingOptions & { type: 'company'; clean?: 'none' | false }
 ): value is KennitalaCompany;
 export function isValidKennitala<O extends { clean?: 'none' | false }>(
   value: string,
-  opts?: KennitalaOptions & { clean?: 'none' | false }
+  opts?: KennitalaParsingOptions & { clean?: 'none' | false }
 ): value is Kennitala;
-export function isValidKennitala(value: string, opts?: KennitalaOptions): boolean;
+export function isValidKennitala(value: string, opts?: KennitalaParsingOptions): boolean;
 
 export function isValidKennitala(
   value: string,
-  opts?: KennitalaOptions
+  opts?: KennitalaParsingOptions
 ): value is Kennitala {
   return !!parseKennitala(value, {
     ...opts,
@@ -386,6 +386,7 @@ export function isValidKennitala(
  *
  * To safely check the type of a plain, non-validated `string` input,
  * use `parseKennitala` and check the `.type` of the retured data object.
+ *
  * Example:
  *
  * ```js
@@ -409,6 +410,7 @@ export const isPersonKennitala = (kennitala: Kennitala): kennitala is KennitalaP
  *
  * To safely check the type of a plain, non-validated `string` input,
  * use `parseKennitala` and check the `.type` of the retured data object.
+ *
  * Example:
  *
  * ```js
@@ -433,6 +435,7 @@ export const isCompanyKennitala = (kennitala: Kennitala): kennitala is Kennitala
  * To safely check the type of a plain, non-validated `string` input,
  * use `parseKennitala` and check the `.temporary` status of the
  * retured data object.
+ *
  * Example:
  *
  * ```js
@@ -478,11 +481,11 @@ export function generateKennitala(
     if (opts.temporary) {
       const Head = String(8 + (Math.random() > 0.5 ? 1 : 0));
       const Tail = String(Math.floor(Math.random() * 1000000000)).padStart(9, '0');
-      return (Head + Tail) as Kennitala;
+      return (Head + Tail) as KennitalaTemporary;
     }
     if (opts.robot) {
       const RRR = robotKtNums[Math.floor(Math.random() * robotKtNums.length)];
-      return `010130${RRR}9` as Kennitala;
+      return `010130${RRR}9` as KennitalaPerson;
     }
   }
 
@@ -508,9 +511,10 @@ export function generateKennitala(
 
   let kt = '';
 
-  // Brute-force search for the checksum digit that validates.
-  // (NOTE: This is slow, but `generateKennitala` is generally not used
-  // in performance-critical code-paths.)
+  // Brute-force search for a checksum digit that passes validation.
+  // NOTE: This is slow, but `generateKennitala` is generally not used
+  // in performance-critical code-paths.
+  // Open a GitHub issue if you need a faster implementation.
   while (true as boolean) {
     let x = 0; // Checksum digit
     const RR = isCompany
@@ -519,7 +523,7 @@ export function generateKennitala(
     while (x < 10) {
       kt = DDMMYY + RR + x + C;
       if (isValidKennitala(kt, { type: opts.type })) {
-        return kt as Kennitala;
+        return kt;
       }
       x++;
     }
