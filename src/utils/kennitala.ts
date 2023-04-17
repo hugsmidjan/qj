@@ -479,15 +479,16 @@ export function generateKennitala(
 export function generateKennitala(
   opts: GeneratePersonOptions | GenerateCompanyOptions = {}
 ): Kennitala {
+  const { random, floor } = Math;
   const isCompany = opts.type === 'company';
   if (!isCompany) {
     if (opts.temporary) {
-      const Head = String(8 + (Math.random() > 0.5 ? 1 : 0));
-      const Tail = String(Math.floor(Math.random() * 1000000000)).padStart(9, '0');
+      const Head = String(8 + (random() > 0.5 ? 1 : 0));
+      const Tail = String(floor(random() * 1000000000)).padStart(9, '0');
       return (Head + Tail) as KennitalaTemporary;
     }
     if (opts.robot) {
-      const RRR = robotKtNums[Math.floor(Math.random() * robotKtNums.length)];
+      const RRR = robotKtNums[floor(random() * robotKtNums.length)];
       return `010130${RRR}9` as KennitalaPerson;
     }
   }
@@ -501,7 +502,7 @@ export function generateKennitala(
     bDay >= new Date('2100-01-01')
   ) {
     const YEAR_MS = 365 * 24 * 60 * 60 * 1000;
-    bDay = new Date(Date.now() - Math.floor(Math.random() * 100 * YEAR_MS));
+    bDay = new Date(Date.now() - floor(random() * 100 * YEAR_MS));
   }
 
   const dateModifier = isCompany ? 40 : 0;
@@ -521,8 +522,8 @@ export function generateKennitala(
   while (true as boolean) {
     let x = 0; // Checksum digit
     const RR = isCompany
-      ? String(Math.floor(100 * Math.random()))
-      : String(Math.floor(20 + 80 * Math.random()));
+      ? String(floor(100 * random()))
+      : String(floor(20 + 80 * random()));
     while (x < 10) {
       kt = DDMMYY + RR + x + C;
       if (isValidKennitala(kt, { type: opts.type })) {
