@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.18.0
+
+_2023-05-24_
+
 - feat: Add `pkg.exports` to improve ESM (and TS) `import` resolutions
 - feat: Add `KennitalaTemporary` signature for `generateKennitala`
 

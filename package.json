@@ -1,6 +1,6 @@
 {
   "name": "@hugsmidjan/qj",
-  "version": "4.17.1",
+  "version": "4.18.0",
   "description": "Quick JavaScripts – Collection of mostly useful miniature JavaScript helper functions.",
   "scripts": {
     "publishdist": "yarn run build  &&  cd dist  &&  npm publish",
