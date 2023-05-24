@@ -469,7 +469,7 @@ type GenerateCompanyOptions = {
  */
 export function generateKennitala(opts: GenerateCompanyOptions): KennitalaCompany;
 export function generateKennitala(
-  opts: GenerateCompanyOptions & { temporary: true }
+  opts: GeneratePersonOptions & { temporary: true }
 ): KennitalaTemporary;
 export function generateKennitala(opts?: GeneratePersonOptions): KennitalaPerson;
 export function generateKennitala(
