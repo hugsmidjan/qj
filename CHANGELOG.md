@@ -4,6 +4,7 @@
 
 - ... <!-- Add new lines here. Version number will be decided later -->
 - feat: Add `pkg.exports` to improve ESM (and TS) `import` resolutions
+- feat: Add `KennitalaTemporary` signature for `generateKennitala`
 
 ## 4.17.1
 
