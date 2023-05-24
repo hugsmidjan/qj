@@ -37,8 +37,16 @@ const makeInputMap = (files /*: Array<string> */) /*: InputMap */ => {
   return fileMap;
 };
 
+const scriptsBundleMap = makeInputMap(getEntrypoints());
+
+const entryTokens = Object.keys(scriptsBundleMap).sort((a, b) =>
+  a.localeCompare(b, 'en')
+);
+
 exports.srcFolder = srcFolder;
-exports.scriptsBundleMap = makeInputMap(getEntrypoints());
+exports.scriptsBundleMap = scriptsBundleMap;
+exports.entryTokens = entryTokens;
+
 exports.testGlobs = [globs.tests];
 exports.distFolder = 'dist/';
 exports.testingFolder = '__tests/';

@@ -15,8 +15,9 @@ const {
   polyfillsGlobs,
   polyfillsSrcFolder,
   polyfillsDistFolder,
+  entryTokens,
 } = require('./build-config');
-const { readdirSync, statSync, unlinkSync } = require('fs');
+const { readdirSync, statSync, unlinkSync, writeFileSync, readFileSync } = require('fs');
 
 // ===========================================================================
 
@@ -71,6 +72,25 @@ const [testsBundle, testsWatch] = rollupTaskFactory({
 
 const cleanup = () => del([distFolder, testingFolder]);
 
+const addReferenePathsToIndex = (done) => {
+  const hasIndexFile = entryTokens.some((token) => token === 'index');
+
+  if (hasIndexFile) {
+    const extraEntryPaths = entryTokens
+      .filter((token) => token !== 'index')
+      .map((token) => `/// <reference path="./${token}.d.ts" />`);
+    if (extraEntryPaths.length > 0) {
+      const indexDeclFile = `${distFolder}/index.d.ts`;
+      writeFileSync(
+        indexDeclFile,
+        extraEntryPaths.join('\n') + `\n\n` + readFileSync(indexDeclFile)
+      );
+    }
+  }
+
+  done();
+};
+
 const makePackageJson = (done) => {
   const pkg = require('./package.json');
   const { dist_package_json } = pkg;
@@ -81,6 +101,12 @@ const makePackageJson = (done) => {
   delete pkg.hxmstyle;
   delete pkg.dist_package_json;
   Object.assign(pkg, dist_package_json);
+  pkg.exports = Object.fromEntries(
+    entryTokens.map((token) => {
+      const expToken = token === 'index' ? '.' : `./${token}`;
+      return [expToken, `./${token}.js`];
+    })
+  );
   writeFile(distFolder + 'package.json', JSON.stringify(pkg, null, '\t'));
   done();
 };
@@ -101,7 +127,12 @@ const removeTypesOnlyModules = (done) => {
 
 const build = parallel(scriptsBundle, polyfillsBundle, testsBundle);
 const watch = parallel(scriptsWatch, polyfillsWatch, testsWatch);
-const publishPrep = parallel(makePackageJson, copyDocs, removeTypesOnlyModules);
+const publishPrep = parallel(
+  makePackageJson,
+  addReferenePathsToIndex,
+  copyDocs,
+  removeTypesOnlyModules
+);
 
 // ---------------------------------------------------------------------------
 
