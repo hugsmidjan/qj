@@ -50,10 +50,10 @@ const _focusElm = <E extends HTMLElement>(_elm: E, opts: FocusElmOpts<E>): void 
 
 type TimerId = ReturnType<typeof setTimeout>;
 
-export default function focusElm<E extends HTMLElement>(
+export const focusElm = <E extends HTMLElement>(
   elm: E | null | undefined,
   options?: FocusElmOpts<E>
-): void | TimerId {
+): void | TimerId => {
   if (elm) {
     const opts = options || {};
     if (opts.delay == null) {
@@ -64,4 +64,6 @@ export default function focusElm<E extends HTMLElement>(
       }, opts.delay);
     }
   }
-}
+};
+
+export { focusElm as default };
