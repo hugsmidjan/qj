@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.19.0
+
+_2023-05-26_
+
 - feat: Export `focusElm` function as named export
 
 ## 4.18.0
