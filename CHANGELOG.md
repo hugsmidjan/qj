@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.20.0
+
+_2023-06-03_
+
 - feat: Add "polyfill" modules to `pkg.exports` list
 
 ## 4.19.0
