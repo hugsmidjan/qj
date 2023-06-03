@@ -31,7 +31,7 @@ const makeInputMap = (files /*: Array<string> */) /*: InputMap */ => {
       fileName
         .split('/')
         .pop()
-        .replace(/\.(?:jsx?|tsx?)$/, '')
+        .replace(/\.[jt]sx?$/, '')
     ] = fileName;
   });
   return fileMap;
@@ -39,13 +39,8 @@ const makeInputMap = (files /*: Array<string> */) /*: InputMap */ => {
 
 const scriptsBundleMap = makeInputMap(getEntrypoints());
 
-const entryTokens = Object.keys(scriptsBundleMap).sort((a, b) =>
-  a.localeCompare(b, 'en')
-);
-
 exports.srcFolder = srcFolder;
 exports.scriptsBundleMap = scriptsBundleMap;
-exports.entryTokens = entryTokens;
 
 exports.testGlobs = [globs.tests];
 exports.distFolder = 'dist/';
@@ -54,3 +49,11 @@ exports.testingFolder = '__tests/';
 exports.polyfillsGlobs = polyfillsGlob;
 exports.polyfillsSrcFolder = srcFolder + polyfillsSrcFolder;
 exports.polyfillsDistFolder = exports.distFolder + 'polyfills/';
+
+exports.entryTokens = Object.keys(scriptsBundleMap)
+  .concat(
+    glob
+      .sync(polyfillsGlob, { cwd: exports.polyfillsSrcFolder })
+      .map((fileName) => 'polyfills/' + fileName.replace(/\.[jt]sx?$/, ''))
+  )
+  .sort((a, b) => a.localeCompare(b, 'en'));
