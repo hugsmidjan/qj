@@ -1,15 +1,7 @@
-type Falsy = undefined | null | false | 0 | '';
+import { classes, ClassNames } from './classUtils';
 
-export type ClassName = string | Falsy | ReadonlyArray<ClassName>;
+/** @deprecated Instead `import { ClassNames } from @hugsmidjan/qj/classUtils`  (Will be removed in v5.0) */
+export type ClassName = ClassNames;
 
-/** Filters and concatenates any messy list of CSS classNames.
- *
- * All falsy values are neatly skipped.
- */
-const classes = (...classNames: ReadonlyArray<ClassName>): string =>
-  classNames
-    .map((name) => (name && Array.isArray(name) ? classes(...name) : name))
-    .filter((name) => !!name)
-    .join(' ');
-
+/** @deprecated Instead `import {classes} from @hugsmidjan/qj/classUtils`  (Will be removed in v5.0) */
 export default classes;
