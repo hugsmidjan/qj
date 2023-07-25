@@ -16,6 +16,7 @@ o.spec('getModifierClass', () => {
       o(classes(modifier)).equals('');
     });
     o(classes(null, 'A', ['', ['B', undefined], false])).equals('A B');
+    o(classes('A', ['', [null, undefined]])).equals('A');
   });
 
   o('Does NOT trim or otherwise clean up strings', () => {

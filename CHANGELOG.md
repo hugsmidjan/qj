@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix: `classes` not completely collapsing empty arrays
 
 ## 4.20.0
 

@@ -8,8 +8,8 @@ export type ClassName = string | Falsy | ReadonlyArray<ClassName>;
  */
 const classes = (...classNames: ReadonlyArray<ClassName>): string =>
   classNames
-    .filter((name): name is string | ReadonlyArray<ClassName> => !!name)
-    .map((name) => (Array.isArray(name) ? classes(...name) : name))
+    .map((name) => (name && Array.isArray(name) ? classes(...name) : name))
+    .filter((name) => !!name)
     .join(' ');
 
 export default classes;
