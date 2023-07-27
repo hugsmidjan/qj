@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.21.0
+
+_2023-07-25_
+
 - feat: Add `classUtils` exporting `classes` and `modifiedClass` functions
 - feat: Deprecate `classes` module in favor of `classUtils`
 - fix: `classes` not completely collapsing empty arrays
