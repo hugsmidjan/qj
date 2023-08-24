@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.22.0
+
+_2023-08-24_
+
 - fix: Make `cropText` more tolreant and resonable for edge case inputs
 
 ## 4.21.0
