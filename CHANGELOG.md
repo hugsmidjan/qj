@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 4.22.1
+
+_2023-08-28_
+
 - fix: How `range` handles `null` and other invalid inputs inputs
 
 ## 4.22.0
