@@ -2,7 +2,7 @@ import o from 'ospec';
 
 import { classes, modifiedClass } from './classUtils';
 
-o.spec('modifiedClass', () => {
+o.spec('classes', () => {
   o('Accepts string and/or string arrays', () => {
     o(classes('A')).equals('A');
     o(classes('B', 'C', 'D')).equals('B C D');
