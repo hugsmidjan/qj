@@ -8,13 +8,13 @@
 
 _2023-08-28_
 
-- fix: How `range` handles `null` and other invalid inputs inputs
+- fix: How `range` handles `null` and other invalid inputs
 
 ## 4.22.0
 
 _2023-08-24_
 
-- feat: Make `cropText` more tolreant and resonable for edge case inputs
+- feat: Make `cropText` more tolerant and resonable for edge case inputs
 
 ## 4.21.0
 
