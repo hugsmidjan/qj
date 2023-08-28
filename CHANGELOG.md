@@ -9,7 +9,7 @@
 
 _2023-08-24_
 
-- fix: Make `cropText` more tolreant and resonable for edge case inputs
+- feat: Make `cropText` more tolreant and resonable for edge case inputs
 
 ## 4.21.0
 
