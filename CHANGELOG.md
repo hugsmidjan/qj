@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix: How `range` handles `null` and other invalid inputs inputs
 
 ## 4.22.0
 

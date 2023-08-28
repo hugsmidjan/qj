@@ -8,7 +8,7 @@
  */
 const range = (from: number, to: number, step?: number) => {
   // Fuck JavaScript's type coercion!
-  if (Number(from + to) !== from + to) {
+  if (Number(from) !== from || Number(to) !== to) {
     throw new Error('invalid range');
   }
   const asc = from < to;

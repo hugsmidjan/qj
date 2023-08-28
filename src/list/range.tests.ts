@@ -29,14 +29,26 @@ o.spec('range', () => {
   });
 
   o('Throws on invalid/NaN `to`/`from` inputs', () => {
-    o(() => range(1, NaN)).throws(Error);
-    o(() => range(NaN, 10, 2)).throws(Error);
     // @ts-expect-error  (testing invalid input)
-    o(() => range('1', '4')).throws(Error)('treat numeric strings as invalid');
+    const _foo: number = 'foo';
     // @ts-expect-error  (testing invalid input)
-    o(() => range(1, 'a')).throws(Error);
+    const _1: number = '1';
     // @ts-expect-error  (testing invalid input)
-    o(() => range('a', 'z')).throws(Error);
+    const _4: number = '4';
+    // @ts-expect-error  (testing invalid input)
+    const _null: number = null;
+    // @ts-expect-error  (testing invalid input)
+    const _undef: number = undefined;
+
+    o(() => range(1, NaN)).throws(Error)('1 to NaN');
+    o(() => range(NaN, 10, 2)).throws(Error)('NaN to 10, by 2');
+    o(() => range(_1, _4)).throws(Error)('"1" to "4"');
+    o(() => range(1, _foo)).throws(Error)('1 to "foo"');
+    o(() => range(_foo, _foo)).throws(Error)('"foo" to "foo"');
+    o(() => range(1, _null)).throws(Error)('1 to null');
+    o(() => range(_null, 10, 2)).throws(Error)('null to 10, by 2');
+    o(() => range(1, _undef)).throws(Error)('1 to undefined');
+    o(() => range(_undef, 10, 2)).throws(Error)('undefined to 10, by 2');
   });
 
   o('invalid steps are ignored', () => {
@@ -49,6 +61,10 @@ o.spec('range', () => {
     // gracefully ignore NaN
     o(range(1, 4, NaN)).deepEquals([1, 2, 3, 4]);
     // @ts-expect-error  (testing invalid input)
-    o(range(1, 4, '3')).deepEquals([1, 2, 3, 4])('treat numeric strings as invalid');
+    const _3: number = '3';
+    o(range(1, 4, _3)).deepEquals([1, 2, 3, 4])('treat numeric strings as invalid');
+    // @ts-expect-error  (testing invalid input)
+    const _null: number = null;
+    o(range(1, 4, _null)).deepEquals([1, 2, 3, 4])('treat null as invalid');
   });
 });
