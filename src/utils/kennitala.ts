@@ -387,6 +387,8 @@ export function isValidKennitala(
  * To safely check the type of a plain, non-validated `string` input,
  * use `parseKennitala` and check the `.type` of the retured data object.
  *
+ * That way you can also get a cleaned-up version of the kennitala.
+ *
  * Example:
  *
  * ```js
@@ -410,6 +412,8 @@ export const isPersonKennitala = (kennitala: Kennitala): kennitala is KennitalaP
  *
  * To safely check the type of a plain, non-validated `string` input,
  * use `parseKennitala` and check the `.type` of the retured data object.
+ *
+ * That way you can also get a cleaned-up version of the kennitala.
  *
  * Example:
  *
@@ -435,6 +439,8 @@ export const isCompanyKennitala = (kennitala: Kennitala): kennitala is Kennitala
  * To safely check the type of a plain, non-validated `string` input,
  * use `parseKennitala` and check the `.temporary` status of the
  * retured data object.
+ *
+ * That way you can also get a cleaned-up version of the kennitala.
  *
  * Example:
  *
@@ -465,7 +471,7 @@ type GenerateCompanyOptions = {
  *
  * Defaults to making a KennitalaPerson, unless `opts.type` is set to `"company"`.
  *
- * Picks a birth date at random, unless `opts.birthDate` is provided.
+ * Picks a birth date at random, unless a valid `opts.birthDate` is provided.
  */
 export function generateKennitala(opts: GenerateCompanyOptions): KennitalaCompany;
 export function generateKennitala(
