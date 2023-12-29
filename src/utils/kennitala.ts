@@ -217,25 +217,16 @@ const isRobotKt = (value: string) => {
 
 const validTypes: Record<KennitalaType, 1> = { person: 1, company: 1 };
 
-const toKtData = (data: {
-  value: string;
-  type: KennitalaType;
-  robot: boolean;
-  temporary?: true;
-}) => {
-  const { value, type, robot, temporary } = data;
-  const ktData = {
-    value,
-    type,
-    robot,
-    toString: () => value,
-    get formatted() {
-      return formatKennitala(value);
-    },
-  };
-  temporary != null && ((ktData as KennitalaData).temporary = temporary);
-  return ktData;
-};
+function toString(this: { value: string }) {
+  return this.value;
+}
+
+const converters = (value: string) => ({
+  toString,
+  get formatted() {
+    return formatKennitala(value);
+  },
+});
 
 /**
  * Parses a string value to see if may be a technically valid kennitala,
@@ -298,12 +289,13 @@ export function parseKennitala<
       og hinar tölurnar verða tilviljanakenndar.
       https://www.skra.is/folk/eg-i-thjodskra/um-kennitolur/um-kerfiskennitolur/
     */
-    return toKtData({
+    return {
       value,
       type: 'person',
       robot: false,
       temporary: true,
-    }) as KennitalaData<KtType, PossiblyRobot>;
+      ...converters(value),
+    } as KennitalaData<KtType, PossiblyRobot>;
   }
 
   // Quickly weed out obviously non-date kennitalas
@@ -335,7 +327,12 @@ export function parseKennitala<
     return;
   }
 
-  return toKtData({ value, type, robot }) as KennitalaData<KtType, PossiblyRobot>;
+  return {
+    value,
+    type,
+    robot,
+    ...converters(value),
+  } as KennitalaData<KtType, PossiblyRobot>;
 }
 
 // ---------------------------------------------------------------------------
