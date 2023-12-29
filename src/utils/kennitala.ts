@@ -84,7 +84,7 @@ export const formatKennitala = (value: string, separator = '-') => {
   if (!cleaned) {
     return value;
   }
-  return cleaned.substring(0, 6) + separator + cleaned.substring(6);
+  return cleaned.slice(0, 6) + separator + cleaned.slice(6);
 };
 
 // ---------------------------------------------------------------------------
@@ -102,10 +102,10 @@ export const getKennitalaBirthDate = (value: string) => {
   if (!cleaned || /^[89]/.test(cleaned)) {
     return;
   }
-  const DD = String(parseInt(cleaned.substring(0, 2)) % 40).padStart(2, '0');
-  const MM = cleaned.substring(2, 4);
-  const CC = ((parseInt(cleaned.substring(9, 10)) + 2) % 10) + 18;
-  const YY = cleaned.substring(4, 6);
+  const DD = String(parseInt(cleaned.slice(0, 2)) % 40).padStart(2, '0');
+  const MM = cleaned.slice(2, 4);
+  const CC = ((parseInt(cleaned.slice(9, 10)) + 2) % 10) + 18;
+  const YY = cleaned.slice(4, 6);
   const ISODate = `${CC + YY}-${MM}-${DD}`;
   const birthDate = new Date(ISODate);
   if (isNaN(birthDate.getTime()) || !birthDate.toISOString().startsWith(ISODate)) {
