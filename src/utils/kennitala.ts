@@ -322,7 +322,10 @@ export function parseKennitala<
   if (robot && !opts.robot) {
     return;
   }
-  const checkSum = magic.reduce((acc, num, i) => acc + num * parseInt(value[i]), 0);
+  let checkSum = 0;
+  for (let i = 0, len = magic.length; i < len; i++) {
+    checkSum += magic[i] * parseInt(value[i]);
+  }
   if (checkSum % 11) {
     return;
   }
