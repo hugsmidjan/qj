@@ -1,20 +1,37 @@
 declare const _KennitalaPerson__Brand: unique symbol;
-/** A valid 10-digit Kennitala string for a person */
+/**
+ * A valid 10-digit Kennitala string for a person
+ *
+ * @deprecated Import `KennitalaPerson` from `is-kennitala` instead.  (Will be removed in v5)
+ */
 export type KennitalaPerson = string & { [_KennitalaPerson__Brand]: true };
 
 declare const _KennitalaCompany__Brand: unique symbol;
-/** A valid 10-digit Kennitala string for a person */
+/**
+ * A valid 10-digit Kennitala string for a person
+ *
+ * @deprecated Import `KennitalaCompany` from `is-kennitala` instead.  (Will be removed in v5)
+ */
 export type KennitalaCompany = string & { [_KennitalaCompany__Brand]: true };
 
-/** A valid 10-digit Kennitala string */
+/**
+ * A valid 10-digit Kennitala string
+ *
+ * @deprecated Import `Kennitala` from `is-kennitala` instead.  (Will be removed in v5)
+ */
 export type Kennitala = KennitalaPerson | KennitalaCompany;
 
 declare const _KennitalaTemporary__Brand: unique symbol;
-/** A valid 10-digit Kennitala string for a person with a temporary "Kerfiskennitala" */
+/**
+ * A valid 10-digit Kennitala string for a person with a temporary "Kerfiskennitala"
+ *
+ * @deprecated Import `KennitalaTemporary` from `is-kennitala` instead.  (Will be removed in v5)
+ */
 export type KennitalaTemporary = KennitalaPerson & { [_KennitalaTemporary__Brand]: true };
 
 // ---------------------------------------------------------------------------
 
+/** @deprecated Import `isValidKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export type KennitalaType = 'person' | 'company';
 
 // ---------------------------------------------------------------------------
@@ -26,18 +43,7 @@ export type KennitalaType = 'person' | 'company';
  * Defaults to returning the (trimmed) original string, if the pattern
  * doesn't match.
  *
- * Cleaned:
- *  * `' 123456-7890'` ==> `'1234567890'`
- *  * `'123456 7890 '` ==> `'1234567890'`
- *  * `' 123456 - 7890'` ==> `'1234567890'`
- *  * `'123456 -7890'` ==> `'1234567890'`
- *
- * Only trimmed:
- * 	* `' abc '` ==> `'abc'`
- *  * `' 123456   - 7890'` ==> `'123456   - 7890'`
- * 	* `'kt. 123456-7890'` ==> `'kt. 123456-7890'`
- * 	* `' 1234-567890'` ==> `'1234-567890'`
- * 	* `'123 456-7890'` ==> `'123 456-7890'`
+ * @deprecated Import `cleanKennitalaCareful` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export const cleanKennitalaCareful = (value: string): string =>
   value.trim().replace(/^(\d{6})\s?[-–]?\s?(\d{4})$/, '$1$2');
@@ -50,14 +56,7 @@ export const cleanKennitalaCareful = (value: string): string =>
  *
  * Returns whatever is left.
  *
- * Examples:
- *  * `' abc '` ==> `''`
- *  * `'(kt. 123456-7890)'` ==> `'1234567890'`
- *  * `'(kt. 123456-7890, s. 765 4321) '` ==> `'1234567890,s.7654321'`
- *  * `'(tel. 123-4567, 765-4321)'` ==> `'1234567,7654321'`
- *  * `'(s. 765 4321) '` ==> `'7654321'`
- *  * `' 12 34 56 - 78 90'` ==> `'1234567890'`
- *  * `'1-2-3 4-5 6-7-8 9-0'` ==> `'1234567890'`
+ * @deprecated Import `cleanKennitalaAggressive` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export const cleanKennitalaAggressive = (value: string): string =>
   value
@@ -78,6 +77,8 @@ const cleanIfKtShaped = (value: string): string | undefined => {
  * digits.
  *
  * Defaults to returning the input untouched.
+ *
+ * @deprecated Import `formatKennitala` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export const formatKennitala = (value: string, separator = '-') => {
   const cleaned = cleanIfKtShaped(value);
@@ -96,6 +97,8 @@ export const formatKennitala = (value: string, separator = '-') => {
  * It returns `undefined` for malformed (non-kennitala shaped) strings,
  * temporary "kerfiskennitalas" and kennitalas with nonsensical dates, even if
  * they're numerically valid.
+ *
+ * @deprecated Import `generateKennitala` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export const getKennitalaBirthDate = (value: string) => {
   const cleaned = cleanIfKtShaped(value);
@@ -170,6 +173,9 @@ type KennitalaParsingOptions<
   strictDate?: boolean;
 };
 
+/**
+ * @deprecated Import `KennitalaDataPerson` from `is-kennitala` instead.  (Will be removed in v5)
+ */
 export type KennitalaDataPerson<PossiblyRobot extends boolean = false> = {
   /** The plain, cleaned-up 10 digit kennitala string */
   value: KennitalaPerson;
@@ -184,6 +190,9 @@ export type KennitalaDataPerson<PossiblyRobot extends boolean = false> = {
   toString(): string;
 };
 
+/**
+ * @deprecated Import `KennitalaDataCompany` from `is-kennitala` instead.  (Will be removed in v5)
+ */
 export type KennitalaDataCompany = {
   /** The plain, cleaned-up 10 digit kennitala string */
   value: KennitalaCompany;
@@ -198,6 +207,9 @@ export type KennitalaDataCompany = {
   toString(): string;
 };
 
+/**
+ * @deprecated Import `KennitalaData` from `is-kennitala` instead.  (Will be removed in v5)
+ */
 export type KennitalaData<
   KtType extends KennitalaType = KennitalaType,
   PossiblyRobot extends boolean = boolean
@@ -234,6 +246,8 @@ const converters = (value: string) => ({
  * along with some meta-data and pretty-formatted version.
  *
  * If the parsing/validation fails, it simply returns `undefined`
+ *
+ * @deprecated Import `parseKennitala` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export function parseKennitala(
   // This is here just to trick TS into providing full IntelliSense
@@ -241,16 +255,19 @@ export function parseKennitala(
   value: '',
   opt?: KennitalaParsingOptions
 ): undefined;
+/** @deprecated Import `parseKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function parseKennitala(
   kt: KennitalaCompany,
   opt?: KennitalaParsingOptions<'company'>
 ): KennitalaDataCompany;
+/** @deprecated Import `parseKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function parseKennitala<PossiblyRobot extends boolean = false>(
   kt: KennitalaPerson,
   opt?: KennitalaParsingOptions<'person', PossiblyRobot>
 ): PossiblyRobot extends false
   ? undefined | KennitalaDataPerson
   : KennitalaDataPerson<boolean>;
+/** @deprecated Import `parseKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function parseKennitala<
   KtType extends KennitalaType,
   PossiblyRobot extends boolean = false
@@ -259,6 +276,7 @@ export function parseKennitala<
   opts?: KennitalaParsingOptions<KtType, PossiblyRobot>
 ): KennitalaData<KtType, PossiblyRobot> | undefined;
 
+/** @deprecated Import `parseKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 // eslint-disable-next-line complexity
 export function parseKennitala<
   KtType extends KennitalaType,
@@ -343,6 +361,8 @@ export function parseKennitala<
  *
  * Options are the same as for `parseKennitala` except that `clean` option
  * defaults to `"none"`.
+ *
+ * @deprecated Import `isValidKennitala` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export function isValidKennitala(
   // This is here just to trick TS into providing full IntelliSense
@@ -350,20 +370,25 @@ export function isValidKennitala(
   value: '',
   opts: KennitalaParsingOptions
 ): false;
+/** @deprecated Import `isValidKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function isValidKennitala(
   value: string,
   opts: KennitalaParsingOptions & { type: 'person'; clean?: 'none' | false }
 ): value is KennitalaPerson;
+/** @deprecated Import `isValidKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function isValidKennitala(
   value: string,
   opts: KennitalaParsingOptions & { type: 'company'; clean?: 'none' | false }
 ): value is KennitalaCompany;
+/** @deprecated Import `isValidKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function isValidKennitala<O extends { clean?: 'none' | false }>(
   value: string,
   opts?: KennitalaParsingOptions & { clean?: 'none' | false }
 ): value is Kennitala;
+/** @deprecated Import `isValidKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function isValidKennitala(value: string, opts?: KennitalaParsingOptions): boolean;
 
+/** @deprecated Import `isValidKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function isValidKennitala(
   value: string,
   opts?: KennitalaParsingOptions
@@ -380,24 +405,7 @@ export function isValidKennitala(
 /**
  * Detects if an input `Kennitala` is `KennitalaPerson`.
  *
- * Assumes that the input `kt` is already validated as `Kennitala`
- * and performs no internal validation, and is thus insanely fast, but
- * unreliable for random strings.
- *
- * To safely check the type of a plain, non-validated `string` input,
- * use `parseKennitala` and check the `.type` of the retured data object.
- *
- * That way you can also get a cleaned-up version of the kennitala.
- *
- * Example:
- *
- * ```js
- * const isPerson = parseKennitala(someString)?.type === 'person';
- * ```
- * ...or...
- * ```js
- * const isPerson = !!parseKennitala(someString, { type: 'person' });
- * ```
+ * @deprecated Import `isPersonKennitala` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export const isPersonKennitala = (kennitala: Kennitala): kennitala is KennitalaPerson =>
   // Temporary "kerfiskenntalas" for people start with 8 or 9
@@ -406,24 +414,7 @@ export const isPersonKennitala = (kennitala: Kennitala): kennitala is KennitalaP
 /**
  * Detects if an input `Kennitala` is `KennitalaCompany`.
  *
- * Assumes that the input `kt` is already validated as `Kennitala`
- * and performs no internal validation, and is thus insanely fast, but
- * unreliable for random strings.
- *
- * To safely check the type of a plain, non-validated `string` input,
- * use `parseKennitala` and check the `.type` of the retured data object.
- *
- * That way you can also get a cleaned-up version of the kennitala.
- *
- * Example:
- *
- * ```js
- * const isCompany = parseKennitala(someString)?.type === 'company';
- * ```
- * ...or...
- * ```js
- * const isCompany = !!parseKennitala(someString, { type: 'company' });
- * ```
+ * @deprecated Import `isCompanyKennitala` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export const isCompanyKennitala = (kennitala: Kennitala): kennitala is KennitalaCompany =>
   /^[4567]/.test(kennitala);
@@ -432,21 +423,7 @@ export const isCompanyKennitala = (kennitala: Kennitala): kennitala is Kennitala
  * Detects if an input `Kennitala` is a (temporary) "kerfiskennitala"
  * (a subset of valid `KennitalaPerson`s).
  *
- * Assumes that the input `kt` is already validated as `Kennitala`
- * and performs no internal validation, and is thus insanely fast, but
- * unreliable for random strings.
- *
- * To safely check the type of a plain, non-validated `string` input,
- * use `parseKennitala` and check the `.temporary` status of the
- * retured data object.
- *
- * That way you can also get a cleaned-up version of the kennitala.
- *
- * Example:
- *
- * ```js
- * const isTemp = !!parseKennitala(someString)?.temporary;
- * ```
+ * @deprecated Import `isTempKennitala` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export const isTempKennitala = (kennitala: Kennitala): kennitala is KennitalaTemporary =>
   /^[89]/.test(kennitala);
@@ -469,19 +446,21 @@ type GenerateCompanyOptions = {
 /**
  * Generates a technically valid Kennitala. (Possibly a real one!)
  *
- * Defaults to making a KennitalaPerson, unless `opts.type` is set to `"company"`.
- *
- * Picks a birth date at random, unless a valid `opts.birthDate` is provided.
+ * @deprecated Import `generateKennitala` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export function generateKennitala(opts: GenerateCompanyOptions): KennitalaCompany;
+/** @deprecated Import `generateKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function generateKennitala(
   opts: GeneratePersonOptions & { temporary: true }
 ): KennitalaTemporary;
+/** @deprecated Import `generateKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function generateKennitala(opts?: GeneratePersonOptions): KennitalaPerson;
+/** @deprecated Import `generateKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function generateKennitala(
   opts?: GeneratePersonOptions | GenerateCompanyOptions
 ): Kennitala;
 
+/** @deprecated Import `generateKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export function generateKennitala(
   opts: GeneratePersonOptions | GenerateCompanyOptions = {}
 ): Kennitala {

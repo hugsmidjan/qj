@@ -10,32 +10,18 @@ import {
 } from './kennitala';
 
 export type {
-  /**
-   * @deprecated Import `Kennitala` from `@hugsmidjan/qj/kennitala` instead.
-   *
-   * (Will be removed in v5)
-   */
+  /** @deprecated Import `Kennitala` from `is-kennitala` instead.  (Will be removed in v5) */
   Kennitala,
-  /**
-   * @deprecated Import `KennitalaCompany` from `@hugsmidjan/qj/kennitala` instead.
-   *
-   * (Will be removed in v5)
-   */
+  /** @deprecated Import `KennitalaCompany` from `is-kennitala` instead.  (Will be removed in v5) */
   KennitalaCompany,
-  /**
-   * @deprecated Import `KennitalaPerson` from `@hugsmidjan/qj/kennitala` instead.
-   *
-   * (Will be removed in v5)
-   */
+  /** @deprecated Import `KennitalaPerson` from `is-kennitala` instead.  (Will be removed in v5) */
   KennitalaPerson,
 };
 
 /**
  * A valid 10-digit Kennitala string for either a person or a compnay
  *
- * @deprecated Use `Kennitala` from `@hugsmidjan/qj/kennitala` instead.
- *
- * (Will be removed in v5)
+ * @deprecated Use `Kennitala` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export type KennitalaReal = Kennitala;
 
@@ -43,19 +29,13 @@ declare const _KennitalaRobot__Brand: unique symbol;
 /**
  * A valid 10-digit Kennitala string for a "Gervimaður"
  *
- * @deprecated Use `KennitalaPerson` from `@hugsmidjan/qj/kennitala` instead.
- *
- * (Will be removed in v5)
+ * @deprecated Use `KennitalaPerson` from `is-kennitala` instead.  (Will be removed in v5)
  */
 export type KennitalaRobot = KennitalaPerson & { [_KennitalaRobot__Brand]: true };
 
 // ---------------------------------------------------------------------------
 
-/**
- * @deprecated Use `isValidKennitala` from `@hugsmidjan/qj/kennitala` instead.
- *
- * (Will be removed in v5)
- */
+/** @deprecated Use `isValidKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 function validKennitala(
   /**
    * A reasonably kennitala-ish string
@@ -106,4 +86,5 @@ validKennitala.cleanAggressive = cleanKennitalaAggressive;
 validKennitala.format = formatKennitala;
 validKennitala.getBirthday = getKennitalaBirthDate;
 
+/** @deprecated Import `isValidKennitala` from `is-kennitala` instead.  (Will be removed in v5) */
 export default validKennitala;
