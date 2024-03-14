@@ -17,7 +17,7 @@ export default function promiseAllProperties<T extends PlainObj>(
   promisesMap: PromisesMap<T>
 ): Promise<T> {
   if (
-    !(typeof process !== undefined && process.env.NODE_ENV === 'production') &&
+    !(typeof process !== 'undefined' && process.env.NODE_ENV === 'production') &&
     (promisesMap === null ||
       typeof promisesMap !== 'object' ||
       Array.isArray(promisesMap))
